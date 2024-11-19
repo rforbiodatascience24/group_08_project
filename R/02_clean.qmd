@@ -60,6 +60,8 @@ merged_data <- list(clean_data_list_pre,
          by = c("name", 
                 "code_class", 
                 "accesion_number")) |> 
+  
+  ##do more efficiently##
   # rename count variables
   rename(pre_count_1 = count.x,
          pre_count_2 = count.x.x,
