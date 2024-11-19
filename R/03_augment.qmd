@@ -48,8 +48,16 @@ mbc_clean_aug |>
     type == "filtered_mean_post" ~ "post"
   ))
 mbc_clean_aug_long
+
+
 ```
 
 ### making log2 fold change of case/control
 
-### 
+```{r}
+# Making log2 fold change (log2(post/pre))
+mbc_clean_aug_wide <- mbc_clean_aug_long |> 
+  pivot_wider(names_from = type, values_from = mean_count) |> 
+  mutate(log2_fold_change = log2(post / pre))
+mbc_clean_aug_wide
+```
