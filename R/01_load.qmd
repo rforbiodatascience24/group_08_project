@@ -1,5 +1,30 @@
-# Load libraries 
+# Load libraries
 
 ```{r}
 library(tidyverse)
 ```
+
+# Import the raw pre data
+
+```{r}
+library(tidyverse)
+# URL of the gzipped file
+url_1 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152450&format=file&file=GSM8152450%5F20220128%5F30102613280522%2D01%5F01011%2DC3%5F09%2ERCC%2Egz"
+url_2 <- 
+url_3 <-
+url_4 <- 
+
+# Define the destination file name
+data_file <- "GSM8152450.gz"
+
+# Download the gzipped file to a local file (without tempfile)
+download.file(url, data_file, mode = "wb")
+
+# Read the gzipped file directly into a tibble
+post_data <- read_csv(data_file)
+
+# Return the data
+data
+```
+
+# Import the raw post data
