@@ -59,5 +59,20 @@ mbc_clean_aug_long
 mbc_clean_aug_wide <- mbc_clean_aug_long |> 
   pivot_wider(names_from = type, values_from = mean_count) |> 
   mutate(log2_fold_change = log2(post / pre))
+
 mbc_clean_aug_wide
+```
+
+#### Sorting ratio ascending
+
+```{r}
+mbc_clean_aug_wide |> 
+  arrange(log2_fold_change)
+```
+
+#### Sorting ratio descending
+
+```{r}
+mbc_clean_aug_wide |> 
+  arrange(desc(log2_fold_change))
 ```
