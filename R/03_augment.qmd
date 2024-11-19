@@ -35,8 +35,8 @@ mbc_clean_aug
 
 ```{r}
 
-mcb_clean_aug_long <- 
-mcb_clean_aug |> 
+mbc_clean_aug_long <- 
+mbc_clean_aug |> 
   pivot_longer(
     cols = starts_with("filtered"),
     names_to = "pre/post",
