@@ -1,0 +1,116 @@
+# Load libraries
+
+```{r}
+#| message: false
+
+library(tidyverse)
+library(here)
+```
+
+# Clean data
+
+```{r}
+# Load in pre-data 
+pre_data <- read_csv('data/pre_data.csv')
+# Load in post-data 
+post_data <- read_csv('data/post_data.csv')
+
+```
+
+```{r}
+# create clean pre dataframe
+pre_data_clean <- pre_data |>
+  # filter out the first 25 rows 
+  filter(row_number() > 25) |> 
+  # separate the header columns into different headers
+  separate(col = `<Header>`, 
+           into = c("code_class", "name", "accesion_number", "count"), 
+           sep= ",") |> 
+  drop_na()
+```
+
+```{r}
+# create clean pre dataframe
+post_data_clean <- post_data |>
+  # filter out the first 25 rows 
+  filter(row_number() > 25) |> 
+  # separate the header columns into different headers
+  separate(col = `<Header>`, 
+           into = c("code_class", "name", "accesion_number", "count"), 
+           sep= ",") |> 
+  drop_na()
+
+
+```
+
+# Merge data
+
+```{r}
+merge_post_and_pre <- 
+  inner_join(x = pre_data_clean, 
+             y = post_data_clean, 
+             by = c("name", 
+                    "code_class", 
+                    "accesion_number")) |> 
+  rename(pre_count = count.x,
+         post_count = count.y)
+
+```
+
+```{r}
+
+# Use map() to read all files into a list of data frames
+data_list <- c(here('data/pre_data_GSM8152441.csv'), 
+               here('data/pre_data_GSM8152442.csv'),
+               here('data/pre_data_GSM8152443.csv'),
+               here('data/pre_data_GSM8152444.csv'),
+               here('data/pre_data_GSM8152441.csv')) |>
+  map(read_csv) 
+
+
+
+```
+
+```{r}
+ibrary(tidyverse)
+
+# Create a vector of file URLs
+file_urls <- c(
+  "https://example.com/file1.csv",
+  "https://example.com/file2.csv",
+  "https://example.com/file3.csv"
+  # Add the rest of your file URLs
+)
+
+# Use map() to read all files into a list of data frames
+data_list <- file_urls %>%
+  map(read_csv) # Replace read_csv with read_delim, read_excel, etc., if needed
+
+# Optionally, combine all data frames into one (if they have the same structure)
+combined_data <- bind_rows(data_list)
+```
+
+```{r}
+print(data_list)
+```
+
+```{r}
+clean_data <- function(dataframe) {
+  # create dataframe
+  data_clean <- dataframe |>
+    # filter out the first 25 rows 
+    filter(row_number() > 25) |> 
+    # separate the header columns into different headers
+    separate(col = `<Header>`, 
+             into = c("code_class", "name", "accesion_number", "count"), 
+             sep= ",") |> 
+    drop_na()
+    
+
+  return(data_clean)
+  }
+```
+
+```{r}
+from 99_proj_func.qmd import 
+```
