@@ -9,19 +9,32 @@ library(tidyverse)
 ```{r}
 library(tidyverse)
 # URL of the gzipped file
-url_1 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152450&format=file&file=GSM8152450%5F20220128%5F30102613280522%2D01%5F01011%2DC3%5F09%2ERCC%2Egz"
+url_1 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152441&format=file&file=GSM8152441%5F20220128%5F30102613280522%2D01%5F01002%5F04%2ERCC%2Egz"
 url_2 <- 
 url_3 <-
 url_4 <- 
+url_5 <- 
 
 # Define the destination file name
-data_file <- "GSM8152450.gz"
+data_file_GSM8152441 <- "GSM8152441.gz"
+data_file_GSM8152450 <- "GSM8152450.gz"
+data_file_GSM8152450 <- "GSM8152450.gz"
+data_file_GSM8152450 <- "GSM8152450.gz"
+data_file_GSM8152450 <- "GSM8152450.gz"
 
 # Download the gzipped file to a local file (without tempfile)
-download.file(url, data_file, mode = "wb")
+download.file(url_1, data_file_GSM8152441, mode = "wb")
+download.file(url_2, data_file_GSM8152450, mode = "wb")
+download.file(url_3, data_file_GSM8152450, mode = "wb")
+download.file(url_4, data_file_GSM8152450, mode = "wb")
+download.file(url_5, data_file_GSM8152450, mode = "wb")
 
 # Read the gzipped file directly into a tibble
-post_data <- read_csv(data_file)
+post_data_GSM8152441 <- read_csv(data_file_GSM8152441)
+post_data_GSM8152450 <- read_csv(data_file_GSM8152450)
+post_data_GSM8152450 <- read_csv(data_file_GSM8152450)
+post_data_GSM8152450 <- read_csv(data_file_GSM8152450)
+post_data_GSM8152450 <- read_csv(data_file_GSM8152450)
 
 # Return the data
 data
