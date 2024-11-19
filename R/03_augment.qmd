@@ -1,0 +1,45 @@
+# Load Libraries
+
+```{r}
+library(tidyverse)
+library(here)
+```
+
+# Load data
+
+```{r}
+mcb_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
+```
+
+# Augmentation
+
+```{r}
+
+source("99_proj_func.R")
+
+mcb_clean_aug <- mcb_clean_aug |> 
+  rowwise() |> 
+  mutate(filtered_mean_pre = calculate_filtered_mean(c_across(starts_with("pre_count")))) |> 
+  ungroup()
+
+
+mcb_clean_aug <- mcb_clean_aug |> 
+  rowwise() |> 
+  mutate(filtered_mean_post = calculate_filtered_mean(c_across(starts_with("post_count"))))
+  ungroup()
+
+
+mcb_clean_aug
+```
+
+```{r}
+
+mch_clean_aug |> 
+  pivot_longer(
+    cols = starts_with("filtered"),
+    names_to = "Pre/Post",
+    values_to = "Count"
+  )
+```
+
+\

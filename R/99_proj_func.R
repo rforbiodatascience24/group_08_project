@@ -34,7 +34,7 @@ calculate_filtered_mean <- function(data) {
   filtered_data <- data[data >= lower_bound & data <= upper_bound]
   
   # 4. Calculate the mean of the filtered data
-  mean_filtered <- mean(filtered_data, na.rm = TRUE)
+  mean_filtered <- round(mean(filtered_data, na.rm = TRUE), 2)
   
   # 5. Return results as a list
   return(mean_filtered)
