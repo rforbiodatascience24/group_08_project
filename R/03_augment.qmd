@@ -31,6 +31,19 @@ write_csv(mbc_clean_aug, here("data/03_dat_aug_01.csv"))
 mbc_clean_aug
 ```
 
+```{r}
+# make a longer data frame with a row for each "count" variable
+long_data <- aug_02 |> 
+  pivot_longer(
+    cols = starts_with("pre_count") | starts_with("post_count"), # select count columns
+    names_to = "count_type",  # new column for column names
+    values_to = "count_value" # new column for values
+  ) |> 
+
+write_csv(here(long_data, "data/03_dat_aug_02.csv"))
+
+```
+
 ### make the data set longer with pivot longer
 
 ```{r}
