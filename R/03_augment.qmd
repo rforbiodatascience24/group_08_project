@@ -9,43 +9,42 @@ source("99_proj_func.R")
 # Load data
 
 ```{r}
-mcb_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
+mbc_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
 ```
 
 # Augmentation
 
 ```{r}
-mcb_clean_aug <- mcb_clean_aug |> 
+mbc_clean_aug <- mbc_clean_aug |> 
   rowwise() |> 
   mutate(filtered_mean_pre = calculate_filtered_mean(c_across(starts_with("pre_count")))) |> 
   ungroup()
 
 
-mcb_clean_aug <- mcb_clean_aug |> 
+mbc_clean_aug <- mbc_clean_aug |> 
   rowwise() |> 
   mutate(filtered_mean_post = calculate_filtered_mean(c_across(starts_with("post_count")))) |> 
   ungroup()
 
-write_csv(mcb_clean_aug, here("data/03_dat_aug_mcb_clean_aug.csv"))
+write_csv(mbc_clean_aug, here("data/03_dat_aug_01.csv"))
 
-mcb_clean_aug
+mbc_clean_aug
 ```
 
 ### make the data set longer with pivot longer
 
 ```{r}
-mbc_clean_aug_long <- 
-  mbc_clean_aug |> 
+
+mcb_clean_aug_long <- 
+mcb_clean_aug |> 
   pivot_longer(
     cols = starts_with("filtered"),
-    names_to = "type",
+    names_to = "pre/post",
     values_to = "mean_count"
   ) |> 
-  select("code_class", "name", "type", "mean_count") |> 
-  mutate(type = case_when(
-    type == "filtered_mean_pre" ~ "pre",
-    type == "filtered_mean_post" ~ "post"
-  ))
+  select("code_class", "name", "pre/post", "mean_count") |> 
+  
+  
 
 mcb_clean_aug_long
 ```
