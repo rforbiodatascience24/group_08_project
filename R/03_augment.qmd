@@ -43,10 +43,10 @@ mbc_clean_aug |>
     values_to = "mean_count"
   ) |> 
   select("code_class", "name", "pre/post", "mean_count") |> 
-  
-  
 
 mcb_clean_aug_long
 ```
 
-\
+### making log2 fold change of case/control
+
+###  
