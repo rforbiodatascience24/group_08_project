@@ -34,12 +34,16 @@ mcb_clean_aug
 
 ```{r}
 
-mch_clean_aug |> 
+mcb_clean_aug_long <- 
+mcb_clean_aug |> 
   pivot_longer(
     cols = starts_with("filtered"),
-    names_to = "Pre/Post",
-    values_to = "Count"
-  )
+    names_to = "pre/post",
+    values_to = "count"
+  ) |> 
+  select("code_class", "name", "pre/post", "mean_count")
+
+mcb_clean_aug_long
 ```
 
 \
