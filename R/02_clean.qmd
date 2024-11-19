@@ -54,13 +54,17 @@ clean_data_list_post <-
 # Merge data
 
 ```{r}
+# create vector with both lists of data frames
 merged_data <- list(clean_data_list_pre, 
-                    clean_data_list_post) |>  
+                    clean_data_list_post) |> 
+  # unpack nested dataframes
   flatten() |>  
+  # join data frames
   reduce(inner_join, 
          by = c("name", 
                 "code_class", 
                 "accesion_number")) |> 
+  # rename count variables
   rename(pre_count_1 = count.x,
          pre_count_2 = count.x.x,
          pre_count_3 = count.x.x.x,
