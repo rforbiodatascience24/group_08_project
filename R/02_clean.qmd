@@ -11,8 +11,6 @@ source("99_proj_func.R")
 
 # Load in data
 
-Pre data
-
 ```{r}
 # define list of dataframes for pre data
 data_list_pre <- c(here('data/pre_data_GSM8152441.csv'), 
