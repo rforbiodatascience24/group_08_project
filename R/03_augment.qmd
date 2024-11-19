@@ -51,6 +51,15 @@ mbc_clean_aug_long
 
 ```
 
+## adding log transformed
+
+```{r}
+mbc_clean_aug_long_log_trans <- 
+mbc_clean_aug_long |> 
+  mutate(log2_transformed = log2(mean_count))
+mbc_clean_aug_long_log_trans
+```
+
 ### making log2 fold change of case/control
 
 ```{r}
