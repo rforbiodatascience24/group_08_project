@@ -25,7 +25,7 @@ mcb_clean_aug <- mcb_clean_aug |>
 
 mcb_clean_aug <- mcb_clean_aug |> 
   rowwise() |> 
-  mutate(filtered_mean_post = calculate_filtered_mean(c_across(starts_with("post_count"))))
+  mutate(filtered_mean_post = calculate_filtered_mean(c_across(starts_with("post_count")))) |> 
   ungroup()
 
 
