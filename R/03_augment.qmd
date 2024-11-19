@@ -30,6 +30,8 @@ mcb_clean_aug <- mcb_clean_aug |>
 mcb_clean_aug
 ```
 
+### make the data set longer with pivot longer
+
 ```{r}
 
 mcb_clean_aug_long <- 
