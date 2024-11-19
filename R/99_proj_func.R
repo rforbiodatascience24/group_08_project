@@ -11,6 +11,7 @@ clean_data <- function(dataframe) {
     separate(col = `<Header>`, 
              into = c("code_class", "name", "accesion_number", "count"), 
              sep= ",") |> 
+    # drop rows containing "NA"
     drop_na()
   
   
