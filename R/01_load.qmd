@@ -55,3 +55,50 @@ write_csv(x = pre_data_GSM8152445,
 ```
 
 # Import the raw post data
+
+```{r}
+# URL of the gzipped file
+url_6 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152447&format=file&file=GSM8152447%5F20220128%5F30102613280522%2D01%5F01001%2DC3%5F06%2ERCC%2Egz"
+url_7 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152448&format=file&file=GSM8152448%5F20220128%5F30102613280522%2D01%5F01003%2DC3%5F07%2ERCC%2Egz"
+url_8 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152449&format=file&file=GSM8152449%5F20220128%5F30102613280522%2D01%5F01007%2DC3%5F08%2ERCC%2Egz"
+url_9 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152450&format=file&file=GSM8152450%5F20220128%5F30102613280522%2D01%5F01011%2DC3%5F09%2ERCC%2Egz"
+url_10 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152451&format=file&file=GSM8152451%5F20220128%5F30102613280522%2D01%5F01014%2DC3%5F10%2ERCC%2Egz"
+
+# Define the destination file name
+data_file_GSM8152447 <- "GSM8152447.gz"
+data_file_GSM8152448 <- "GSM8152448.gz"
+data_file_GSM8152449 <- "GSM8152449.gz"
+data_file_GSM8152450 <- "GSM8152450.gz"
+data_file_GSM8152451 <- "GSM8152451.gz"
+
+# Download the gzipped file to a local file (without tempfile)
+download.file(url_6, data_file_GSM8152447, mode = "wb")
+download.file(url_7, data_file_GSM8152448, mode = "wb")
+download.file(url_8, data_file_GSM8152449, mode = "wb")
+download.file(url_9, data_file_GSM8152450, mode = "wb")
+download.file(url_10, data_file_GSM8152451, mode = "wb")
+
+# Read the gzipped file directly into a tibble
+post_data_GSM8152447 <- read_csv(data_file_GSM8152447)
+post_data_GSM8152448 <- read_csv(data_file_GSM8152448)
+post_data_GSM8152449 <- read_csv(data_file_GSM8152449)
+post_data_GSM8152450 <- read_csv(data_file_GSM8152450)
+post_data_GSM8152451 <- read_csv(data_file_GSM8152451)
+
+```
+
+### Write data to folder
+
+```{r}
+# write to data folder
+write_csv(x = post_data_GSM8152447,
+          file = here("data/post_data_GSM8152447.csv"))
+write_csv(x = post_data_GSM8152448,
+          file = here("data/post_data_GSM8152448.csv"))
+write_csv(x = post_data_GSM8152449,
+          file = here("data/post_data_GSM8152449.csv"))
+write_csv(x = post_data_GSM8152450,
+          file = here("data/post_data_GSM8152450.csv"))
+write_csv(x = post_data_GSM8152451,
+          file = here("data/post_data_GSM8152451.csv"))
+```
