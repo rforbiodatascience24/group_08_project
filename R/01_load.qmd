@@ -8,7 +8,6 @@ library(here)
 # Import the raw pre data
 
 ```{r}
-library(tidyverse)
 # URL of the gzipped file
 url_1 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152441&format=file&file=GSM8152441%5F20220128%5F30102613280522%2D01%5F01002%5F04%2ERCC%2Egz"
 url_2 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152442&format=file&file=GSM8152442%5F20220128%5F30102613280522%2D01%5F01004%5F05%2ERCC%2Egz"
