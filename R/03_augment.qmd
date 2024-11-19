@@ -33,7 +33,7 @@ mbc_clean_aug
 
 ```{r}
 # make a longer data frame with a row for each "count" variable
-long_data <- aug_02 |> 
+long_data <- mbc_clean_aug |> 
   pivot_longer(
     cols = starts_with("pre_count") | starts_with("post_count"), # select count columns
     names_to = "count_type",  # new column for column names
