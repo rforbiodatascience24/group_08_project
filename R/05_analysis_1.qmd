@@ -25,15 +25,18 @@ long_data <- aug_01 |>
 ```
 
 ```{r}
-print(long_data)
+
+selected_genes <- long_data |> 
+  pull(name[])
+
 
 ```
 
 ```{r}
 
 # create scatter plot
-ggplot(long_data, aes(x = count_value, y = count_value, color = name)) +
-  geom_point(alpha = 0.6) + 
+ggplot(long_data, aes(x = count_type, y = count_value, color = count_type)) +
+  geom_text(aes(label = name), vjust = -0.5, size = 3, check_overlap = TRUE) +
   labs(
     title = "Scatter Plot of Pre and Post Counts",
     x = "Count Type",
@@ -43,4 +46,5 @@ ggplot(long_data, aes(x = count_value, y = count_value, color = name)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)
   )
+        
 ```
