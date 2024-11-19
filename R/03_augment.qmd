@@ -3,6 +3,7 @@
 ```{r}
 library(tidyverse)
 library(here)
+source("99_proj_func.R")
 ```
 
 # Load data
@@ -14,9 +15,6 @@ mcb_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
 # Augmentation
 
 ```{r}
-
-source("99_proj_func.R")
-
 mcb_clean_aug <- mcb_clean_aug |> 
   rowwise() |> 
   mutate(filtered_mean_pre = calculate_filtered_mean(c_across(starts_with("pre_count")))) |> 
@@ -39,9 +37,10 @@ mcb_clean_aug |>
   pivot_longer(
     cols = starts_with("filtered"),
     names_to = "pre/post",
-    values_to = "count"
+    values_to = "mean_count"
   ) |> 
-  select("code_class", "name", "pre/post", "mean_count")
+  select("code_class", "name", "pre/post", "mean_count") |> 
+  
 
 mcb_clean_aug_long
 ```
