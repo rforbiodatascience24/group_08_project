@@ -29,7 +29,7 @@ clean_data <- function(dataframe) {
 # Filtering means for no outliers in pre and post data
 
 ```{r}
-calculate_filtered_mean_pre <- function(data) {
+calculate_filtered_mean <- function(data) {
   # 1. Calculate quartiles and IQR
   q1 <- quantile(data, 0.25) # First quartile (Q1)
   q3 <- quantile(data, 0.75) # Third quartile (Q3)
@@ -43,25 +43,9 @@ calculate_filtered_mean_pre <- function(data) {
   filtered_data <- data[data >= lower_bound & data <= upper_bound]
   
   # 4. Calculate the mean of the filtered data
-  mean_filtered <- mean(filtered_data)
+  mean_filtered <- mean(filtered_data, na.rm = TRUE)
   
   # 5. Return results as a list
-  return(list(
-    Original_Data = data,
-    Lower_Bound = lower_bound,
-    Upper_Bound = upper_bound,
-    Filtered_Data = filtered_data,
-    Mean_Filtered = mean_filtered
-  ))
-  
-  print(Mean_Filtered)
-
+  return(mean_filtered)
 }
-
-
-
-# Example usage
-calculate_mean_without_outliers(data)
-
-
 ```
