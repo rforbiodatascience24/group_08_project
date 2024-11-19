@@ -5,6 +5,7 @@
 
 library(tidyverse)
 library(here)
+library(readr)
 source("99_proj_func.R")
 ```
 
@@ -14,7 +15,7 @@ Pre data
 
 ```{r}
 
-# define list of dataframes
+# define list of dataframes for pre data
 data_list_pre <- c(here('data/pre_data_GSM8152441.csv'), 
                here('data/pre_data_GSM8152442.csv'),
                here('data/pre_data_GSM8152443.csv'),
@@ -23,146 +24,71 @@ data_list_pre <- c(here('data/pre_data_GSM8152441.csv'),
   # map() files into the list
   map(read_csv) 
 
-# define clean list 
-clean_data_list_pre <-
-  data_list_pre |> 
-  # use clean_data function to clean the list of data frames
-  map(clean_data)
-```
-
-```{r}
-print(clean_data_list)
-```
-
-Post data
-
-```{r}
-# define list of dataframes
-data_list_post <- c(here('data/post_data_GSM8152441.csv'), 
-               here('data/post_data_GSM8152442.csv'),
-               here('data/post_data_GSM8152443.csv'),
-               here('data/post_data_GSM8152444.csv'),
-               here('data/post_data_GSM8152441.csv')) |>
+# define list of dataframes for post data
+data_list_post <- c(here('data/post_data_GSM8152447.csv'), 
+               here('data/post_data_GSM8152448.csv'),
+               here('data/post_data_GSM8152449.csv'),
+               here('data/post_data_GSM8152450.csv'),
+               here('data/post_data_GSM8152451.csv')) |>
   # map() files into the list
   map(read_csv) 
-
-# define clean list 
-clean_data_list_post <-
-  data_list_post |> 
-  # use clean_data function to clean the list of data frames
-  map(clean_data)
-```
-
-```{r}
 
 ```
 
 # Clean data
 
 ```{r}
-# Load in pre-data 
-pre_data <- read_csv('data/pre_data.csv')
-# Load in post-data 
-post_data <- read_csv('data/post_data.csv')
+# define clean list for pre data
+clean_data_list_pre <-
+  data_list_pre |> 
+  # use clean_data function to clean the list of data frames
+  map(clean_data)
 
-```
-
-```{r}
-# create clean pre dataframe
-pre_data_clean <- pre_data |>
-  # filter out the first 25 rows 
-  filter(row_number() > 25) |> 
-  # separate the header columns into different headers
-  separate(col = `<Header>`, 
-           into = c("code_class", "name", "accesion_number", "count"), 
-           sep= ",") |> 
-  drop_na()
-```
-
-```{r}
-# create clean pre dataframe
-post_data_clean <- post_data |>
-  # filter out the first 25 rows 
-  filter(row_number() > 25) |> 
-  # separate the header columns into different headers
-  separate(col = `<Header>`, 
-           into = c("code_class", "name", "accesion_number", "count"), 
-           sep= ",") |> 
-  drop_na()
-
-
+# define clean list for post data
+clean_data_list_post <-
+  data_list_post |> 
+  # use clean_data function to clean the list of data frames
+  map(clean_data)
 ```
 
 # Merge data
 
 ```{r}
-merge_post_and_pre <- 
-  inner_join(x = pre_data_clean, 
-             y = post_data_clean, 
-             by = c("name", 
-                    "code_class", 
-                    "accesion_number")) |> 
-  rename(pre_count = count.x,
-         post_count = count.y)
+# Use Reduce to perform inner joins sequentially
+merged_data <- Reduce(function(x, y) {
+  inner_join(x, y, by = c("name", "code_class", "accesion_number"))
+}, combined_list)
 
+# View the merged data
+print(merged_data)
 ```
 
 ```{r}
+merged_data <- list(clean_data_list_pre, 
+                    clean_data_list_post) |>  
+  flatten() |>  
+  reduce(inner_join, 
+         by = c("name", 
+                "code_class", 
+                "accesion_number")) |> 
+  rename(pre_count_1 = count.x,
+         pre_count_2 = count.x.x,
+         pre_count_3 = count.x.x.x,
+         pre_count_4 = count.x.x.x.x,
+         pre_count_5 = count.x.x.x.x.x,
+         post_count_1 = count.y,
+         post_count_2 = count.y.y,
+         post_count_3 = count.y.y.y,
+         post_count_4 = count.y.y.y.y,
+         post_count_5 = count.y.y.y.y.y
+         )
 
-# Use map() to read all files into a list of data frames
-data_list <- c(here('data/pre_data_GSM8152441.csv'), 
-               here('data/pre_data_GSM8152442.csv'),
-               here('data/pre_data_GSM8152443.csv'),
-               here('data/pre_data_GSM8152444.csv'),
-               here('data/pre_data_GSM8152441.csv')) |>
-  map(read_csv) 
-
-
-
+print(merged_data)
 ```
 
-```{r}
-ibrary(tidyverse)
-
-# Create a vector of file URLs
-file_urls <- c(
-  "https://example.com/file1.csv",
-  "https://example.com/file2.csv",
-  "https://example.com/file3.csv"
-  # Add the rest of your file URLs
-)
-
-# Use map() to read all files into a list of data frames
-data_list <- file_urls %>%
-  map(read_csv) # Replace read_csv with read_delim, read_excel, etc., if needed
-
-# Optionally, combine all data frames into one (if they have the same structure)
-combined_data <- bind_rows(data_list)
-```
+# Write to csv
 
 ```{r}
-print(data_list)
-```
 
-```{r}
-clean_data <- function(dataframe) {
-  # create dataframe
-  data_clean <- dataframe |>
-    # filter out the first 25 rows 
-    filter(row_number() > 25) |> 
-    # separate the header columns into different headers
-    separate(col = `<Header>`, 
-             into = c("code_class", "name", "accesion_number", "count"), 
-             sep= ",") |> 
-    drop_na()
-    
-
-  return(data_clean)
-  }
-```
-
-```{r}
-source("99_proj_func.R")
-
-
+write_csv(merged_data, here("data/merged_data.csv"))
 ```
