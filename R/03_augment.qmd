@@ -26,6 +26,7 @@ mcb_clean_aug <- mcb_clean_aug |>
   mutate(filtered_mean_post = calculate_filtered_mean(c_across(starts_with("post_count")))) |> 
   ungroup()
 
+write_csv(mcb_clean_aug, here("data/03_dat_aug_mcb_clean_aug.csv"))
 
 mcb_clean_aug
 ```
