@@ -30,12 +30,28 @@ download.file(url_4, data_file_GSM8152444, mode = "wb")
 download.file(url_5, data_file_GSM8152445, mode = "wb")
 
 # Read the gzipped file directly into a tibble
-post_data_GSM8152441 <- read_csv(data_file_GSM8152441)
-post_data_GSM8152442 <- read_csv(data_file_GSM8152442)
-post_data_GSM8152443 <- read_csv(data_file_GSM8152443)
-post_data_GSM8152444 <- read_csv(data_file_GSM8152444)
-post_data_GSM8152450 <- read_csv(data_file_GSM8152445)
+pre_data_GSM8152441 <- read_csv(data_file_GSM8152441)
+pre_data_GSM8152442 <- read_csv(data_file_GSM8152442)
+pre_data_GSM8152443 <- read_csv(data_file_GSM8152443)
+pre_data_GSM8152444 <- read_csv(data_file_GSM8152444)
+pre_data_GSM8152445 <- read_csv(data_file_GSM8152445)
 
+```
+
+### Write data to folder
+
+```{r}
+# write to data folder
+write_csv(x = pre_data_GSM8152441,
+          file = here("data/pre_data_GSM8152441.csv"))
+write_csv(x = pre_data_GSM8152442,
+          file = here("data/pre_data_GSM8152442.csv"))
+write_csv(x = pre_data_GSM8152443,
+          file = here("data/pre_data_GSM8152443.csv"))
+write_csv(x = pre_data_GSM8152444,
+          file = here("data/pre_data_GSM8152444.csv"))
+write_csv(x = pre_data_GSM8152445,
+          file = here("data/pre_data_GSM8152445.csv"))
 ```
 
 # Import the raw post data
