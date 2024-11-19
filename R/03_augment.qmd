@@ -33,17 +33,18 @@ mcb_clean_aug
 ### make the data set longer with pivot longer
 
 ```{r}
-
-mcb_clean_aug_long <- 
-mcb_clean_aug |> 
+mbc_clean_aug_long <- 
+  mbc_clean_aug |> 
   pivot_longer(
     cols = starts_with("filtered"),
-    names_to = "pre/post",
+    names_to = "type",
     values_to = "mean_count"
   ) |> 
-  select("code_class", "name", "pre/post", "mean_count") |> 
-  
-  
+  select("code_class", "name", "type", "mean_count") |> 
+  mutate(type = case_when(
+    type == "filtered_mean_pre" ~ "pre",
+    type == "filtered_mean_post" ~ "post"
+  ))
 
 mcb_clean_aug_long
 ```
