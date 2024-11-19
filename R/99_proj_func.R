@@ -1,0 +1,18 @@
+library(tidyverse)
+library(here)
+
+# cleaning data
+clean_data <- function(dataframe) {
+  # create dataframe
+  data_clean <- dataframe |>
+    # filter out the first 25 rows 
+    filter(row_number() > 25) |> 
+    # separate the header columns into different headers
+    separate(col = `<Header>`, 
+             into = c("code_class", "name", "accesion_number", "count"), 
+             sep= ",") |> 
+    drop_na()
+  
+  
+  return(data_clean)
+}

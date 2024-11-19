@@ -5,6 +5,56 @@
 
 library(tidyverse)
 library(here)
+source("99_proj_func.R")
+```
+
+# Load in data
+
+Pre data
+
+```{r}
+
+# define list of dataframes
+data_list_pre <- c(here('data/pre_data_GSM8152441.csv'), 
+               here('data/pre_data_GSM8152442.csv'),
+               here('data/pre_data_GSM8152443.csv'),
+               here('data/pre_data_GSM8152444.csv'),
+               here('data/pre_data_GSM8152441.csv')) |>
+  # map() files into the list
+  map(read_csv) 
+
+# define clean list 
+clean_data_list_pre <-
+  data_list_pre |> 
+  # use clean_data function to clean the list of data frames
+  map(clean_data)
+```
+
+```{r}
+print(clean_data_list)
+```
+
+Post data
+
+```{r}
+# define list of dataframes
+data_list_post <- c(here('data/post_data_GSM8152441.csv'), 
+               here('data/post_data_GSM8152442.csv'),
+               here('data/post_data_GSM8152443.csv'),
+               here('data/post_data_GSM8152444.csv'),
+               here('data/post_data_GSM8152441.csv')) |>
+  # map() files into the list
+  map(read_csv) 
+
+# define clean list 
+clean_data_list_post <-
+  data_list_post |> 
+  # use clean_data function to clean the list of data frames
+  map(clean_data)
+```
+
+```{r}
+
 ```
 
 # Clean data
@@ -112,5 +162,7 @@ clean_data <- function(dataframe) {
 ```
 
 ```{r}
-from 99_proj_func.qmd import 
+source("99_proj_func.R")
+
+
 ```
