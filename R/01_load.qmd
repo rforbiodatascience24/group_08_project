@@ -10,31 +10,31 @@ library(tidyverse)
 library(tidyverse)
 # URL of the gzipped file
 url_1 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152441&format=file&file=GSM8152441%5F20220128%5F30102613280522%2D01%5F01002%5F04%2ERCC%2Egz"
-url_2 <- 
-url_3 <-
-url_4 <- 
-url_5 <- 
+url_2 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152442&format=file&file=GSM8152442%5F20220128%5F30102613280522%2D01%5F01004%5F05%2ERCC%2Egz"
+url_3 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152443&format=file&file=GSM8152443%5F20220128%5F30102613280522%2D01%5F01013%5F01%2ERCC%2Egz"
+url_4 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152444&format=file&file=GSM8152444%5F20220128%5F30102613280522%2D01%5F01014%5F02%2ERCC%2Egz"
+url_5 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152445&format=file&file=GSM8152445%5F20220128%5F30102613280522%2D01%5F01015%5F03%2ERCC%2Egz"
 
 # Define the destination file name
 data_file_GSM8152441 <- "GSM8152441.gz"
-data_file_GSM8152450 <- "GSM8152450.gz"
-data_file_GSM8152450 <- "GSM8152450.gz"
-data_file_GSM8152450 <- "GSM8152450.gz"
-data_file_GSM8152450 <- "GSM8152450.gz"
+data_file_GSM8152442 <- "GSM8152442.gz"
+data_file_GSM8152443 <- "GSM8152443.gz"
+data_file_GSM8152444 <- "GSM8152444.gz"
+data_file_GSM8152445 <- "GSM8152445.gz"
 
 # Download the gzipped file to a local file (without tempfile)
 download.file(url_1, data_file_GSM8152441, mode = "wb")
-download.file(url_2, data_file_GSM8152450, mode = "wb")
-download.file(url_3, data_file_GSM8152450, mode = "wb")
-download.file(url_4, data_file_GSM8152450, mode = "wb")
-download.file(url_5, data_file_GSM8152450, mode = "wb")
+download.file(url_2, data_file_GSM8152442, mode = "wb")
+download.file(url_3, data_file_GSM8152443, mode = "wb")
+download.file(url_4, data_file_GSM8152444, mode = "wb")
+download.file(url_5, data_file_GSM8152445, mode = "wb")
 
 # Read the gzipped file directly into a tibble
 post_data_GSM8152441 <- read_csv(data_file_GSM8152441)
-post_data_GSM8152450 <- read_csv(data_file_GSM8152450)
-post_data_GSM8152450 <- read_csv(data_file_GSM8152450)
-post_data_GSM8152450 <- read_csv(data_file_GSM8152450)
-post_data_GSM8152450 <- read_csv(data_file_GSM8152450)
+post_data_GSM8152442 <- read_csv(data_file_GSM8152442)
+post_data_GSM8152443 <- read_csv(data_file_GSM8152443)
+post_data_GSM8152444 <- read_csv(data_file_GSM8152444)
+post_data_GSM8152450 <- read_csv(data_file_GSM8152445)
 
 # Return the data
 data
