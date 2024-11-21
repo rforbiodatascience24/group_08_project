@@ -42,6 +42,7 @@ long_data <- mbc_clean_aug |>
 
 write_csv(long_data, here("data/03_dat_aug_02.csv"))
 
+long_data
 ```
 
 ### make the data set longer with pivot longer
@@ -74,6 +75,17 @@ mbc_clean_aug_long_log_trans
 ```
 
 ### making log2 fold change of case/control
+
+laver log2 fold change på datasæt inden at det er blevet gjort long så man ikke behøver at lave det wide
+
+```{r}
+mbc_clean_aug_log2fc <- mbc_clean_aug |> 
+  mutate(log2_fold_change = log2(filtered_mean_post / filtered_mean_pre)) |> 
+  select("code_class", "name", "log2_fold_change")
+
+mbc_clean_aug_log2fc
+
+```
 
 ```{r}
 # Making log2 fold change (log2(post/pre))
