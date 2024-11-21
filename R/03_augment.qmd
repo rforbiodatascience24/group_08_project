@@ -35,12 +35,12 @@ mbc_clean_aug
 # make a longer data frame with a row for each "count" variable
 long_data <- mbc_clean_aug |> 
   pivot_longer(
-    cols = starts_with("pre_count") | starts_with("post_count"), # select count columns
+    cols = c(starts_with("pre_count"), starts_with("post_count")), # select count columns
     names_to = "count_type",  # new column for column names
     values_to = "count_value" # new column for values
-  ) |> 
+  )
 
-write_csv(here(long_data, "data/03_dat_aug_02.csv"))
+write_csv(long_data, here("data/03_dat_aug_02.csv"))
 
 ```
 
