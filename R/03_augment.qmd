@@ -81,7 +81,8 @@ laver log2 fold change på datasæt inden at det er blevet gjort long så man ik
 ```{r}
 mbc_clean_aug_log2fc <- mbc_clean_aug |> 
   mutate(log2_fold_change = log2(filtered_mean_post / filtered_mean_pre)) |> 
-  select("code_class", "name", "log2_fold_change")
+  select("code_class", "name", "log2_fold_change") |> 
+  arrange(desc(log2_fold_change))
 
 mbc_clean_aug_log2fc
 
