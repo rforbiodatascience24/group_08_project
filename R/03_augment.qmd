@@ -61,8 +61,8 @@ mbc_clean_aug |>
     type == "filtered_mean_pre" ~ "pre",
     type == "filtered_mean_post" ~ "post"
   ))
-mbc_clean_aug_long
 
+mbc_clean_aug_long
 ```
 
 ## adding log transformed
@@ -70,8 +70,12 @@ mbc_clean_aug_long
 ```{r}
 mbc_clean_aug_long_log_trans <- 
 mbc_clean_aug_long |> 
-  mutate(log2_transformed = log2(mean_count))
+  mutate(log2_transformed = log2(mean_count+1))
+
+
 mbc_clean_aug_long_log_trans
+
+write_csv(mbc_clean_aug_long_log_trans, here("data/03_dat_aug_03.csv"))
 ```
 
 ### making log2 fold change of case/control
