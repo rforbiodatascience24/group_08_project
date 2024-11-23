@@ -8,6 +8,7 @@ editor: visual
 
 ```{r}
 library(tidyverse)
+library(broom)
 library(here)
 source("99_proj_func.R")
 ```
@@ -15,18 +16,21 @@ source("99_proj_func.R")
 ## Load data
 
 ```{r}
-mbc_log2_transformed <- read.csv(here("data/03_dat_aug_03.csv"))
+long_data <- read_csv(here("data/03_dat_aug_02.csv"))
+long_data
 ```
 
 ### Augment Data
 
 ```{r}
-mbc_log2_transformed <- mbc_log2_transformed |>
+
+mbc_log2_transformed <- long_data |>
+  mutate(log2_transformed = log2(count_value)) |>
   rename(gene = name) |> 
-  mutate(type = case_when(
-                          type == "pre" ~ 0,
-                          type == "post" ~ 1)) |> 
-  relocate(treatment = type)
+  mutate(count_type = case_when(
+                          str_detect(count_type, "^pre") ~ 0,
+                          str_detect(count_type, "^post") ~ 1)) |> 
+  relocate(treatment = count_type)
 mbc_log2_transformed
 ```
 
@@ -38,7 +42,7 @@ mbc_log2_transformed_nested <- mbc_log2_transformed |>
   nest() |> 
   ungroup()
 
-sample(mbc_log2_transformed_nested)
+(mbc_log2_transformed_nested)
 ```
 
 ```{r}
