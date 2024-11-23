@@ -49,6 +49,7 @@ im making counttype to either pre=0 or post=1 so the data can be used for modell
 
 ```{r}
 long_data_for_modelling <- long_data |> 
+  
    mutate(count_type = case_when(count_type == "pre_count_1" ~ "0",
                                 count_type == "pre_count_2" ~ "0",
                                 count_type == "pre_count_3" ~ "0",
