@@ -3,14 +3,31 @@
 ```{r}
 library(tidyverse)
 library(here)
+library(broom)
 ```
 
 # Load data
 
 ```{r}
-
+analysis_dat_aug_03 <- read.csv(here("data/03_dat_aug_03.csv"))
 ```
 
 ## Question:
 
 -   **What genes are significantly up- or down-regulated between the patients with/without treatment?**
+
+```{r}
+# Filtrer data for genet CCNO
+ccno_data <- analysis_dat_aug_03 |> 
+  mutate(type = case_when(type == "post" ~ 1,
+                       type == "pre" ~ 0)) |> 
+  filter(name == "CCNO")
+
+# Fit lineær model
+ccno_model <- lm(mean_count ~ type, data = ccno_data)
+
+# Se resultaterne af modellen
+ccno_model |> 
+  summary()
+
+```
