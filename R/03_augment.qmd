@@ -59,9 +59,12 @@ long_data_for_modelling <- long_data |>
                                 count_type == "post_count_3" ~ "1",
                                 count_type == "post_count_4" ~ "1",
                                 count_type == "post_count_5" ~ "1"
-                                ))
-long_data_for_modelling
+                                )) |> 
+  select("code_class", "name", "count_type", "count_value")
+
 write_csv(long_data_for_modelling, here("data/03_dat_aug_04.csv"))
+
+long_data_for_modelling
 
 ```
 
