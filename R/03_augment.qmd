@@ -38,11 +38,30 @@ long_data <- mbc_clean_aug |>
     cols = c(starts_with("pre_count"), starts_with("post_count")), # select count columns
     names_to = "count_type",  # new column for column names
     values_to = "count_value" # new column for values
-  )
+  ) 
 
 write_csv(long_data, here("data/03_dat_aug_02.csv"))
 
 long_data
+```
+
+im making counttype to either pre=0 or post=1
+
+```{r}
+long_data_pre_or_post <- long_data |> 
+   mutate(count_type = case_when(count_type == "pre_count_1" ~ "0",
+                                count_type == "pre_count_2" ~ "0",
+                                count_type == "pre_count_3" ~ "0",
+                                count_type == "pre_count_4" ~ "0",
+                                count_type == "pre_count_5" ~ "0",
+                                count_type == "post_count_1" ~ "1",
+                                count_type == "post_count_2" ~ "1",
+                                count_type == "post_count_3" ~ "1",
+                                count_type == "post_count_4" ~ "1",
+                                count_type == "post_count_5" ~ "1"
+                                ))
+long_data_for_modelling
+
 ```
 
 ### make the data set longer with pivot longer

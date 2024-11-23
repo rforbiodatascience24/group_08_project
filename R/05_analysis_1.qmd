@@ -19,8 +19,6 @@ analysis_dat_aug_03 <- read.csv(here("data/03_dat_aug_03.csv"))
 ```{r}
 # Filtrer data for genet CCNO
 ccno_data <- analysis_dat_aug_03 |> 
-  mutate(type = case_when(type == "post" ~ 1,
-                       type == "pre" ~ 0)) |> 
   filter(name == "CCNO")
 
 # Fit lineær model
