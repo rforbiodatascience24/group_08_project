@@ -29,3 +29,5 @@ ccno_model |>
   summary()
 
 ```
+
+Modellen viser en negativ sammenhæng mellem count_value og count_type (gennemsnitlig nedgang på 74 fra pre til post), men ændringen er **ikke statistisk signifikant**.
