@@ -48,7 +48,7 @@ long_data
 im making counttype to either pre=0 or post=1
 
 ```{r}
-long_data_pre_or_post <- long_data |> 
+long_data_for_modelling <- long_data |> 
    mutate(count_type = case_when(count_type == "pre_count_1" ~ "0",
                                 count_type == "pre_count_2" ~ "0",
                                 count_type == "pre_count_3" ~ "0",
@@ -61,6 +61,7 @@ long_data_pre_or_post <- long_data |>
                                 count_type == "post_count_5" ~ "1"
                                 ))
 long_data_for_modelling
+write_csv(long_data_for_modelling, here("data/03_dat_aug_04.csv"))
 
 ```
 
