@@ -45,7 +45,7 @@ write_csv(long_data, here("data/03_dat_aug_02.csv"))
 long_data
 ```
 
-im making counttype to either pre=0 or post=1
+im making counttype to either pre=0 or post=1 so the data can be used for modelling
 
 ```{r}
 long_data_for_modelling <- long_data |> 
