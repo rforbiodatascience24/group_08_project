@@ -1,0 +1,82 @@
+---
+title: "06_analysis_2"
+format: html
+editor: visual
+---
+
+## Load Libraries
+
+```{r}
+library(tidyverse)
+library(here)
+source("99_proj_func.R")
+```
+
+## Load data
+
+```{r}
+mbc_log2_transformed <- read.csv(here("data/03_dat_aug_03.csv"))
+```
+
+### Augment Data
+
+```{r}
+mbc_log2_transformed <- mbc_log2_transformed |>
+  rename(gene = name) |> 
+  mutate(type = case_when(
+                          type == "pre" ~ 0,
+                          type == "post" ~ 1)) |> 
+  relocate(treatment = type)
+mbc_log2_transformed
+```
+
+## Analysis (make linear models)
+
+```{r}
+mbc_log2_transformed_nested <- mbc_log2_transformed |> 
+  group_by(gene) |> 
+  nest() |> 
+  ungroup()
+
+sample(mbc_log2_transformed_nested)
+```
+
+```{r}
+mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
+  group_by(gene) |> 
+  mutate(model_object = map(
+    .x = data,
+    .f = ~lm(formula = log2_transformed ~ treatment,
+             data = .x)))
+(mbc_log2_transformed_nested)
+```
+
+```{r}
+mbc_log2_transformed_nested |>
+  filter(gene == "CCNO") |>
+  pull(model_object) |> 
+  pluck(1) |> 
+  tidy(conf.int = TRUE,
+       conf.level = 0.95)
+```
+
+```{r}
+#group data
+mbc_log2_transformed_grouped <- mbc_log2_transformed |> 
+  group_by(gene)
+mbc_log2_transformed_grouped
+```
+
+```{r}
+# Calculate log2 fold change
+data_summary <- mbc_log2_transformed_grouped %>%
+  group_by(gene) %>%
+  summarise(
+    log2_fold_change = log2_transformed[treatment == 1] - log2_transformed[treatment == 0],
+    mean_treatment_0 = mean_count[treatment == 0],
+    mean_treatment_1 = mean_count[treatment == 1]
+  )
+
+# View the results
+print(data_summary)
+```
