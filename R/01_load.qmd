@@ -1,33 +1,39 @@
-# Load libraries
+## Load libraries
 
 ```{r}
 library(tidyverse)
 library(here)
 ```
 
-# Import the raw pre data
+## Import the raw pre data
 
 ```{r}
-# URL of the gzipped file
+# URL of the gzipped pre-data files
 url_1 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152441&format=file&file=GSM8152441%5F20220128%5F30102613280522%2D01%5F01002%5F04%2ERCC%2Egz"
 url_2 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152442&format=file&file=GSM8152442%5F20220128%5F30102613280522%2D01%5F01004%5F05%2ERCC%2Egz"
 url_3 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152443&format=file&file=GSM8152443%5F20220128%5F30102613280522%2D01%5F01013%5F01%2ERCC%2Egz"
 url_4 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152444&format=file&file=GSM8152444%5F20220128%5F30102613280522%2D01%5F01014%5F02%2ERCC%2Egz"
 url_5 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152445&format=file&file=GSM8152445%5F20220128%5F30102613280522%2D01%5F01015%5F03%2ERCC%2Egz"
 
-# Creating list of urls to map functions
+# Creating list of URLs to map functions
 url_list <- c(url_1, url_2, url_3, url_4, url_5)
 
-# Define the destination file name
+# Define the destination file names
 data_file_GSM8152441 <- "GSM8152441.gz"
 data_file_GSM8152442 <- "GSM8152442.gz"
 data_file_GSM8152443 <- "GSM8152443.gz"
 data_file_GSM8152444 <- "GSM8152444.gz"
 data_file_GSM8152445 <- "GSM8152445.gz"
 
-gzfile_list <- c(data_file_GSM8152441,data_file_GSM8152442,data_file_GSM8152443,data_file_GSM8152444,data_file_GSM8152445)
+# Creating list of gzfile names
+gzfile_list <- c(data_file_GSM8152441,
+                 data_file_GSM8152442,
+                 data_file_GSM8152443,
+                 data_file_GSM8152444,
+                 data_file_GSM8152445
+                )
 
-# downloading all the gz files from the url
+# Downloading all the post-data gz files from the URL
 map2(url_list, gzfile_list, ~ download.file(.x, .y, mode = "wb"))
 
 # Readiong all the gzfiles as csv's
@@ -39,24 +45,24 @@ data_list <- gzfile_list |>
 ### Write data to folder
 
 ```{r}
-
+# Rename and write datafiles to data folder
 map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", paste0("pre_data_", str_sub(.y, 1, -4), ".csv"))))
 ```
 
-# Import the raw post data
+## Import the raw post data
 
 ```{r}
-# URL of the gzipped file
+# URL of the gzipped post-data files
 url_6 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152447&format=file&file=GSM8152447%5F20220128%5F30102613280522%2D01%5F01001%2DC3%5F06%2ERCC%2Egz"
 url_7 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152448&format=file&file=GSM8152448%5F20220128%5F30102613280522%2D01%5F01003%2DC3%5F07%2ERCC%2Egz"
 url_8 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152449&format=file&file=GSM8152449%5F20220128%5F30102613280522%2D01%5F01007%2DC3%5F08%2ERCC%2Egz"
 url_9 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152450&format=file&file=GSM8152450%5F20220128%5F30102613280522%2D01%5F01011%2DC3%5F09%2ERCC%2Egz"
 url_10 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152451&format=file&file=GSM8152451%5F20220128%5F30102613280522%2D01%5F01014%2DC3%5F10%2ERCC%2Egz"
 
-# Creating list of urls to map functions
+# Creating list of URLs to map functions
 url_list <- c(url_6, url_7, url_8, url_9, url_10)
 
-# Define the destination file name
+# Define the destination file names
 data_file_GSM8152447 <- "GSM8152447.gz"
 data_file_GSM8152448 <- "GSM8152448.gz"
 data_file_GSM8152449 <- "GSM8152449.gz"
@@ -64,12 +70,17 @@ data_file_GSM8152450 <- "GSM8152450.gz"
 data_file_GSM8152451 <- "GSM8152451.gz"
 
 # Creating list of gzfile names
-gzfile_list <- c(data_file_GSM8152447,data_file_GSM8152448,data_file_GSM8152449,data_file_GSM8152450,data_file_GSM8152451)
+gzfile_list <- c(data_file_GSM8152447,
+                 data_file_GSM8152448,
+                 data_file_GSM8152449,
+                 data_file_GSM8152450,
+                 data_file_GSM8152451
+                )
 
-# downloading all the gz files from the url
+# Downloading all the post-data gz files from the URL
 map2(url_list, gzfile_list, ~ download.file(.x, .y, mode = "wb"))
 
-# Readiong all the gzfiles as csv's
+# Reading all the gz-files as csv's
 data_list <- gzfile_list |>
     map(~ read_csv(.x))
 
@@ -78,6 +89,7 @@ data_list <- gzfile_list |>
 ### Write data to folder
 
 ```{r}
+# Rename and write datafiles to data folder
 map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", paste0("post_data_", str_sub(.y, 1, -4), ".csv"))))
 ```
 
@@ -92,5 +104,4 @@ gz_files <- grep("\\.gz$", all_files, value = TRUE)
 
 # Delete the .gz files
 file.remove(gz_files)
-
 ```
