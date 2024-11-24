@@ -1,0 +1,6 @@
+---
+title: "Gene expression analysis of combined treatment of metastatic breast cancer"
+author: "Martin Vennick Haugbølle, Cecilie Møller-Jensen, Amanda Vinter Eichen, Thomas Vitus and Julie Alsing Haugaard"
+format: revealjs
+editor: visual
+---
