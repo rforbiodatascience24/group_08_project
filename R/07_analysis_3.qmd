@@ -14,6 +14,7 @@ library(here)
 
 ```{r}
 analysis_dat_aug_03 <- read.csv(here("data/03_dat_aug_03.csv"))
+analysis_dat_aug_04 <- read.csv(here("data/03_dat_aug_04.csv"))
 ```
 
 ## Analysis
@@ -36,10 +37,13 @@ analysis_dat_aug_03 |>
 ```
 
 ```{r}
-ggplot(data = analysis_dat_aug_03, aes(x = log_2_fold_change, fill = treatment)) +
+ggplot(data = analysis_dat_aug_04, aes(x = mean_count, fill = code_class)) +
   geom_density(alpha = 0.5) +
   theme_minimal() +
-  labs(title = "Density Plot of Log2 Fold Change",
-       x = "Log2 Fold Change",
+  scale_x_log10() +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.25)) +
+  facet_wrap("type") +
+  labs(title = "Density Plot of code plass",
+       x = "mean count",
        y = "Density")
 ```
