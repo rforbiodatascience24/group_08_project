@@ -52,7 +52,7 @@ mbc_log2_transformed_nested <- mbc_log2_transformed_nested |>
     .x = data,
     .f = ~lm(formula = log2_transformed ~ treatment,
              data = .x)))
-(mbc_log2_transformed_nested)
+View(mbc_log2_transformed_nested)
 ```
 
 ```{r}
@@ -100,11 +100,54 @@ adding q.value
 ```{r}
 estimates <- estimates |> 
   mutate(q.value = p.adjust(p.value),
-         is_significant = case_when(
-                                    q.value < 0.05  ~ "yes", 
-                                    q.value > 0.05 ~ "no"))
+         is_kindof_significant_p = case_when(
+                                    p.value < 0.05  ~ "yes", 
+                                    p.value > 0.05 ~ "no"))
+estimates
+```
+
+### Forest plot
+
+```{r}
+
 estimates |> 
-  filter(is_significant == "yes")
+  filter(is_kindof_significant_p == "yes") |>
+  ggplot(aes(x = estimate, y = fct_reorder(gene, estimate))) +
+  geom_point() +
+  geom_errorbarh(aes(xmax = conf.low, xmin = conf.high)) +
+  theme_minimal(base_size = 8) +
+  geom_vline(xintercept = 0, linetype = "solid", color = "black") +
+  labs(title = "Genes Associated with Early Metastasis in Small Node-Negative Breast Carcinoma",
+       x = "Estimates (95%CIs)",
+       y = "Gene",
+       caption = "Data from DOI: 10.1002/gcc.20820")
+```
+
+volcano plot
+
+```{r}
+estimates <- estimates |> 
+  mutate(log_of_p = (-log10(p.value)))
+#| fig-width: 8
+#| fig-height: 5.5
+#| dpi: 300
+estimates |> 
+  ggplot(aes(x = estimate, y = log_of_p)) +
+  geom_point(alpha = 0.05) +
+  geom_point(data = estimates |> filter(is_kindof_significant_p == "yes"), 
+                        color = "turquoise", alpha = 0.6) +
+  geom_point(data = estimates |> filter(is_kindof_significant_p == "no"), 
+                        color = "tomato", alpha = 0.3) +
+  geom_text_repel(data = estimates |> filter(is_kindof_significant_p == "yes"), 
+                  aes(label = gene), size = 2, color = "turquoise", max.overlaps = 50) +
+  theme_minimal(base_size = 10) +
+  geom_hline(yintercept = 0, linetype = "solid", color = "black") +
+  labs(title = "Genes Associated with Early Metastasis in Small Node-Negative Breast Carcinoma",
+       subtitle = "Genes highlighted in turquoise were significant after multiple testing correction",
+       x = "Estimates",
+       y = "- log10( p-value )",
+       caption = "Data from DOI: 10.1002/gcc.20820") +
+  theme(plot.title.position = "plot")
 ```
 
 ```{r}
