@@ -1,4 +1,4 @@
-code_class,name,accesion_number,pre_count_1,post_count_1,pre_count_2,post_count_2,pre_count_3,post_count_3,pre_count_4,post_count_4,pre_count_5,post_count_5
+code_class,gene,accesion_number,pre_count_1,post_count_1,pre_count_2,post_count_2,pre_count_3,post_count_3,pre_count_4,post_count_4,pre_count_5,post_count_5
 Endogenous,CCNO,NM_021147.4,14,14,324,23,14,24,87,13,20,15
 Endogenous,MYC,NM_002467.3,632,427,2138,570,632,105,55,102,147,125
 Endogenous,CD79A,NM_001783.3,10,17,31,49,10,9,110,12,53,13
