@@ -1,4 +1,4 @@
-# Load libraries
+## Load libraries
 
 ```{r}
 #| message: false
@@ -9,7 +9,7 @@ library(readr)
 source("99_proj_func.R")
 ```
 
-# Load in data
+## Load in data
 
 ```{r}
 # define list of dataframes for pre data
@@ -31,7 +31,7 @@ data_list_post <- c(here('data/post_data_GSM8152447.csv'),
   map(read_csv) 
 ```
 
-# Clean data
+## Clean data
 
 ```{r}
 # define clean list for pre data
@@ -47,7 +47,7 @@ clean_data_list_post <-
   map(clean_data)
 ```
 
-# Merge data
+## Merge data
 
 ```{r}
 # create vector with both lists of data frames
@@ -79,7 +79,7 @@ merged_data <- list(clean_data_list_pre,
 print(merged_data)
 ```
 
-# Write to csv
+## Write to csv
 
 ```{r}
 write_csv(merged_data, here("data/02_dat_clean.csv"))
