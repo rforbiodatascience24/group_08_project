@@ -10,16 +10,29 @@ format: revealjs
 editor: visual
 ---
 
-Dette vil generere en HTML-fil, som du kan åbne i din webbrowser.
+# Introduction
 
-### 5. **Præsentation i browser**
+## Study describtion
 
-Quarto understøtter præsentationsformater som **reveal.js** og **beamer** (til LaTeX). `reveal.js` giver en interaktiv præsentation, hvor du kan bladre gennem slides i din webbrowser.
+This study looks at how a combination of pembrolizumab, exemestane, and leuprolide affects the immune environment in premenopausal women with advanced breast cancer. It tracks changes in immune-related gene expression before and after treatment in 15 patients.
 
-### 6. **Yderligere funktioner**
+# The raw data from GEO
 
--   **Interaktivitet**: Du kan bruge R- eller Python-kodeblokke til at vise visualiseringer, køre analyser eller generere plots i din præsentation.
--   **Formatindstillinger**: Du kan vælge forskellige formater for præsentationen (fx `revealjs`, `ioslides`, `beamer`).
--   **Medieindhold**: Du kan integrere billeder, videoer og andre medier i dine slides.
+```{r}
 
-Quarto giver dig mulighed for at lave præsentationer, der kombinerer både tekst, kode og dynamisk output, hvilket gør det ideelt til akademiske eller tekniske præsentationer.
+
+
+
+```
+
+# Making the data tidy
+
+# Augment of data
+
+# Describment of data 
+
+# Data analysis 1
+
+# Data analysis 2
+
+# Data analysis 3
