@@ -337,18 +337,47 @@
 </div>
 
 </section>
-<section class="slide level2">
+<section>
+<section id="introduction" class="title-slide slide level1 center">
+<h1>Introduction</h1>
 
-<p>Dette vil generere en HTML-fil, som du kan åbne i din webbrowser.</p>
-<h3 id="præsentation-i-browser">5. <strong>Præsentation i browser</strong></h3>
-<p>Quarto understøtter præsentationsformater som <strong>reveal.js</strong> og <strong>beamer</strong> (til LaTeX). <code>reveal.js</code> giver en interaktiv præsentation, hvor du kan bladre gennem slides i din webbrowser.</p>
-<h3 id="yderligere-funktioner">6. <strong>Yderligere funktioner</strong></h3>
-<ul>
-<li><strong>Interaktivitet</strong>: Du kan bruge R- eller Python-kodeblokke til at vise visualiseringer, køre analyser eller generere plots i din præsentation.</li>
-<li><strong>Formatindstillinger</strong>: Du kan vælge forskellige formater for præsentationen (fx <code>revealjs</code>, <code>ioslides</code>, <code>beamer</code>).</li>
-<li><strong>Medieindhold</strong>: Du kan integrere billeder, videoer og andre medier i dine slides.</li>
-</ul>
-<p>Quarto giver dig mulighed for at lave præsentationer, der kombinerer både tekst, kode og dynamisk output, hvilket gør det ideelt til akademiske eller tekniske præsentationer.</p>
+</section>
+<section id="study-describtion" class="slide level2">
+<h2>Study describtion</h2>
+<p>This study looks at how a combination of pembrolizumab, exemestane, and leuprolide affects the immune environment in premenopausal women with advanced breast cancer. It tracks changes in immune-related gene expression before and after treatment in 15 patients.</p>
+</section></section>
+<section id="the-raw-data-from-geo" class="title-slide slide level1 center">
+<h1>The raw data from GEO</h1>
+
+</section>
+
+<section id="making-the-data-tidy" class="title-slide slide level1 center">
+<h1>Making the data tidy</h1>
+
+</section>
+
+<section id="augment-of-data" class="title-slide slide level1 center">
+<h1>Augment of data</h1>
+
+</section>
+
+<section id="describment-of-data" class="title-slide slide level1 center">
+<h1>Describment of data</h1>
+
+</section>
+
+<section id="data-analysis-1" class="title-slide slide level1 center">
+<h1>Data analysis 1</h1>
+
+</section>
+
+<section id="data-analysis-2" class="title-slide slide level1 center">
+<h1>Data analysis 2</h1>
+
+</section>
+
+<section id="data-analysis-3" class="title-slide slide level1 center">
+<h1>Data analysis 3</h1>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
@@ -565,6 +594,44 @@
         ]
       });
     </script>
+    
+    <script>
+      // htmlwidgets need to know to resize themselves when slides are shown/hidden.
+      // Fire the "slideenter" event (handled by htmlwidgets.js) when the current
+      // slide changes (different for each slide format).
+      (function () {
+        // dispatch for htmlwidgets
+        function fireSlideEnter() {
+          const event = window.document.createEvent("Event");
+          event.initEvent("slideenter", true, true);
+          window.document.dispatchEvent(event);
+        }
+
+        function fireSlideChanged(previousSlide, currentSlide) {
+          fireSlideEnter();
+
+          // dispatch for shiny
+          if (window.jQuery) {
+            if (previousSlide) {
+              window.jQuery(previousSlide).trigger("hidden");
+            }
+            if (currentSlide) {
+              window.jQuery(currentSlide).trigger("shown");
+            }
+          }
+        }
+
+        // hookup for slidy
+        if (window.w3c_slidy) {
+          window.w3c_slidy.add_observer(function (slide_num) {
+            // slide_num starts at position 1
+            fireSlideChanged(null, w3c_slidy.slides[slide_num - 1]);
+          });
+        }
+
+      })();
+    </script>
+
     <script id="quarto-html-after-body" type="application/javascript">
     window.document.addEventListener("DOMContentLoaded", function (event) {
       const toggleBodyColorMode = (bsSheetEl) => {
