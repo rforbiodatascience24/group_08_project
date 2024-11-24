@@ -47,21 +47,7 @@ write_csv(long_data, here("data/03_dat_aug_02.csv"))
 long data for modelling
 
 ```{r}
-long_data_pre_or_post <- long_data |> 
-   mutate(count_type = case_when(count_type == "pre_count_1" ~ "0",
-                                count_type == "pre_count_2" ~ "0",
-                                count_type == "pre_count_3" ~ "0",
-                                count_type == "pre_count_4" ~ "0",
-                                count_type == "pre_count_5" ~ "0",
-                                count_type == "post_count_1" ~ "1",
-                                count_type == "post_count_2" ~ "1",
-                                count_type == "post_count_3" ~ "1",
-                                count_type == "post_count_4" ~ "1",
-                                count_type == "post_count_5" ~ "1"
-                                ))
-long_data_for_modelling
 
-write_csv(long_data_for_modelling, here("data/03_dat_aug_04.csv"))
 ```
 
 ### make the data set longer with pivot longer
