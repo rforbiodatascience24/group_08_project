@@ -80,6 +80,16 @@ mbc_clean_aug_long_log_trans
 ### making log2 fold change of case/control
 
 ```{r}
+#laver log2 fold change på datasæt inden at det er blevet gjort long så man ikke behøver at lave det wide
+
+mbc_clean_aug_log2fc <- mbc_clean_aug |> 
+  mutate(log2_fold_change = log2(filtered_mean_post / filtered_mean_pre)) |> 
+  select("code_class", "name", "log2_fold_change")
+mbc_clean_aug_log2fc
+
+```
+
+```{r}
 # Making log2 fold change (log2(post/pre))
 mbc_clean_aug_wide <- mbc_clean_aug_long |> 
   pivot_wider(names_from = type, values_from = mean_count) |> 
