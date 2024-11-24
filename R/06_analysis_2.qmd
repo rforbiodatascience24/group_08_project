@@ -64,11 +64,47 @@ mbc_log2_transformed_nested |>
        conf.level = 0.95)
 ```
 
+### Make the variable model_object_tidy 
+
 ```{r}
-#group data
-mbc_log2_transformed_grouped <- mbc_log2_transformed |> 
-  group_by(gene)
-mbc_log2_transformed_grouped
+mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
+  group_by(gene) |> 
+  mutate(model_object_tidy = map(
+    .x = model_object,
+    .f = ~tidy(x = .x,
+               conf.int = TRUE,
+               conf.level = 0.95)))
+mbc_log2_transformed_nested
+```
+
+### Make the new variable **`estimates`**
+
+```{r}
+estimates <- mbc_log2_transformed_nested |> 
+  unnest(model_object_tidy)
+estimates
+```
+
+### only show slope, and ungroup
+
+```{r}
+estimates <- estimates |> 
+  filter(term == "treatment") |> 
+  select(gene, p.value, estimate, conf.low, conf.high) |> 
+  ungroup()
+estimates
+```
+
+adding q.value
+
+```{r}
+estimates <- estimates |> 
+  mutate(q.value = p.adjust(p.value),
+         is_significant = case_when(
+                                    q.value < 0.05  ~ "yes", 
+                                    q.value > 0.05 ~ "no"))
+estimates |> 
+  filter(is_significant == "yes")
 ```
 
 ```{r}
