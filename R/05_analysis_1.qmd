@@ -13,11 +13,7 @@ library(ggplot2)
 log2_fold_change <- read.csv(here("data/03_dat_aug_03.csv"))
 ```
 
-# Heatmap
-
-```{r}
-print(log2_fold_change)
-```
+# Boxplot
 
 ```{r}
 fold_change_data |>
@@ -25,8 +21,8 @@ fold_change_data |>
              y = log2_fold_change,  # set log2_fold_change as y-axis
              fill = code_class)) + # color by code_class
    labs(
-    x = NULL, 
-    y = "log2 Fold Change") +
-    scale_fill_brewer(palette = "Paired") +
-    geom_boxplot()
+    x = NULL, # set the x-axis title to nothing
+    y = "log2 Fold Change") + # set the y-axis title
+    scale_fill_brewer(palette = "Paired") + # set color theme
+    geom_boxplot() # plot
 ```

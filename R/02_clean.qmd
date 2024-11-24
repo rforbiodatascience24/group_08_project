@@ -73,7 +73,8 @@ merged_data <- list(clean_data_list_pre,
          post_count_3 = count.y.y.y,
          post_count_4 = count.y.y.y.y,
          post_count_5 = count.y.y.y.y.y
-         )
+         ) |> 
+  rename(gene = name) 
 
 print(merged_data)
 ```
