@@ -68,7 +68,7 @@ mbc_clean_aug_long
 
 ```
 
-## adding log transformed
+## adding log transformed count
 
 ```{r}
 mbc_clean_aug_long_log_trans <- 
@@ -76,6 +76,8 @@ mbc_clean_aug_long |>
   mutate(log2_transformed = log2(mean_count))
 mbc_clean_aug_long_log_trans
 ```
+
+## Making log2 fold change on case/control
 
 ```{r}
 #laver log2 fold change på datasæt inden at det er blevet gjort long så man ikke behøver at lave det wide
