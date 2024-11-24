@@ -64,7 +64,7 @@ mbc_log2_transformed_nested |>
        conf.level = 0.95)
 ```
 
-### Make the variable model_object_tidy 
+### Make the variable model_object_tidy
 
 ```{r}
 mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
