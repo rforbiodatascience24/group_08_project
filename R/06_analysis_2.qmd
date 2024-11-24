@@ -150,16 +150,23 @@ estimates |>
   theme(plot.title.position = "plot")
 ```
 
-```{r}
-# Calculate log2 fold change
-data_summary <- mbc_log2_transformed_grouped %>%
-  group_by(gene) %>%
-  summarise(
-    log2_fold_change = log2_transformed[treatment == 1] - log2_transformed[treatment == 0],
-    mean_treatment_0 = mean_count[treatment == 0],
-    mean_treatment_1 = mean_count[treatment == 1]
-  )
+### comparing slopes with log 2 fold in percent difference
 
-# View the results
-print(data_summary)
+```{r}
+# comparing slopes with log 2 fold in percent difference
+estimate_summary <- estimates |>
+  arrange(gene) |> 
+  summarise(estimate)
+log2fold <- mbc_clean_aug_wide |> 
+  arrange(name) |> 
+  summarise(log2_fold_change)
+# calculate  percent difference and rename the column
+percent_difference <- estimate_summary |> 
+  bind_cols(log2fold) |> 
+  mutate(percent_difference = round((estimate - log2_fold_change) / log2_fold_change * 100, 2)) %>%
+  select(percent_difference)
+
+percent_difference
+
+
 ```
