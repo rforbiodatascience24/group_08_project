@@ -15,15 +15,24 @@ mbc_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
 # Augmentation
 
 ```{r}
-mbc_clean_aug <- mbc_clean_aug |> 
-  rowwise() |> 
-  mutate(filtered_mean_pre = calculate_filtered_mean(as.numeric(c_across(starts_with("pre_count"))))) |> 
-  ungroup()
+print(mbc_clean_aug)
+# mbc_clean_aug <- mbc_clean_aug |> 
+#   rowwise() |> 
+#   mutate(filtered_mean_pre = calculate_filtered_mean(as.numeric(c_across(starts_with("pre_count"))))) |> 
+#   ungroup()
+# 
+# mbc_clean_aug <- mbc_clean_aug |> 
+#   rowwise() |> 
+#   mutate(filtered_mean_post = calculate_filtered_mean(as.numeric(c_across(starts_with("post_count"))))) |> 
+#   ungroup()
 
-mbc_clean_aug <- mbc_clean_aug |> 
-  rowwise() |> 
-  mutate(filtered_mean_post = calculate_filtered_mean(as.numeric(c_across(starts_with("post_count"))))) |> 
-  ungroup()
+df1 <- replace_outliers_with_na(mbc_clean_aug, "pre_count")
+df2 <- replace_outliers_with_na(mbc_clean_aug, "post_count")
+  
+joined_df <- df1 |>
+  inner_join(df2, by = "gene")
+  
+print(joined_df)
 
 # Save data
 write_csv(mbc_clean_aug, here("data/03_dat_aug_01.csv"))
