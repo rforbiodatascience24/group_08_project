@@ -17,18 +17,16 @@ mbc_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
 ```{r}
 mbc_clean_aug <- mbc_clean_aug |> 
   rowwise() |> 
-  mutate(filtered_mean_pre = calculate_filtered_mean(c_across(starts_with("pre_count")))) |> 
+  mutate(filtered_mean_pre = calculate_filtered_mean(as.numeric(c_across(starts_with("pre_count"))))) |> 
   ungroup()
-
 
 mbc_clean_aug <- mbc_clean_aug |> 
   rowwise() |> 
-  mutate(filtered_mean_post = calculate_filtered_mean(c_across(starts_with("post_count")))) |> 
+  mutate(filtered_mean_post = calculate_filtered_mean(as.numeric(c_across(starts_with("post_count"))))) |> 
   ungroup()
 
+# Save data
 write_csv(mbc_clean_aug, here("data/03_dat_aug_01.csv"))
-
-mbc_clean_aug
 ```
 
 ```{r}
