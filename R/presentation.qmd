@@ -1,6 +1,25 @@
 ---
 title: "Gene expression analysis of combined treatment of metastatic breast cancer"
-author: "Martin Vennick Haugbølle, Cecilie Møller-Jensen, Amanda Vinter Eichen, Thomas Vitus and Julie Alsing Haugaard"
+author: |
+  Martin Vennick Haugbølle, 
+  Cecilie Møller-Jensen, 
+  Amanda Vinter Eichen, 
+  Thomas Vitus, 
+  Julie Alsing Haugaard
 format: revealjs
 editor: visual
 ---
+
+Dette vil generere en HTML-fil, som du kan åbne i din webbrowser.
+
+### 5. **Præsentation i browser**
+
+Quarto understøtter præsentationsformater som **reveal.js** og **beamer** (til LaTeX). `reveal.js` giver en interaktiv præsentation, hvor du kan bladre gennem slides i din webbrowser.
+
+### 6. **Yderligere funktioner**
+
+-   **Interaktivitet**: Du kan bruge R- eller Python-kodeblokke til at vise visualiseringer, køre analyser eller generere plots i din præsentation.
+-   **Formatindstillinger**: Du kan vælge forskellige formater for præsentationen (fx `revealjs`, `ioslides`, `beamer`).
+-   **Medieindhold**: Du kan integrere billeder, videoer og andre medier i dine slides.
+
+Quarto giver dig mulighed for at lave præsentationer, der kombinerer både tekst, kode og dynamisk output, hvilket gør det ideelt til akademiske eller tekniske præsentationer.
