@@ -29,7 +29,7 @@ This study looks at how a combination of pembrolizumab, exemestane, and leuproli
 
 # Augment of data
 
-# Describment of data 
+# Describment of data
 
 # Data analysis 1
 
