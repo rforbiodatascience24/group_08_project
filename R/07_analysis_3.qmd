@@ -36,5 +36,10 @@ analysis_dat_aug_03 |>
 ```
 
 ```{r}
-
+ggplot(data = analysis_dat_aug_03, aes(x = log_2_fold_change, fill = treatment)) +
+  geom_density(alpha = 0.5) +
+  theme_minimal() +
+  labs(title = "Density Plot of Log2 Fold Change",
+       x = "Log2 Fold Change",
+       y = "Density")
 ```
