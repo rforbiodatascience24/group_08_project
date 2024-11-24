@@ -75,6 +75,8 @@ mbc_clean_aug_long_log_trans <-
 mbc_clean_aug_long |> 
   mutate(log2_transformed = log2(mean_count))
 mbc_clean_aug_long_log_trans
+
+write_csv(mbc_clean_aug_long_log_trans, here("data/03_dat_aug_04.csv"))
 ```
 
 ## Making log2 fold change on case/control
