@@ -20,28 +20,6 @@ print(log2_fold_change)
 ```
 
 ```{r}
-
-fold_change_data |>
-  ggplot(aes(x = name, y = code_class, fill = log2_fold_change)) +
-  geom_tile() +
-  scale_fill_gradient2(
-    low = "blue", high = "red", mid = "white", midpoint = 0,
-    name = "Mean Log2 Fold Change"
-  ) +
-  labs(
-    x = "Genes", 
-    y = NULL
-  ) +
-  theme_minimal() +
-  theme(
-    panel.background = element_rect(fill = "black", color = NA),
-    axis.text.x = element_blank(),  
-    axis.ticks.x = element_blank()  
-  )
-
-```
-
-```{r}
 fold_change_data |>
   ggplot(aes(x = code_class, # set code_class as x-axis
              y = log2_fold_change,  # set log2_fold_change as y-axis
