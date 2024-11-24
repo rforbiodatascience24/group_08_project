@@ -3,22 +3,52 @@
 ```{r}
 library(tidyverse)
 library(here)
+library(dplyr)
+library(ggplot2)
 ```
 
 # Load data
 
 ```{r}
-analysis_dat_aug_04 <- read.csv(here("data/03_dat_aug_04.csv"))
+log2_fold_change <- read.csv(here("data/03_dat_aug_03.csv"))
+```
+
+# Heatmap
+
+```{r}
+print(log2_fold_change)
 ```
 
 ```{r}
-# Filtrer data for genet CCNO
-ccno_data <- analysis_dat_aug_04 |> 
-  filter(name == "CCNO")
-# Fit lineær model
-ccno_model <- lm(count_value ~ count_type, data = ccno_data)
 
-# Se resultaterne af modellen
-ccno_model |> 
-  summary()
+fold_change_data |>
+  ggplot(aes(x = name, y = code_class, fill = log2_fold_change)) +
+  geom_tile() +
+  scale_fill_gradient2(
+    low = "blue", high = "red", mid = "white", midpoint = 0,
+    name = "Mean Log2 Fold Change"
+  ) +
+  labs(
+    x = "Genes", 
+    y = NULL
+  ) +
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill = "black", color = NA),
+    axis.text.x = element_blank(),  
+    axis.ticks.x = element_blank()  
+  )
+
+```
+
+```{r}
+fold_change_data |>
+  ggplot(aes(x = code_class, # set code_class as x-axis
+             y = log2_fold_change,  # set log2_fold_change as y-axis
+             fill = code_class)) + # color by code_class
+   labs(
+    x = NULL, 
+    y = "log2 Fold Change") +
+    scale_fill_brewer(palette = "Paired") +
+    geom_boxplot()
 ```
