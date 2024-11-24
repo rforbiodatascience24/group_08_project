@@ -1,0 +1,28 @@
+```{r}
+library(tidyverse)
+library(here)
+source("99_proj_func.R")
+
+mbc_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
+
+# Create a vector of all values in "pre_" columns for the first row
+pre_values_first_row <- mbc_clean_aug |>
+  select(starts_with("pre_")) |>
+  slice(1) |>
+  unlist(use.names = FALSE) |>
+  as.numeric()
+
+print(pre_values_first_row)
+
+# Convert to data frame for ggplot
+data <- data.frame(values = pre_values_first_row)
+print(data)
+
+# Create a boxplot
+ggplot(data, aes(x = "", y = values)) +
+  geom_boxplot(fill = "lightblue", color = "darkblue") +
+  theme_minimal() +
+  labs(title = "Boxplot of Pre Values", y = "Values", x = "")
+
+
+```
