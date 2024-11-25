@@ -17,7 +17,7 @@ data_list_pre <- c(here('data/pre_data_GSM8152441.csv'),
                here('data/pre_data_GSM8152442.csv'),
                here('data/pre_data_GSM8152443.csv'),
                here('data/pre_data_GSM8152444.csv'),
-               here('data/pre_data_GSM8152441.csv')) |>
+               here('data/pre_data_GSM8152445.csv')) |>
   # map() files into the list
   map(read_csv) 
 
