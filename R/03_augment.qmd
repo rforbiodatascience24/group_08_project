@@ -53,8 +53,6 @@ print(long_data)
 
 ```
 
-long data for modelling
-
 ### make the data set longer with pivot longer
 
 ```{r}
@@ -101,4 +99,18 @@ mbc_clean_aug_log2fc
 
 write_csv(mbc_clean_aug_log2fc, here("data/03_dat_aug_03.csv"))
 
+```
+
+### Log2 transform count values (not mean count values)
+
+```{r}
+mbc_log2_transformed <- long_data |>
+  mutate(gene = name) |> #rename name to gene
+  mutate(log2_transformed = log2(count_value)) |> # calculate log2 of counts
+  mutate(count_type = case_when(
+                          str_detect(count_type, "^pre") ~ 0, # # change every instance that contains "pre" to 0
+                          str_detect(count_type, "^post") ~ 1)) |> # change every instance that contains "post" to 1
+  relocate(treatment = count_type) # rename count_type to treatment 
+
+write_csv(mbc_log2_transformed, here("data/03_dat_aug_05.csv"))
 ```
