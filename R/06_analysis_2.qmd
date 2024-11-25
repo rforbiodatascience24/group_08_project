@@ -139,19 +139,28 @@ volcano plot
 
 ```{r}
 estimates <- estimates |> 
-  mutate(log_of_p = (-log10(p.value)))
+  mutate(log_of_p = (-log10(p.value))) # create a new column with -10log10(p)
 #| fig-width: 8
 #| fig-height: 5.5
 #| dpi: 300
 estimates |> 
-  ggplot(aes(x = estimate, y = log_of_p)) +
-  geom_point(alpha = 0.05) +
-  geom_point(data = estimates |> filter(p_significance == "yes"), 
-                        color = "turquoise", alpha = 0.6) +
-  geom_point(data = estimates |> filter(p_significance == "no"), 
-                        color = "tomato", alpha = 0.3) +
-  geom_text_repel(data = estimates |> filter(p_significance == "yes"), 
-                  aes(label = gene), size = 2, color = "turquoise", max.overlaps = 50) +
+  ggplot(aes(x = estimate, # plot results
+             y = log_of_p)) + 
+  geom_point(alpha = 0.05) + # add semi-transparancy 
+  geom_point(data = estimates |> # highlight signifanct genes in turquoise 
+               filter(p_significance == "yes"), 
+              color = "turquoise", 
+              alpha = 0.6) +
+  geom_point(data = estimates |> # dye insignifanct genes red 
+               filter(p_significance == "no"), 
+             color = "tomato", 
+             alpha = 0.3) +
+  geom_text_repel(data = estimates |> # label insignificant points with gene name
+                    filter(p_significance == "yes"), 
+                  aes(label = gene), 
+                  size = 2, 
+                  color = "turquoise", 
+                  max.overlaps = 50) +
   theme_minimal(base_size = 10) +
   geom_hline(yintercept = 0, linetype = "solid", color = "black") +
   labs(title = "Genes Associated with Early Metastasis in Small Node-Negative Breast Carcinoma",
