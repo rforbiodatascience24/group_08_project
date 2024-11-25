@@ -31,8 +31,8 @@ df <- mbc_clean_aug |>
   replace_outliers_with_na("pre_count") |>
   replace_outliers_with_na("post_count") |> 
   rowwise() |> 
-  mutate(mean_pre = mean(c_across(starts_with("pre_count")), na.rm = TRUE),
-         mean_post = mean(c_across(starts_with("post_count")), na.rm = TRUE)) |> 
+  mutate(mean_pre = round(mean(c_across(starts_with("pre_count")), na.rm = TRUE),1),
+         mean_post = round(mean(c_across(starts_with("post_count")), na.rm = TRUE),1)) |> 
   ungroup()
 
 print(df)
@@ -84,14 +84,14 @@ colnames(mbc_clean_aug)
 mbc_clean_aug_long <- 
 df |> 
   pivot_longer(
-    cols = starts_with("filtered"),
+    cols = starts_with("mean"),
     names_to = "type",
     values_to = "mean_count"
   ) |> 
   select("code_class", "gene", "type", "mean_count") |> 
   mutate(type = case_when(
-    type == "filtered_mean_pre" ~ "pre",
-    type == "filtered_mean_post" ~ "post"
+    type == "mean_pre" ~ "pre",
+    type == "mean_post" ~ "post"
   ))
 mbc_clean_aug_long
 
