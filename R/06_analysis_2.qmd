@@ -10,6 +10,7 @@ editor: visual
 library(tidyverse)
 library(broom)
 library(here)
+library(ggrepel)
 source("99_proj_func.R")
 ```
 
@@ -38,7 +39,7 @@ mbc_log2_transformed
 
 ```{r}
 mbc_log2_transformed_nested <- mbc_log2_transformed |> 
-  group_by(name) |> # group by name
+  group_by(gene) |> # group by name
   nest() # nest data by each gene
 
 # view nested data
@@ -144,11 +145,11 @@ estimates <- estimates |>
 estimates |> 
   ggplot(aes(x = estimate, y = log_of_p)) +
   geom_point(alpha = 0.05) +
-  geom_point(data = estimates |> filter(is_kindof_significant_p == "yes"), 
+  geom_point(data = estimates |> filter(p_significance == "yes"), 
                         color = "turquoise", alpha = 0.6) +
-  geom_point(data = estimates |> filter(is_kindof_significant_p == "no"), 
+  geom_point(data = estimates |> filter(p_significance == "no"), 
                         color = "tomato", alpha = 0.3) +
-  geom_text_repel(data = estimates |> filter(is_kindof_significant_p == "yes"), 
+  geom_text_repel(data = estimates |> filter(p_significance == "yes"), 
                   aes(label = gene), size = 2, color = "turquoise", max.overlaps = 50) +
   theme_minimal(base_size = 10) +
   geom_hline(yintercept = 0, linetype = "solid", color = "black") +
@@ -156,19 +157,22 @@ estimates |>
        subtitle = "Genes highlighted in turquoise were significant after multiple testing correction",
        x = "Estimates",
        y = "- log10( p-value )",
-       caption = "Data from DOI: 10.1002/gcc.20820") +
+       caption = "Data from DOI: 10.1002/gcc.20820") + ########### <- skal dette slettes?
   theme(plot.title.position = "plot")
 ```
 
 ### comparing slopes with log 2 fold in percent difference
 
 ```{r}
+
+######## skal denne slettes? ##########
+
 # comparing slopes with log 2 fold in percent difference
 estimate_summary <- estimates |>
   arrange(gene) |> 
   summarise(estimate)
 log2fold <- mbc_clean_aug_wide |> 
-  arrange(name) |> 
+  arrange(gene) |> 
   summarise(log2_fold_change)
 # calculate  percent difference and rename the column
 percent_difference <- estimate_summary |> 
