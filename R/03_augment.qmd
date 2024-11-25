@@ -30,7 +30,7 @@ df1 <- replace_outliers_with_na(mbc_clean_aug, "pre_count")
 df2 <- replace_outliers_with_na(mbc_clean_aug, "post_count")
   
 joined_df <- df1 |>
-  inner_join(df2, by = "name")
+  inner_join(df2, by = "gene")
   
 print(joined_df)
 
@@ -105,7 +105,6 @@ write_csv(mbc_clean_aug_log2fc, here("data/03_dat_aug_03.csv"))
 
 ```{r}
 mbc_log2_transformed <- long_data |>
-  mutate(gene = name) |> #rename name to gene
   mutate(log2_transformed = log2(count_value)) |> # calculate log2 of counts
   mutate(count_type = case_when(
                           str_detect(count_type, "^pre") ~ 0, # # change every instance that contains "pre" to 0
