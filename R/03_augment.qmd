@@ -30,17 +30,17 @@ df1 <- replace_outliers_with_na(mbc_clean_aug, "pre_count")
 df2 <- replace_outliers_with_na(mbc_clean_aug, "post_count")
   
 joined_df <- df1 |>
-  inner_join(df2, by = "gene")
+  inner_join(df2, by = "name")
   
 print(joined_df)
 
 # Save data
-write_csv(mbc_clean_aug, here("data/03_dat_aug_01.csv"))
+write_csv(joined_df, here("data/03_dat_aug_01.csv"))
 ```
 
 ```{r}
 # make a longer data frame with a row for each "count" variable
-long_data <- mbc_clean_aug |> 
+long_data <- joined_df |> 
   pivot_longer(
     cols = starts_with("pre_count") | starts_with("post_count"), # select count columns
     names_to = "count_type",  # new column for column names
@@ -48,6 +48,8 @@ long_data <- mbc_clean_aug |>
   ) 
 
 write_csv(long_data, here("data/03_dat_aug_02.csv"))
+
+print(long_data)
 
 ```
 
@@ -60,9 +62,8 @@ colnames(mbc_clean_aug)
 ```
 
 ```{r}
-
 mbc_clean_aug_long <- 
-mbc_clean_aug |> 
+joined_df |> 
   pivot_longer(
     cols = starts_with("filtered"),
     names_to = "type",
