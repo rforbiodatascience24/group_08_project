@@ -26,11 +26,11 @@ print(mbc_clean_aug)
 #   mutate(filtered_mean_post = calculate_filtered_mean(as.numeric(c_across(starts_with("post_count"))))) |> 
 #   ungroup()
 
-df1 <- replace_outliers_with_na(mbc_clean_aug, "pre_count")
-df2 <- replace_outliers_with_na(mbc_clean_aug, "post_count")
+df_pre <- replace_outliers_with_na(mbc_clean_aug, "pre_count")
+df_post <- replace_outliers_with_na(mbc_clean_aug, "post_count")
   
-joined_df <- df1 |>
-  inner_join(df2, by = "gene")
+joined_df <- df_pre |>
+  inner_join(df_post, by = "gene")
   
 print(joined_df)
 
@@ -39,6 +39,7 @@ write_csv(joined_df, here("data/03_dat_aug_01.csv"))
 ```
 
 ```{r}
+###### Do we use this long_data? #################
 # make a longer data frame with a row for each "count" variable
 long_data <- joined_df |> 
   pivot_longer(
