@@ -16,21 +16,21 @@ source("99_proj_func.R")
 ## Load data
 
 ```{r}
+# load data
 long_data <- read_csv(here("data/03_dat_aug_02.csv"))
+# view data
 print(long_data)
 ```
 
 ### Augment Data
 
 ```{r}
-
 mbc_log2_transformed <- long_data |>
-  mutate(log2_transformed = log2(count_value)) |>
-  rename(gene = name) |> 
+  mutate(log2_transformed = log2(count_value)) |> # calculate log2 of counts
   mutate(count_type = case_when(
-                          str_detect(count_type, "^pre") ~ 0,
-                          str_detect(count_type, "^post") ~ 1)) |> 
-  relocate(treatment = count_type)
+                          str_detect(count_type, "^pre") ~ 0, # change "pre" to 0
+                          str_detect(count_type, "^post") ~ 1)) |> # change "post" to 1
+  relocate(treatment = count_type) # rename count_type to treatment 
 mbc_log2_transformed
 ```
 
@@ -38,29 +38,30 @@ mbc_log2_transformed
 
 ```{r}
 mbc_log2_transformed_nested <- mbc_log2_transformed |> 
-  group_by(gene) |> 
-  nest() |> 
-  ungroup()
+  group_by(name) |> # group by name
+  nest() # nest data by each gene
 
-(mbc_log2_transformed_nested)
+# view nested data
+mbc_log2_transformed_nested
 ```
 
 ```{r}
 mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
-  group_by(gene) |> 
-  mutate(model_object = map(
-    .x = data,
-    .f = ~lm(formula = log2_transformed ~ treatment,
+  mutate(model_object = map( # add new column 
+    .x = data, # use data column as input
+    .f = ~lm(formula = log2_transformed ~ treatment, # model log2 transformed values based on treatment
              data = .x)))
-View(mbc_log2_transformed_nested)
+
+# view new nested data with lm results
+mbc_log2_transformed_nested
 ```
 
 ```{r}
 mbc_log2_transformed_nested |>
-  filter(gene == "CCNO") |>
-  pull(model_object) |> 
-  pluck(1) |> 
-  tidy(conf.int = TRUE,
+  filter(gene == "CCNO") |> # pick out gene to run analysis on
+  pull(model_object) |> # extract model objects
+  pluck(1) |> # select the first model object
+  tidy(conf.int = TRUE, # convert results to tibble
        conf.level = 0.95)
 ```
 
@@ -68,7 +69,6 @@ mbc_log2_transformed_nested |>
 
 ```{r}
 mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
-  group_by(gene) |> 
   mutate(model_object_tidy = map(
     .x = model_object,
     .f = ~tidy(x = .x,
@@ -77,11 +77,11 @@ mbc_log2_transformed_nested <- mbc_log2_transformed_nested |>
 mbc_log2_transformed_nested
 ```
 
-### Make the new variable **`estimates`**
+### Make the new tibble **`estimates`**
 
 ```{r}
 estimates <- mbc_log2_transformed_nested |> 
-  unnest(model_object_tidy)
+  unnest(model_object_tidy) # unnest nested tbl
 estimates
 ```
 
@@ -89,9 +89,15 @@ estimates
 
 ```{r}
 estimates <- estimates |> 
-  filter(term == "treatment") |> 
-  select(gene, p.value, estimate, conf.low, conf.high) |> 
-  ungroup()
+  filter(term == "treatment") |> # choose only "treatment"
+  select(gene, # select variables of interest
+         p.value, 
+         estimate, 
+         conf.low, 
+         conf.high) |> 
+  ungroup() # ungroup tbl
+
+# view result
 estimates
 ```
 
@@ -99,10 +105,12 @@ adding q.value
 
 ```{r}
 estimates <- estimates |> 
-  mutate(q.value = p.adjust(p.value),
-         is_kindof_significant_p = case_when(
-                                    p.value < 0.05  ~ "yes", 
-                                    p.value > 0.05 ~ "no"))
+  mutate(q.value = p.adjust(p.value), # calculate q-values 
+         p_significance = case_when(
+                                    p.value < 0.05  ~ "yes", # annotate p-value below 0,05 to "yes"
+                                    p.value > 0.05 ~ "no")) # annotate p-value above 0,05 to "no"
+
+# view results
 estimates
 ```
 
@@ -111,8 +119,10 @@ estimates
 ```{r}
 
 estimates |> 
-  filter(is_kindof_significant_p == "yes") |>
-  ggplot(aes(x = estimate, y = fct_reorder(gene, estimate))) +
+  filter(p_significance == "yes") |> # filter out insignificant genes
+  ggplot(aes(x = estimate, # set x as estimate 
+             y = fct_reorder(gene, # set y as gene 
+                             estimate))) +
   geom_point() +
   geom_errorbarh(aes(xmax = conf.low, xmin = conf.high)) +
   theme_minimal(base_size = 8) +
@@ -120,7 +130,7 @@ estimates |>
   labs(title = "Genes Associated with Early Metastasis in Small Node-Negative Breast Carcinoma",
        x = "Estimates (95%CIs)",
        y = "Gene",
-       caption = "Data from DOI: 10.1002/gcc.20820")
+       caption = "Data from DOI: 10.1002/gcc.20820") # add a caption
 ```
 
 volcano plot
