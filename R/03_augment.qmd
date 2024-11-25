@@ -15,7 +15,7 @@ mbc_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
 # Augmentation
 
 ```{r}
-print(mbc_clean_aug)
+# print(mbc_clean_aug)
 # mbc_clean_aug <- mbc_clean_aug |> 
 #   rowwise() |> 
 #   mutate(filtered_mean_pre = calculate_filtered_mean(as.numeric(c_across(starts_with("pre_count"))))) |> 
@@ -29,7 +29,11 @@ print(mbc_clean_aug)
 # Replace outliers for both pre_count and post_count columns in a single step
 df <- mbc_clean_aug |>
   replace_outliers_with_na("pre_count") |>
-  replace_outliers_with_na("post_count")
+  replace_outliers_with_na("post_count") |> 
+  rowwise() |> 
+  mutate(mean_pre = mean(c_across(starts_with("pre_count")), na.rm = TRUE),
+         mean_post = mean(c_across(starts_with("post_count")), na.rm = TRUE)) |> 
+  ungroup()
 
 print(df)
 
@@ -66,6 +70,8 @@ mbc_log2_transformed <- long_data |>
   relocate(treatment = count_type) # rename count_type to treatment 
 
 write_csv(mbc_log2_transformed, here("data/03_dat_aug_05.csv"))
+
+
 ```
 
 ### make the data set longer with pivot longer
