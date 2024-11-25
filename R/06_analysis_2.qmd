@@ -38,7 +38,7 @@ mbc_log2_transformed
 ## Analysis (make linear models)
 
 ```{r}
-mbc_log2_transformed_nested <- mbc_log2_transformed |> 
+mbc_log2_transformed_nested <- mbc_log2_transformed |> # define new tbl
   group_by(gene) |> # group by name
   nest() # nest data by each gene
 
@@ -47,8 +47,8 @@ mbc_log2_transformed_nested
 ```
 
 ```{r}
-mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
-  mutate(model_object = map( # add new column 
+mbc_log2_transformed_nested |> 
+  mutate(model_object = map( # add a model_object column
     .x = data, # use data column as input
     .f = ~lm(formula = log2_transformed ~ treatment, # model log2 transformed values based on treatment
              data = .x)))
@@ -69,12 +69,13 @@ mbc_log2_transformed_nested |>
 ### Make the variable model_object_tidy
 
 ```{r}
-mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
-  mutate(model_object_tidy = map(
+mbc_log2_transformed_nested |> 
+  mutate(model_object_tidy = map( # add a tidy model_object column
     .x = model_object,
     .f = ~tidy(x = .x,
                conf.int = TRUE,
                conf.level = 0.95)))
+# view new nested data with tidy lm results
 mbc_log2_transformed_nested
 ```
 
