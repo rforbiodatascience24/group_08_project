@@ -53,11 +53,11 @@ write_csv(long_data, here("data/03_dat_aug_02.csv"))
 
 long data for modelling
 
-```{r}
-
-```
-
 ### make the data set longer with pivot longer
+
+```{r}
+colnames(mbc_clean_aug)
+```
 
 ```{r}
 
@@ -68,7 +68,7 @@ mbc_clean_aug |>
     names_to = "type",
     values_to = "mean_count"
   ) |> 
-  select("code_class", "name", "type", "mean_count") |> 
+  select("code_class", "gene", "type", "mean_count") |> 
   mutate(type = case_when(
     type == "filtered_mean_pre" ~ "pre",
     type == "filtered_mean_post" ~ "post"
