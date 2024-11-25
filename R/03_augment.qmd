@@ -31,30 +31,18 @@ df <- mbc_clean_aug |>
   replace_outliers_with_na("pre_count") |>
   replace_outliers_with_na("post_count")
 
-# No need for a join if both are already in the same data frame
 print(df)
 
 # Save data
-write_csv(joined_df, here("data/03_dat_aug_01.csv"))
+write_csv(df, here("data/03_dat_aug_01.csv"))
 ```
 
-### Log2 transform count values (not mean_count values)
-
-```{r}
-mbc_log2_transformed <- long_data |>
-  mutate(log2_transformed = log2(count_value)) |> # calculate log2 of counts
-  mutate(count_type = case_when(
-                          str_detect(count_type, "^pre") ~ 0, # # change every instance that contains "pre" to 0
-                          str_detect(count_type, "^post") ~ 1)) |> # change every instance that contains "post" to 1
-  relocate(treatment = count_type) # rename count_type to treatment 
-
-write_csv(mbc_log2_transformed, here("data/03_dat_aug_05.csv"))
-```
+#### Make long data frame with a row for each "count" variable
 
 ```{r}
 ####### Do we use this long_data? #################
 # make a longer data frame with a row for each "count" variable
-long_data <- joined_df |> 
+long_data <- df |> 
   pivot_longer(
     cols = starts_with("pre_count") | starts_with("post_count"), # select count columns
     names_to = "count_type",  # new column for column names
@@ -67,6 +55,19 @@ print(long_data)
 
 ```
 
+#### Log2 transform count values (not mean_count values)
+
+```{r}
+mbc_log2_transformed <- long_data |>
+  mutate(log2_transformed = log2(count_value)) |> # calculate log2 of counts
+  mutate(count_type = case_when(
+                          str_detect(count_type, "^pre") ~ 0, # # change every instance that contains "pre" to 0
+                          str_detect(count_type, "^post") ~ 1)) |> # change every instance that contains "post" to 1
+  relocate(treatment = count_type) # rename count_type to treatment 
+
+write_csv(mbc_log2_transformed, here("data/03_dat_aug_05.csv"))
+```
+
 ### make the data set longer with pivot longer
 
 ```{r}
@@ -75,7 +76,7 @@ colnames(mbc_clean_aug)
 
 ```{r}
 mbc_clean_aug_long <- 
-joined_df |> 
+df |> 
   pivot_longer(
     cols = starts_with("filtered"),
     names_to = "type",
