@@ -36,7 +36,7 @@ gzfile_list <- c(data_file_GSM8152441,
 # downloading all the post-data gz files from the URL
 map2(url_list, gzfile_list, ~ download.file(.x, .y, mode = "wb"))
 
-# readiong all the gzfiles as csv's
+# reading all the gzfiles as csv's
 data_list <- gzfile_list |>
     map(~ read_csv(.x))
 
