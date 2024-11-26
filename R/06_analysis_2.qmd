@@ -183,14 +183,16 @@ volcano_plot <- estimates |>
   geom_hline(yintercept = 0, linetype = "solid", color = "black") +
   labs(
   title = "Immune Microenvironment in Response to Pembrolizumab, Exemestane, and Leuprolide \nin Premenopausal ER+/HER2− Advanced Breast Cancer",
-  subtitle = "Significantly expressed genes (by non-adjusted p-values, highlighted in turquoise) after treatment with pembrolizumab, exemestane, and leuprolide \nin pre- and post-treatment samples",
+  subtitle = "Significantly expressed genes (by non-adjusted p-values, highlighted in turquoise) \nafter treatment with pembrolizumab, exemestane, and leuprolide \nin pre- and post-treatment samples",
   x = "Estimates",
   y = "-log10(p-value)"
 ) +
   theme(plot.title.position = "plot")
 
-ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"), 
-         plot = volcano_plot)
+ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"),
+       plot = volcano_plot,
+       width = 8, 
+       height = 5.5)
 ```
 
 ### comparing slopes with log 2 fold in percent difference
