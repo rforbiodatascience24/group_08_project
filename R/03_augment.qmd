@@ -17,7 +17,7 @@ mbc_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
 ```{r}
 
 # Replace outliers for both pre_count and post_count columns in a single step
-df <- mbc_clean_aug |>
+ <- mbc_clean_aug |>
   replace_outliers_with_na("pre_count") |>
   replace_outliers_with_na("post_count") |> 
   rowwise() |> 
