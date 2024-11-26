@@ -52,8 +52,6 @@ df_long <- df_wide |>
   mutate(treatment = case_when(
                           str_detect(treatment, "^pre") ~ "pre", # change to "pre" 
                           str_detect(treatment, "^post") ~ "post")) |> # change to "post"
-  #mutate(log2_mean = log2(mean_count))
-    
 # view data
 print(df_long)
 
