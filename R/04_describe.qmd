@@ -102,7 +102,7 @@ describe_dat_aug_03 |>
   filter(biggest_fold_change %in% c("high", "low")) |> 
   ggplot(mapping = aes(x = gene,
                        y = log2_fold_change)) + 
-  geom_point(aes(color = code_class)) + 
+  geom_point(aes(color = code_class, shape = biggest_fold_change)) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
