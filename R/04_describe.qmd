@@ -73,21 +73,37 @@ There is five columns (variables) containing data from pre-treatment experiment 
 ### Density plot of gene expression by code class in pre and post conditions
 
 ```{r}
-density_plot_of_gene_classes <- 
-  ggplot(data = describe_dat_aug_04, aes(x = mean_count, fill = code_class)) +
+density_plot_pre <- 
+  ggplot(data = describe_dat_aug_02, aes(x = mean_pre, fill = code_class)) +
   geom_density(alpha = 0.5) +
   theme_minimal() +
   scale_x_log10() +
   scale_y_continuous(breaks = seq(0, 1, by = 0.25)) +
-  facet_wrap("type") +
-  labs(title = "Density Plot of Code Class",
+  labs(title = "Density Plot of Pre Gene Class",
+       x = "Mean Expression ",
+       y = "Density",
+       fill = "Gene Class") + 
+  theme(plot.title.position = "plot")
+
+density_plot_post <- 
+  ggplot(data = describe_dat_aug_02, aes(x = mean_post, fill = code_class)) +
+  geom_density(alpha = 0.5) +
+  theme_minimal() +
+  scale_x_log10() +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.25)) +
+  labs(title = "Density Plot of Post Gene Class",
        x = "Mean Expression ",
        y = "Density",
        fill = "Gene Class") + 
   theme(plot.title.position = "plot")
   
+# view plot
+print(density_plot_pre)
+print(density_plot_post)
 
-ggsave(here("results/04_density_plot_of_gene_classes.png"), plot = density_plot_of_gene_classes, width = 10, height = 6)
+# save plots
+ggsave(here("results/density_plot_pre.png"), plot = density_plot_of_gene_classes, width = 10, height = 6)
+ggsave(here("results/density_plot_post.png"), plot = density_plot_of_gene_classes, width = 10, height = 6)
 ```
 
 This plot does assess the variation in gene expression across the different code classes and observe any shifts between the "pre" and "post" conditions.
@@ -115,8 +131,10 @@ top2_fold_change <- describe_dat_aug_01 |>
        shape = "Top or Buttom 2%") + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1),  plot.title.position = "plot") 
   
-  
+# view plot
+print(top2_fold_change)
 
+# save plot
 ggsave(here("results/04_top_2_procent_fold_change.png"), plot = top2_fold_change, width = 10, height = 6)
 ```
 

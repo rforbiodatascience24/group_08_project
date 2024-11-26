@@ -14,6 +14,8 @@ df_clean <- read.csv(here("data/02_dat_clean.csv"))
 
 # Augmentation
 
+### Create wide df
+
 ```{r}
 
 # Replace outliers for both pre_count and post_count columns in a single step
@@ -29,25 +31,32 @@ df_wide <- df_clean |>
 # view data
 print(df_wide)
 
-# Save data
+# save data
 write_csv(df_wide, here("data/03_dat_aug_01.csv"))
 ```
 
-#### Make long data frame with a row for each "count" variable
+#### Create a long df with a row for each "count" variable
 
 ```{r}
 # make a longer data frame with a row for each "count" variable
-long_data <- df |> 
+df_long <- df_wide |>  
   pivot_longer(
     cols = starts_with("pre_count") | starts_with("post_count"), # select count columns
-    names_to = "count_type",  # new column for column names
+    names_to = "treatment",  # new column for column names
     values_to = "count_value" # new column for values
   ) |> 
-  relocate(treatment = count_type) # rename count_type to treatment 
+  mutate(log2_transformed = log2(count_value)) |> # calculate log2 of counts
+  mutate(bin_treatment = case_when(
+                          str_detect(treatment, "^pre") ~ 0, # change "pre" to 0
+                          str_detect(treatment, "^post") ~ 1)) |> # change "post" to 1
+  mutate(treatment = case_when(
+                          str_detect(treatment, "^pre") ~ "pre", # change to "pre" 
+                          str_detect(treatment, "^post") ~ "post")) |> # change to "post"
+# view data
+print(df_long)
 
-write_csv(long_data, here("data/03_dat_aug_02.csv"))
-
-print(long_data)
+# save data
+write_csv(df_long, here("data/03_dat_aug_02.csv"))
 ```
 
 #### Log2 transform count values (not mean_count values)
