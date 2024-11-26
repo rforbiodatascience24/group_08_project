@@ -204,19 +204,19 @@ ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"),
 ######## skal denne slettes? ##########
 
 # comparing slopes with log 2 fold in percent difference
-estimate_summary <- estimates |>
-  arrange(gene) |> 
-  summarise(estimate)
-log2fold <- mbc_clean_aug_wide |> 
-  arrange(gene) |> 
-  summarise(log2_fold_change)
+#estimate_summary <- estimates |>
+#  arrange(gene) |> 
+#  summarise(estimate)
+#log2fold <- mbc_clean_aug_wide |> 
+#  arrange(gene) |> 
+#  summarise(log2_fold_change)
 # calculate  percent difference and rename the column
-percent_difference <- estimate_summary |> 
-  bind_cols(log2fold) |> 
-  mutate(percent_difference = round((estimate - log2_fold_change) / log2_fold_change * 100, 2)) %>%
-  select(percent_difference)
+#percent_difference <- estimate_summary |> 
+#  bind_cols(log2fold) |> 
+#  mutate(percent_difference = round((estimate - log2_fold_change) / log2_fold_change * 100, 2)) %>%
+#  select(percent_difference)
 
-percent_difference
+# percent_difference
 
 
 ```
