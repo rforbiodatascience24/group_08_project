@@ -72,7 +72,7 @@ There is five columns (variables) containing data from pre-treatment experiment 
 ### The genes there is most up regulated and down regulated in terms of fold change before and after treatment
 
 ```{r}
-#The 2% most upregulated and the 2% most downregulated for each class are plottet. Here you can see which genes are most up regulated and downregulated from each class. 
+#The 2% most upregulated and the 2% most downregulated after treatment for each class are plottet. Here you can see which genes are most up regulated and downregulated after treatment from each class. 
 describe_dat_aug_03 |> 
   group_by(code_class) |> 
  mutate(
@@ -87,11 +87,9 @@ describe_dat_aug_03 |>
   geom_point(aes(color = code_class)) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-
-
 ```
 
-### 
+### Which genes are it exactly ? 
 
 ```{r}
 describe_dat_aug_03 |> 
@@ -103,7 +101,7 @@ describe_dat_aug_03 |>
     TRUE ~ "middle")
   ) |> 
   filter(biggest_fold_change %in% c("high", "low")) |> 
-  arrange(desc(log2_fold_change))
+  arrange(desc(log2_fold_change)) #from highest log2fold change to lowest
 
 ```
 
