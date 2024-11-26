@@ -109,10 +109,10 @@ if (nrow(q_value_estimates) > 0) { # if: there are any q-values below below 0,05
     caption = "Genes identified as significant (by q-value) after treatment with \npembrolizumab, exemestane, and leuprolide."
   ) +
     theme(plot.title.position = "plot")
-  ggsave(here("/results/forest_plot_q_value.png"), 
+  ggsave(here("results/forest_plot_q_value.png"), 
          plot = q_value_estimates_plot, 
          width = 10, 
-         height = 10) 
+         height = 6) 
 } else { # else: explain why not
   print("There are no q-values below 0.05")
 }
@@ -123,10 +123,11 @@ if (nrow(q_value_estimates) > 0) { # if: there are any q-values below below 0,05
 
 ```{r}
 
-estimates |> 
+estimates <- estimates |> 
   mutate(p_significance = case_when(
                                     p.value < 0.05  ~ "yes", # annotate p-value below 0,05 to "yes"
-                                    p.value > 0.05 ~ "no")) |>  # annotate p-value above 0,05 to "no"
+                                    p.value > 0.05 ~ "no"))  # annotate p-value above 0,05 to "no"
+p_value_estimates_plot <- estimates |> 
   filter(p_significance == "yes") |> # filter out insignificant genes
   ggplot(aes(x = estimate, # set x as estimate 
              y = fct_reorder(gene, # set y as gene 
@@ -145,6 +146,11 @@ estimates |>
   caption = "Genes identified as significant after treatment with \npembrolizumab, exemestane, and leuprolide."
 ) +
   theme(plot.title.position = "plot")
+
+ggsave(here("results/07_forest_plot_p_value.png"), 
+         plot = p_value_estimates_plot, 
+         width = 10, 
+         height = 6)
 ```
 
 #### Volcano plot
@@ -155,7 +161,7 @@ estimates <- estimates |>
 #| fig-width: 8
 #| fig-height: 5.5
 #| dpi: 300
-estimates |> 
+volcano_plot <- estimates |> 
   ggplot(aes(x = estimate, # plot results
              y = log_of_p)) + 
   geom_point(alpha = 0.05) + # add semi-transparancy 
@@ -173,7 +179,7 @@ estimates |>
                   size = 2, 
                   color = "turquoise", 
                   max.overlaps = 50) +
-  theme_minimal(base_size = 10) +
+  theme_minimal(base_size = 8) +
   geom_hline(yintercept = 0, linetype = "solid", color = "black") +
   labs(
   title = "Immune Microenvironment in Response to Pembrolizumab, Exemestane, and Leuprolide \nin Premenopausal ER+/HER2− Advanced Breast Cancer",
@@ -182,6 +188,11 @@ estimates |>
   y = "-log10(p-value)"
 ) +
   theme(plot.title.position = "plot")
+
+ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"), 
+         plot = volcano_plot, 
+         width = 10, 
+         height = 6)
 ```
 
 ### comparing slopes with log 2 fold in percent difference
