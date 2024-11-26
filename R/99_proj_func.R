@@ -27,8 +27,8 @@ replace_outliers_with_na <- function(data, prefix) {
                                  prefix)]
   
   # Generate bound variable names based on the prefix
-  lower_bound_name <- paste0("lower_bound_", prefix)
-  upper_bound_name <- paste0("upper_bound_", prefix)
+  lower_bound_name <- str_c("lower_bound_", prefix)
+  upper_bound_name <- str_c("upper_bound_", prefix)
   
   # Perform row-wise outlier detection
   data |> 
