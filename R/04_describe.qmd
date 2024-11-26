@@ -34,18 +34,21 @@ there is 784 variables which means there is 784 different genes in the experimen
 describe_dat_aug_01 |>
   group_by(code_class) |> 
   summarise(n = n()) 
-  
-```
 
-```{r}
-ggplot(data = describe_dat_aug_01, mapping = aes(x = code_class, y = n())) +
-  geom_bar(stat = "identity", fill = "blue", color = "black", alpha = 0.7) +
+describe_dat_aug_01 |>
+  ggplot(aes(x = code_class)) +
+  geom_bar() + 
   labs(
     title = "Histogram of Classes",
     x = "Classes",
     y = "Number of Genes"
   ) +
   theme_minimal()
+  
+```
+
+```{r}
+
 ```
 
 There is four different classes: endogenous, housekeeping, negative and positive.\
