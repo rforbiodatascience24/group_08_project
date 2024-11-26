@@ -9,7 +9,7 @@ source("99_proj_func.R")
 # Load data
 
 ```{r}
-mbc_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
+df_clean <- read.csv(here("data/02_dat_clean.csv"))
 ```
 
 # Augmentation
@@ -17,18 +17,21 @@ mbc_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
 ```{r}
 
 # Replace outliers for both pre_count and post_count columns in a single step
- <- mbc_clean_aug |>
+df_wide <- df_clean |>
   replace_outliers_with_na("pre_count") |>
   replace_outliers_with_na("post_count") |> 
   rowwise() |> 
   mutate(mean_pre = round(mean(c_across(starts_with("pre_count")), na.rm = TRUE),1),
          mean_post = round(mean(c_across(starts_with("post_count")), na.rm = TRUE),1)) |> 
   ungroup()
+  mutate(log2_fold_change = log2(mean_post / mean_pre)) |> 
+  select("code_class", "name", "log2_fold_change")
+  select("code_class", "gene", "log2_fold_change")
 
-print(df)
+print(df_wide)
 
 # Save data
-write_csv(df, here("data/03_dat_aug_01.csv"))
+write_csv(df_wide, here("data/03_dat_aug_01.csv"))
 ```
 
 #### Make long data frame with a row for each "count" variable
