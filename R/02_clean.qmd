@@ -61,7 +61,6 @@ merged_data <- list(clean_data_list_pre,
                 "code_class", 
                 "accesion_number")) |> 
   
-<<<<<<< HEAD
   ##do more efficiently##
   # rename count variables
   rename(pre_count_1 = count.x,
@@ -76,19 +75,17 @@ merged_data <- list(clean_data_list_pre,
          post_count_5 = count.y.y.y.y.y
          ) |> 
   rename(gene = name) 
-=======
   # rename count variables to not be named .x.x.x or .y.y etc.
   rename_with(~ case_when(
     # detect all columns containing count.x and for each column count the number of .x or .y and rename the column.
-    str_detect(., "^count\\.x") ~ paste0("pre_count_", 
+    str_detect(., "^count\\.x") ~ str_c("pre_count_", 
                                          str_count(., "\\.x")),
     
-    str_detect(., "^count\\.y") ~ paste0("post_count_", 
+    str_detect(., "^count\\.y") ~ str_c("post_count_", 
                                          str_count(., "\\.y")),
     . == "name" ~ "gene",
     TRUE ~ .
   ))
->>>>>>> b2623145364077a28790a583fc49045c14ddac4d
 
 print(merged_data)
 ```

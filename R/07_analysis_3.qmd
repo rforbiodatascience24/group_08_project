@@ -33,8 +33,8 @@ long_data <- long_data |>
 wide_data <- long_data |> 
   pivot_wider(names_from = treatment, values_from = count_value) |> 
   rowwise() |> 
-  mutate(pre_count = get(paste0("pre_count_", patient)),
-         post_count = get(paste0("post_count_", patient))) |> 
+  mutate(pre_count = get(str_c("pre_count_", patient)),
+         post_count = get(str_c("post_count_", patient))) |> 
   ungroup()
 ```
 
