@@ -47,10 +47,6 @@ describe_dat_aug_01 |>
   
 ```
 
-```{r}
-
-```
-
 There is four different classes: endogenous, housekeeping, negative and positive.\
 There is 750 genes in endogenous, 20 genes in housekeeping, 8 genes in negative and 6 genes in positive
 
@@ -64,7 +60,7 @@ describe_dat_aug_01 |>
   ncol()
 ```
 
-there is five columns (variables) containing data from pre-treatment experiment and vice verse for post-treatment.
+There is five columns (variables) containing data from pre-treatment experiment and vice verse for post-treatment. This mean there was done 10 experiments, five before treatment and five after treatment.
 
 ```{r}
 analysis_dat_aug_03 |> 
