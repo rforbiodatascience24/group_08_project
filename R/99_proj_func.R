@@ -57,6 +57,38 @@ replace_outliers_with_na <- function(data, prefix) {
     mutate(across(all_of(cols), ~ ifelse(.x < lower_bound | .x > upper_bound, NA, .x)))
 }
 
+replace_outliers_with_na_new <- function(data, prefix) {
+  # Identify columns with the specified prefix
+  cols <- names(data)[startsWith(names(data), 
+                                 prefix)]
+  
+  # Generate bound variable names based on the prefix
+  lower_bound_name <- paste0("lower_bound_", prefix)
+  upper_bound_name <- paste0("upper_bound_", prefix)
+  
+  # Perform row-wise outlier detection
+  data |> 
+    rowwise() |>
+    mutate(
+      # Dynamically create lower and upper bound variables with names including the prefix
+      "{lower_bound_name}" := quantile(c_across(all_of(cols)), 
+                                       0.25, 
+                                       na.rm = TRUE) - 1.5 * IQR(c_across(all_of(cols)), 
+                                                                 na.rm = TRUE),
+      "{upper_bound_name}" := quantile(c_across(all_of(cols)), 
+                                       0.75, 
+                                       na.rm = TRUE) + 1.5 * IQR(c_across(all_of(cols)), 
+                                                                 na.rm = TRUE),
+      
+      # Replace outliers with NA for all columns in cols
+      across(
+        all_of(cols),
+        ~ ifelse(. < .data[[lower_bound_name]] | . > .data[[upper_bound_name]], NA, .)
+      )
+    ) |>
+    ungroup()  # Remove rowwise grouping
+}
+
 replace_test_pre <- function(data) {
   pre_data <- data |> starts_with("pre_count")
   # 1. Calculate quartiles and IQR
