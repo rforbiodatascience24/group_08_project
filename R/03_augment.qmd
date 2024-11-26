@@ -44,7 +44,6 @@ write_csv(df, here("data/03_dat_aug_01.csv"))
 #### Make long data frame with a row for each "count" variable
 
 ```{r}
-####### Do we use this long_data? #################
 # make a longer data frame with a row for each "count" variable
 long_data <- df |> 
   pivot_longer(
@@ -56,7 +55,6 @@ long_data <- df |>
 write_csv(long_data, here("data/03_dat_aug_02.csv"))
 
 print(long_data)
-
 ```
 
 #### Log2 transform count values (not mean_count values)
