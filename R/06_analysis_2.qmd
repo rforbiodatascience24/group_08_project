@@ -1,7 +1,10 @@
 ---
 title: "06_analysis_2"
-format: html
+format:
+  html:
+    embed-resources: true
 editor: visual
+output-dir: "../results/06_analysis_2.html"
 ---
 
 ## Load Libraries
@@ -18,7 +21,7 @@ source("99_proj_func.R")
 
 ```{r}
 # load data
-mbc_log2_transformed <- read_csv(here("data/03_dat_aug_05.csv"))
+mbc_log2_transformed <- read_csv(here("data/03_dat_aug_02.csv"))
 # view data
 print(mbc_log2_transformed)
 ```
@@ -202,19 +205,19 @@ ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"),
 ######## skal denne slettes? ##########
 
 # comparing slopes with log 2 fold in percent difference
-estimate_summary <- estimates |>
-  arrange(gene) |> 
-  summarise(estimate)
-log2fold <- mbc_clean_aug_wide |> 
-  arrange(gene) |> 
-  summarise(log2_fold_change)
+#estimate_summary <- estimates |>
+#  arrange(gene) |> 
+#  summarise(estimate)
+#log2fold <- mbc_clean_aug_wide |> 
+#  arrange(gene) |> 
+#  summarise(log2_fold_change)
 # calculate  percent difference and rename the column
-percent_difference <- estimate_summary |> 
-  bind_cols(log2fold) |> 
-  mutate(percent_difference = round((estimate - log2_fold_change) / log2_fold_change * 100, 2)) %>%
-  select(percent_difference)
+#percent_difference <- estimate_summary |> 
+#  bind_cols(log2fold) |> 
+#  mutate(percent_difference = round((estimate - log2_fold_change) / log2_fold_change * 100, 2)) %>%
+#  select(percent_difference)
 
-percent_difference
+# percent_difference
 
 
 ```
