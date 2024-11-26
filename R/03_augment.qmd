@@ -39,7 +39,7 @@ write_csv(df_wide, here("data/03_dat_aug_01.csv"))
 
 ```{r}
 # make a longer data frame with a row for each "count" variable
-df_long <- df_wide |> 
+df_long <- df_wide |>  
   pivot_longer(
     cols = starts_with("pre_count") | starts_with("post_count"), # select count columns
     names_to = "treatment",  # new column for column names
