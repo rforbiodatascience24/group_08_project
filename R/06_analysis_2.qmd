@@ -97,6 +97,9 @@ estimates <- estimates |>
 
 # view results
 estimates
+
+estimates |> 
+  filter(q.value < 1)
 ```
 
 ### Forest plot
