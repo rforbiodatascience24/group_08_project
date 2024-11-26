@@ -59,7 +59,7 @@ mbc_log2_transformed <- long_data |>
 
 write_csv(mbc_log2_transformed, here("data/03_dat_aug_05.csv"))
 
-
+mbc_log2_transformed
 ```
 
 ### make the data set longer with pivot longer
