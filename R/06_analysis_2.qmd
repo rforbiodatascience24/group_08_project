@@ -94,7 +94,7 @@ q_value_estimates <- estimates |>
   filter(q.value < 0.05) # filter for all q-values below 0,05
 
 if (nrow(q_value_estimates) > 0) { # if: there are any q-values below below 0,05, make plot
-  q_value_estimates <- q_value_estimates |> 
+  q_value_estimates_plot <- q_value_estimates |> 
     ggplot(aes(x = estimate, # set x as estimate 
                y = fct_reorder(gene, # set y as gene 
                                estimate))) +
@@ -109,6 +109,10 @@ if (nrow(q_value_estimates) > 0) { # if: there are any q-values below below 0,05
     caption = "Genes identified as significant (by q-value) after treatment with \npembrolizumab, exemestane, and leuprolide."
   ) +
     theme(plot.title.position = "plot")
+  ggsave(here("/results/forest_plot_q_value.png"), 
+         plot = q_value_estimates_plot, 
+         width = 10, 
+         height = 10) 
 } else { # else: explain why not
   print("There are no q-values below 0.05")
 }
