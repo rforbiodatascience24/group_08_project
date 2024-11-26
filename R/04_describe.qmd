@@ -34,7 +34,7 @@ there is 784 variables which means there is 784 different genes in the experimen
 
 ```{r}
 #which different classes the genes are in 
-describe_dat_aug_01 |>
+describe_dat_aug_01 |> 
   group_by(code_class) |> 
   summarise(n = n()) |> 
   print()
@@ -102,8 +102,8 @@ print(density_plot_pre)
 print(density_plot_post)
 
 # save plots
-ggsave(here("results/density_plot_pre.png"), plot = density_plot_of_gene_classes, width = 10, height = 6)
-ggsave(here("results/density_plot_post.png"), plot = density_plot_of_gene_classes, width = 10, height = 6)
+ggsave(here("results/density_plot_pre.png"), plot = density_plot_pre, width = 10, height = 6)
+ggsave(here("results/density_plot_post.png"), plot = density_plot_post, width = 10, height = 6)
 ```
 
 This plot does assess the variation in gene expression across the different code classes and observe any shifts between the "pre" and "post" conditions.

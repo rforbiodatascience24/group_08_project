@@ -21,7 +21,7 @@ source("99_proj_func.R")
 # load data
 long_data <- read_csv(here("data/03_dat_aug_02.csv"))
 #long_data <- read_csv(here("data/03_dat_aug_02.csv"))
-wide_data <- read.csv(here("data/02_dat_clean.csv"))
+wide_data <- read.csv(here("data/03_dat_aug_01.csv"))
 # view data
 print(long_data)
 print(wide_data)
@@ -29,79 +29,50 @@ print(wide_data)
 
 ## Analysis
 
-### Change data format
-
-```{r}
-long_data <- long_data |> 
-  mutate(patient = str_extract(treatment, "\\d+")) # extract experiments individually
-
-wide_data <- long_data |> 
-  pivot_wider(names_from = treatment, 
-              values_from = count_value) |> 
-  rowwise() |> 
-  mutate(pre_count = get(str_c("pre_count_", patient)),
-         post_count = get(str_c("post_count_", patient))) |> 
-  ungroup()
-```
-
-```{r}
-wide_data
-```
-
-### Calculate slope
-
-```{r}
-corrs <- wide_data |>
-  select(pre_count_1, post_count_1) |>
-  drop_na() |>
-  group_by(patient) |>
-  summarise(PCC = cor(x = BMI,
-                      y = value,
-                      use = "complete.obs",
-                      method = "pearson"))
-
-```
-
 ```{r}
 
-corrs <- wide_data |>
-  select(log2(post_count), log2(pre_count)) |>
-  pivot_longer(cols = c(WHR, BFP),
-               names_to = "metric",
-               values_to = "value") |>
-  drop_na() |>
-  group_by(metric) |>
-  summarise(PCC = cor(x = BMI,
-                      y = value,
-                      use = "complete.obs",
-                      method = "pearson"))
-```
-
-```{r}
-# Calculate slopes for each person
-slopes <- wide_data |> 
-  group_by(patient) |> 
-  summarize(slope = lm(log2(post_count) ~ log2(pre_count))$coefficients[2]) # Extract slope
-slopes
-```
-
-### Create scatter plot
-
-```{r}
-# Scatter plot with dynamic faceting
-ggplot(wide_data, aes(x = log2(pre_count), y = log2(post_count), color = patient)) +
-  geom_point(size = 0.3) +
-  geom_text(data = slopes, aes(x = Inf, y = Inf, label = sprintf("Slope: %.2f", slope)),
-            inherit.aes = FALSE, hjust = 2, vjust = 1.5, color = "black", size = 3) + 
+ggplot(wide_data, aes(x = log2(pre_count_1), y = log2(post_count_1))) +
+  geom_point(size = 1, color = "red") +
   geom_smooth(method = "lm") +
-  labs(title = "Scatter Plot of Pre-count vs Post-count Values",
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 1",
        x = "Log2 Pre-count Values",
        y = "Log2 Post-count Values",
        color = "Patient") +
-  theme_minimal() +
-  facet_wrap(~ patient, scales = "free")
-```
+  theme_minimal() 
 
-```{r}
-print(wide_data)
+ggplot(wide_data, aes(x = log2(pre_count_2), y = log2(post_count_2))) +
+  geom_point(size = 1, color = "green") +
+  geom_smooth(method = "lm") +
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 2",
+       x = "Log2 Pre-count Values",
+       y = "Log2 Post-count Values",
+       color = "Patient") +
+  theme_minimal() 
+
+ggplot(wide_data, aes(x = log2(pre_count_3), y = log2(post_count_3))) +
+  geom_point(size = 1, color = "purple") +
+  geom_smooth(method = "lm") +
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 3",
+       x = "Log2 Pre-count Values",
+       y = "Log2 Post-count Values",
+       color = "Patient") +
+  theme_minimal() 
+
+ggplot(wide_data, aes(x = log2(pre_count_4), y = log2(post_count_4))) +
+  geom_point(size = 1, color = "orange") +
+  geom_smooth(method = "lm") +
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 4",
+       x = "Log2 Pre-count Values",
+       y = "Log2 Post-count Values",
+       color = "Patient") +
+  theme_minimal() 
+  
+ggplot(wide_data, aes(x = log2(pre_count_5), y = log2(post_count_5))) +
+  geom_point(size = 1, color = "lightblue") +
+  geom_smooth(method = "lm") +
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 5",
+       x = "Log2 Pre-count Values",
+       y = "Log2 Post-count Values",
+       color = "Patient") +
+  theme_minimal() 
 ```
