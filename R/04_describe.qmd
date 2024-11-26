@@ -23,8 +23,6 @@ describe_dat_aug_02 <- read.csv(here("data/03_dat_aug_02.csv"))
 #number of genes (observations)
 describe_dat_aug_01 |> 
   dim()
-
-
 ```
 
 there is 784 variables which means there is 784 different genes in the experiment
@@ -34,10 +32,9 @@ there is 784 variables which means there is 784 different genes in the experimen
 describe_dat_aug_01 |>
   group_by(code_class) |> 
   count()
-
 ```
 
-There is four different classes: endogenous, housekeeping, negative and positive. \
+There is four different classes: endogenous, housekeeping, negative and positive.\
 There is 750 genes in endogenous, 20 genes in housekeeping, 8 genes in negative and 6 genes in positive
 
 ```{r}
@@ -54,7 +51,6 @@ analysis_dat_aug_03 |>
   ggplot(mapping = aes(x = name,
                        y = log2_fold_change)) + 
   geom_point(aes(color = code_class))
-
 ```
 
 ```{r}
