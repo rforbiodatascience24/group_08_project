@@ -33,7 +33,16 @@ there is 784 variables which means there is 784 different genes in the experimen
 #which different classes the genes are in 
 describe_dat_aug_01 |>
   group_by(code_class) |> 
-  count()
+  count() 
+  
+ggplot(data = describe_dat_aug_01, mapping = aes(x = code_class, y = n)) +
+  geom_bar(stat = "identity", fill = "blue", color = "black", alpha = 0.7) +
+  labs(
+    title = "Histogram of Classes",
+    x = "Classes",
+    y = "Number of Genes"
+  ) +
+  theme_minimal()
 
 ```
 
