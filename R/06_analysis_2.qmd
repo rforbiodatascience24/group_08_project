@@ -86,20 +86,33 @@ estimates <- estimates |>
 estimates
 ```
 
-#### Adding q.value
+### Forest plot of q-values
 
 ```{r}
-estimates <- estimates |> 
-  mutate(q.value = p.adjust(p.value), # calculate q-values 
-         p_significance = case_when(
-                                    p.value < 0.05  ~ "yes", # annotate p-value below 0,05 to "yes"
-                                    p.value > 0.05 ~ "no")) # annotate p-value above 0,05 to "no"
+q_value_estimates <- estimates |> 
+  mutate(q.value = p.adjust(p.value)) |> # add adjusted p-values
+  filter(q.value < 0.05) # filter for all q-values below 0,05
 
-# view results
-estimates
-
-estimates |> 
-  filter(q.value < 1)
+if (nrow(q_value_estimates) > 0) { # if: there are any q-values below below 0,05, make plot
+  q_value_estimates <- q_value_estimates |> 
+    ggplot(aes(x = estimate, # set x as estimate 
+               y = fct_reorder(gene, # set y as gene 
+                               estimate))) +
+    geom_point() +
+    geom_errorbarh(aes(xmax = conf.low, xmin = conf.high)) +
+    theme_minimal(base_size = 8) +
+    geom_vline(xintercept = 0, linetype = "solid", color = "black") +
+    labs(
+    title = "Significant Immune-Related Genes in Premenopausal ER+/HER2− \nAdvanced Breast Cancer",
+    x = "Estimates (95% Confidence Intervals)",
+    y = "Gene",
+    caption = "Genes identified as significant (by q-value) after treatment with \npembrolizumab, exemestane, and leuprolide."
+  ) +
+    theme(plot.title.position = "plot")
+} else { # else: explain why not
+  print("There are no q-values below 0.05")
+}
+  
 ```
 
 ### Forest plot
@@ -107,41 +120,25 @@ estimates |>
 ```{r}
 
 estimates |> 
+  mutate(p_significance = case_when(
+                                    p.value < 0.05  ~ "yes", # annotate p-value below 0,05 to "yes"
+                                    p.value > 0.05 ~ "no")) |>  # annotate p-value above 0,05 to "no"
   filter(p_significance == "yes") |> # filter out insignificant genes
   ggplot(aes(x = estimate, # set x as estimate 
              y = fct_reorder(gene, # set y as gene 
                              estimate))) +
   geom_point() +
-  geom_errorbarh(aes(xmax = conf.low, xmin = conf.high)) +
+  geom_errorbarh(aes(xmax = conf.low, 
+                     xmin = conf.high)) +
   theme_minimal(base_size = 8) +
-  geom_vline(xintercept = 0, linetype = "solid", color = "black") +
+  geom_vline(xintercept = 0, 
+             linetype = "solid", 
+             color = "black") +
   labs(
-  title = "Significant Immune-Related Genes in Premenopausal ER+/HER2− Advanced Breast Cancer",
+  title = "Significant Immune-Related Genes in Premenopausal \nER+/HER2− Advanced Breast Cancer",
   x = "Estimates (95% Confidence Intervals)",
   y = "Gene",
-  caption = "Genes identified as significant after treatment with pembrolizumab, exemestane, and leuprolide."
-) +
-  theme(plot.title.position = "plot")
-```
-
-### forest plot of q-values
-
-```{r}
-
-estimates |> 
-  filter(q.value < 1) |> # filter out insignificant genes
-  ggplot(aes(x = estimate, # set x as estimate 
-             y = fct_reorder(gene, # set y as gene 
-                             estimate))) +
-  geom_point() +
-  geom_errorbarh(aes(xmax = conf.low, xmin = conf.high)) +
-  theme_minimal(base_size = 8) +
-  geom_vline(xintercept = 0, linetype = "solid", color = "black") +
-  labs(
-  title = "Significant Immune-Related Genes in Premenopausal ER+/HER2− Advanced Breast Cancer",
-  x = "Estimates (95% Confidence Intervals)",
-  y = "Gene",
-  caption = "Genes identified as significant (by q-value) after treatment with pembrolizumab, exemestane, and leuprolide."
+  caption = "Genes identified as significant after treatment with \npembrolizumab, exemestane, and leuprolide."
 ) +
   theme(plot.title.position = "plot")
 ```
