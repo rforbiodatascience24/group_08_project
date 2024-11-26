@@ -1,6 +1,8 @@
 ---
 title: "07_analysis_3"
-format: html
+format:
+  html:
+    embed-resources: true
 editor: visual
 ---
 
@@ -62,4 +64,18 @@ ggplot(wide_data, aes(x = log2(pre_count), y = log2(post_count), color = patient
        color = "Patient") +
   theme_minimal() +
   facet_wrap(~ patient, scales = "free")
+```
+
+```{r}
+# Automatically render this file into HTML and save it in "results/" when sourced
+if (basename(rstudioapi::getSourceEditorContext()$path) == "07_analysis_3.qmd") {
+  # Define the output directory using `here()`
+  output_dir <- here("results")
+  
+  # Define the output file path
+  output_file <- file.path(output_dir, "07_analysis_3.html")
+  
+  # Render the file into the results directory
+  system(glue::glue("quarto render {here('07_analysis_3.qmd')} --to html --output {output_file}"))
+}
 ```
