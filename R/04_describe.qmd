@@ -82,7 +82,7 @@ ggplot(data = describe_dat_aug_04, aes(x = mean_count, fill = code_class)) +
        y = "Density")
 ```
 
-This plot assess the variation in gene expression and observe any shifts between the "pre" and "post" conditions across the different code classes. The "negative" genes does general have low ekspression
+This plot assess the variation in gene expression and observe any shifts between the "pre" and "post" conditions across the different code classes. The "negative" genes does general have low expression
 
 ### The genes there is most up regulated and down regulated in terms of fold change before and after treatment
 
