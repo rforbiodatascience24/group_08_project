@@ -16,21 +16,6 @@ log2_fold_change <- read.csv(here("data/03_dat_aug_03.csv"))
 # Boxplot
 
 ```{r}
-log2_fold_change_differences_boxplot <- log2_fold_change |>
-  ggplot(aes(
-    x = code_class, # set code_class as x-axis
-    y = log2_fold_change,  # set log2_fold_change as y-axis
-    fill = code_class)) + # color by code_class
-  
-mbc_log2_transformed_nested <- log2_fold_change |> # define new tbl
-  group_by(gene) |> # group by name
-  nest() # nest data by each gene
-
-# view nested data
-mbc_log2_transformed_nested
-```
-
-```{r}
 
 log2_fold_change |>
   ggplot(aes(
