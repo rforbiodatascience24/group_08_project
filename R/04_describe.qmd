@@ -91,20 +91,28 @@ This plot does assess the variation in gene expression across the different code
 
 ```{r}
 #The 2% most upregulated and the 2% most downregulated after treatment for each class are plottet. Here you can see which genes are most up regulated and downregulated after treatment from each class. 
-describe_dat_aug_03 |> 
+top2_fold_change <- describe_dat_aug_03 |> 
   group_by(code_class) |> 
  mutate(
   biggest_fold_change = case_when(
-    log2_fold_change <= quantile(log2_fold_change, 0.02, na.rm = TRUE) ~ "low",
-    log2_fold_change >= quantile(log2_fold_change, 0.98, na.rm = TRUE) ~ "high",
+    log2_fold_change <= quantile(log2_fold_change, 0.02, na.rm = TRUE) ~ "Low",
+    log2_fold_change >= quantile(log2_fold_change, 0.98, na.rm = TRUE) ~ "High",
     TRUE ~ "middle")
   ) |> 
-  filter(biggest_fold_change %in% c("high", "low")) |> 
+  filter(biggest_fold_change %in% c("High", "Low")) |> 
   ggplot(mapping = aes(x = gene,
                        y = log2_fold_change)) + 
   geom_point(aes(color = code_class, shape = biggest_fold_change)) + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Top 2% most upregulated and downregulated genes after treatment by code class",
+       x = "Genes",
+       y = "Fold Change",
+       color = "Gene Class",
+       shape = "Top or Buttom 2%") + 
+  theme(plot.title.position = "plot")
+  
 
+ggsave(here("results/04_top2_fold_change.png"), plot = top2_fold_change, width = 10, height = 6)
 ```
 
 ### Which genes are it exactly ?
@@ -114,11 +122,11 @@ describe_dat_aug_03 |>
   group_by(code_class) |> 
  mutate(
   biggest_fold_change = case_when(
-    log2_fold_change <= quantile(log2_fold_change, 0.02, na.rm = TRUE) ~ "low",
-    log2_fold_change >= quantile(log2_fold_change, 0.98, na.rm = TRUE) ~ "high",
+    log2_fold_change <= quantile(log2_fold_change, 0.02, na.rm = TRUE) ~ "Low",
+    log2_fold_change >= quantile(log2_fold_change, 0.98, na.rm = TRUE) ~ "High",
     TRUE ~ "middle")
   ) |> 
-  filter(biggest_fold_change %in% c("high", "low")) |> 
+  filter(biggest_fold_change %in% c("High", "Low")) |> 
   arrange(desc(log2_fold_change)) |> #from highest log2fold change to lowest 
   print()
 
