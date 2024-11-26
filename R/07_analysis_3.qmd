@@ -17,15 +17,25 @@ source("99_proj_func.R")
 
 ```{r}
 # load data
-mbc_log2_transformed <- read_csv(here("data/03_dat_aug_05.csv"))
+long_data <- read_csv(here("data/03_dat_aug_02.csv"))
 # view data
 print(long_data)
 ```
 
 ## Analysis
 
+### Change data format
+
 ```{r}
-mbc_log2_transformed
+long_data <- long_data |> 
+  mutate(patient = str_extract(treatment, "\\d+")) # extract experiments individually
+
+wide_data <- long_data |> 
+  pivot_wider(names_from = treatment, values_from = count_value) |> 
+  rowwise() |> 
+  mutate(pre_count = get(paste0("pre_count_", patient)),
+         post_count = get(paste0("post_count_", patient))) |> 
+  ungroup()
 ```
 
 ### Calculate slope
@@ -37,18 +47,9 @@ slopes <- wide_data |>
   summarize(slope = lm(log2(post_count) ~ log2(pre_count))$coefficients[2]) # Extract slope
 ```
 
+### Create scatter plot
+
 ```{r}
-
-long_data <- long_data |> 
-  mutate(patient = str_extract(count_type, "\\d+")) # extract experiments individually
-
-wide_data <- long_data |> 
-  pivot_wider(names_from = count_type, values_from = count_value) |> 
-  rowwise() |> 
-  mutate(pre_count = get(paste0("pre_count_", patient)),
-         post_count = get(paste0("post_count_", patient))) |> 
-  ungroup()
-
 # Scatter plot with dynamic faceting
 ggplot(wide_data, aes(x = log2(pre_count), y = log2(post_count), color = patient)) +
   geom_point(size = 0.3) +
@@ -61,5 +62,4 @@ ggplot(wide_data, aes(x = log2(pre_count), y = log2(post_count), color = patient
        color = "Patient") +
   theme_minimal() +
   facet_wrap(~ patient, scales = "free")
-
 ```
