@@ -13,20 +13,20 @@ source("99_proj_func.R")
 
 ```{r}
 # define list of dataframes for pre data
-data_list_pre <- c(here('data/pre_data_GSM8152441.csv'), 
-               here('data/pre_data_GSM8152442.csv'),
-               here('data/pre_data_GSM8152443.csv'),
-               here('data/pre_data_GSM8152444.csv'),
-               here('data/pre_data_GSM8152445.csv')) |>
+data_list_pre <- c(here('data/01_dat_load_pre_data_GSM8152441.csv'), 
+               here('data/01_dat_load_pre_data_GSM8152442.csv'),
+               here('data/01_dat_load_pre_data_GSM8152443.csv'),
+               here('data/01_dat_load_pre_data_GSM8152444.csv'),
+               here('data/01_dat_load_pre_data_GSM8152445.csv')) |>
   # map() files into the list
   map(read_csv) 
 
 # define list of dataframes for post data
-data_list_post <- c(here('data/post_data_GSM8152447.csv'), 
-               here('data/post_data_GSM8152448.csv'),
-               here('data/post_data_GSM8152449.csv'),
-               here('data/post_data_GSM8152450.csv'),
-               here('data/post_data_GSM8152451.csv')) |>
+data_list_post <- c(here('data/01_dat_load_post_data_GSM8152447.csv'), 
+               here('data/01_dat_load_post_data_GSM8152448.csv'),
+               here('data/01_dat_load_post_data_GSM8152449.csv'),
+               here('data/01_dat_load_post_data_GSM8152450.csv'),
+               here('data/01_dat_load_post_data_GSM8152451.csv')) |>
   # map() files into the list
   map(read_csv) 
 ```
