@@ -6,6 +6,7 @@
 library(tidyverse)
 library(here)
 library(readr)
+library(stringr)
 source("99_proj_func.R")
 ```
 
@@ -60,21 +61,19 @@ merged_data <- list(clean_data_list_pre,
          by = c("name", 
                 "code_class", 
                 "accesion_number")) |> 
+
   
-  ##do more efficiently##
-  # rename count variables
-  rename(pre_count_1 = count.x,
-         pre_count_2 = count.x.x,
-         pre_count_3 = count.x.x.x,
-         pre_count_4 = count.x.x.x.x,
-         pre_count_5 = count.x.x.x.x.x,
-         post_count_1 = count.y,
-         post_count_2 = count.y.y,
-         post_count_3 = count.y.y.y,
-         post_count_4 = count.y.y.y.y,
-         post_count_5 = count.y.y.y.y.y
-         ) |> 
-  rename(gene = name) 
+  # rename count variables to not be named .x.x.x or .y.y etc.
+  rename_with(~ case_when(
+    # detect all columns containing count.x and for eact column count       the number of .x or .y and rename the column.
+    str_detect(., "^count\\.x") ~ paste0("pre_count_", 
+                                         str_count(., "\\.x")),
+    
+    str_detect(., "^count\\.y") ~ paste0("post_count_", 
+                                         str_count(., "\\.y")),
+    . == "name" ~ "gene",
+    TRUE ~ .
+  ))
 
 print(merged_data)
 ```
