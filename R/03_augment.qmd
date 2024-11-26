@@ -111,9 +111,10 @@ write_csv(mbc_clean_aug_long_log_trans, here("data/03_dat_aug_04.csv"))
 ```{r}
 #laver log2 fold change på datasæt inden at det er blevet gjort long så man ikke behøver at lave det wide
 
-mbc_clean_aug_log2fc <- mbc_clean_aug |> 
+mbc_clean_aug_log2fc <- df |> 
   mutate(log2_fold_change = log2(mean_post / mean_pre)) |> 
   select("code_class", "name", "log2_fold_change")
+  select("code_class", "gene", "log2_fold_change")
 mbc_clean_aug_log2fc
 
 write_csv(mbc_clean_aug_log2fc, here("data/03_dat_aug_03.csv"))

@@ -53,3 +53,37 @@ ggplot(scatter_data, aes(x = pre_count_values, y = post_count_values, color = pe
 print(long_data)
 
 ```
+
+```{r}
+mbc_log2_transformed <- read_csv(here("data/03_dat_aug_05.csv"))
+```
+
+```{r}
+mbc_log2_transformed
+```
+
+```{r}
+# Extract the person from count_type
+long_data <- long_data %>%
+  mutate(person = str_extract(count_type, "\\d+")) # Extract person ID as a new column
+
+# Filter rows to include only pre_count and post_count
+filtered_data <- long_data %>%
+  filter(str_detect(count_type, "pre_count|post_count")) # Keep only pre_count and post_count rows
+
+# Pivot data to wide format for pre_count and post_count
+wide_data <- filtered_data %>%
+  pivot_wider(names_from = count_type, values_from = count_value) %>%
+  select(person, pre_count = pre_count_1, post_count = post_count_1) # Adjust these column names as needed
+
+# Scatter plot
+ggplot(wide_data, aes(x = pre_count, y = post_count, color = person)) +
+  geom_point(size = 3) +
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values",
+       x = "Pre-count Values",
+       y = "Post-count Values",
+       color = "Person") +
+  theme_minimal()
+
+
+```

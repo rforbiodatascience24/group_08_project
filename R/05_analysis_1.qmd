@@ -16,7 +16,7 @@ log2_fold_change <- read.csv(here("data/03_dat_aug_03.csv"))
 # Boxplot
 
 ```{r}
-fold_change_data |>
+log2_fold_change |>
   ggplot(aes(x = code_class, # set code_class as x-axis
              y = log2_fold_change,  # set log2_fold_change as y-axis
              fill = code_class)) + # color by code_class
