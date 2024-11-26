@@ -104,7 +104,7 @@ describe_dat_aug_03 |>
 
 ```
 
-### Which genes are it exactly ? 
+### Which genes are it exactly ?
 
 ```{r}
 describe_dat_aug_03 |> 
@@ -118,5 +118,4 @@ describe_dat_aug_03 |>
   filter(biggest_fold_change %in% c("high", "low")) |> 
   arrange(desc(log2_fold_change)) #from highest log2fold change to lowest
 
->>>>>>> b2623145364077a28790a583fc49045c14ddac4d
 ```
