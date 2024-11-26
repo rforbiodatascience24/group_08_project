@@ -33,7 +33,7 @@ print(long_data)
 scatter_data <- long_data |> 
   filter(grepl("pre_count_|post_count_", count_type)) |>  # Filter for pre and post counts
   pivot_wider(names_from = count_type, values_from = count_value) |>  # Reshape the data
-  mutate(person = str_extract(count_type, "\\d+")) # Extract person ID from count_type
+  mutate(person = str_extract(count_type, "\\_(d+)")) # Extract person ID from count_type
 
 # Create the scatterplot
 ggplot(scatter_data, aes(x = pre_count_values, y = post_count_values, color = person)) +
@@ -45,5 +45,11 @@ ggplot(scatter_data, aes(x = pre_count_values, y = post_count_values, color = pe
     color = "Person"
   ) +
   theme_minimal()
+
+```
+
+```{r}
+
+print(long_data)
 
 ```
