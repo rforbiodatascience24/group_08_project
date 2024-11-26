@@ -15,7 +15,7 @@ library(dplyr)
 
 ```{r}
 describe_dat_aug_01 <- read.csv(here("data/03_dat_aug_01.csv"))
-describe_dat_aug_04 <- read.csv(here("data/03_dat_aug_04.csv"))
+describe_dat_aug_02 <- read.csv(here("data/03_dat_aug_02.csv"))
 ```
 
 ## Data description
