@@ -26,8 +26,6 @@ describe_dat_aug_04 <- read.csv(here("data/03_dat_aug_04.csv"))
 #number of genes (observations)
 describe_dat_aug_01 |> 
   dim()
-
-
 ```
 
 there is 784 variables which means there is 784 different genes in the experiment
@@ -38,6 +36,7 @@ there is 784 variables which means there is 784 different genes in the experimen
 #which different classes the genes are in 
 describe_dat_aug_01 |>
   group_by(code_class) |> 
+  count()
   summarise(n = n()) 
 
 describe_dat_aug_01 |>
@@ -49,7 +48,7 @@ describe_dat_aug_01 |>
     y = "Number of Genes"
   ) +
   theme_minimal()
-  
+
 ```
 
 There is four different classes: endogenous, housekeeping, negative and positive.\
@@ -100,6 +99,9 @@ describe_dat_aug_03 |>
   filter(biggest_fold_change %in% c("high", "low")) |> 
   ggplot(mapping = aes(x = gene,
                        y = log2_fold_change)) + 
+<<<<<<< HEAD
+  geom_point(aes(color = code_class))
+=======
   geom_point(aes(color = code_class)) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
@@ -119,4 +121,5 @@ describe_dat_aug_03 |>
   filter(biggest_fold_change %in% c("high", "low")) |> 
   arrange(desc(log2_fold_change)) #from highest log2fold change to lowest
 
+>>>>>>> b2623145364077a28790a583fc49045c14ddac4d
 ```

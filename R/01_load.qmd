@@ -46,7 +46,7 @@ data_list <- gzfile_list |>
 
 ```{r}
 # rename and write datafiles to data folder
-map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", paste0("01_dat_load_pre_data_", str_sub(.y, 1, -4), ".csv"))))
+map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", paste0("pre_data_", str_sub(.y, 1, -4), ".csv"))))
 ```
 
 ## Import the raw post data
@@ -90,7 +90,7 @@ data_list <- gzfile_list |>
 
 ```{r}
 # rename and write datafiles to data folder
-map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", paste0("01_dat_load_post_data_", str_sub(.y, 1, -4), ".csv"))))
+map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", paste0("post_data_", str_sub(.y, 1, -4), ".csv"))))
 ```
 
 ## Deleting all .gz files
