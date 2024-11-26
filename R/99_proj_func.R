@@ -44,7 +44,7 @@ calculate_filtered_mean <- function(data) {
 
 
 # Function to replace outliers with NA for columns starting with a specific string and add bounds
-replace_outliers_with_na <- function(data, prefix) {
+replace_outliers_with_na_old <- function(data, prefix) {
   cols <- names(data)[startsWith(names(data), prefix)]
   
   data %>%
@@ -57,7 +57,8 @@ replace_outliers_with_na <- function(data, prefix) {
     mutate(across(all_of(cols), ~ ifelse(.x < lower_bound | .x > upper_bound, NA, .x)))
 }
 
-replace_outliers_with_na_new <- function(data, prefix) {
+# Function to replace outliers with NA for columns starting with a specific string and add bounds
+replace_outliers_with_na <- function(data, prefix) {
   # Identify columns with the specified prefix
   cols <- names(data)[startsWith(names(data), 
                                  prefix)]
