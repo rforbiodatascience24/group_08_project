@@ -189,8 +189,10 @@ volcano_plot <- estimates |>
 ) +
   theme(plot.title.position = "plot")
 
-ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"), 
-         plot = volcano_plot)
+ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"),
+       plot = volcano_plot,
+       width = 8, 
+       height = 5.5)
 ```
 
 ### comparing slopes with log 2 fold in percent difference
