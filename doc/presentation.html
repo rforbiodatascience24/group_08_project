@@ -418,6 +418,7 @@
 </section>
 <section id="loading-the-data" class="slide level2">
 <h2>Loading the data</h2>
+<p>C comment: I think we should show some code here, highlighting the use of map() function to load data…</p>
 <p>For both pre and post data</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href=""></a><span class="fu">library</span>(tidyverse)</span>
@@ -459,25 +460,12 @@
 <span id="cb1-37"><a href=""></a><span class="fu">map2</span>(data_list, gzfile_list, <span class="sc">~</span> <span class="fu">write_csv</span>(<span class="at">x =</span> .x, <span class="at">file =</span> <span class="fu">here</span>(<span class="st">"data"</span>, <span class="fu">paste0</span>(<span class="st">"pre_data_"</span>, <span class="fu">str_sub</span>(.y, <span class="dv">1</span>, <span class="sc">-</span><span class="dv">4</span>), <span class="st">".csv"</span>))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="deleting-all-.gz-files" class="slide level2">
-<h2>Deleting all .gz files</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co"># list all files in the current directory</span></span>
-<span id="cb2-2"><a href=""></a>all_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"."</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-3"><a href=""></a></span>
-<span id="cb2-4"><a href=""></a><span class="co"># use regex to find files ending with .gz</span></span>
-<span id="cb2-5"><a href=""></a>gz_files <span class="ot">&lt;-</span> <span class="fu">grep</span>(<span class="st">"</span><span class="sc">\\</span><span class="st">.gz$"</span>, all_files, <span class="at">value =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb2-6"><a href=""></a></span>
-<span id="cb2-7"><a href=""></a><span class="co"># delete the .gz files</span></span>
-<span id="cb2-8"><a href=""></a><span class="fu">file.remove</span>(gz_files)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="example-file-for-one-loaded-pre-dataset" class="slide level2">
-<h2>Example file for <strong>one</strong> loaded <strong>pre</strong> dataset</h2>
+<section id="example-file-of-one-dataset" class="slide level2">
+<h2>Example file of one dataset</h2>
 <p>Five dataset for pre and post treatment each, all looking like:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href=""></a><span class="co"># Displaying the first few rows of the dataset</span></span>
-<span id="cb3-2"><a href=""></a><span class="fu">print</span>(<span class="fu">read.csv</span>(<span class="fu">here</span>(<span class="st">"data/01_dat_load_pre_data_GSM8152441.csv"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href=""></a><span class="co"># Displaying the first few rows of the dataset</span></span>
+<span id="cb2-2"><a href=""></a><span class="fu">print</span>(<span class="fu">read.csv</span>(<span class="fu">here</span>(<span class="st">"data/01_dat_load_pre_data_GSM8152441.csv"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                 X.Header.
 1                          FileVersion,2.0
@@ -1302,14 +1290,2382 @@
 </section>
 <section id="workflow" class="slide level2">
 <h2>Workflow</h2>
+<p>C comment: Test image of data cleaning overview. Code is not as relevant here i think…</p>
 <p>A workflow overview of data cleaning and tidying:</p>
 
 <img data-src="images/clean_workflow.png" class="r-stretch"></section></section>
+<section>
 <section id="augment-of-data" class="title-slide slide level1 center">
 <h1>Augment of data</h1>
 
 </section>
-
+<section id="removing-outliers" class="slide level2">
+<h2>Removing outliers</h2>
+<p>Removing outliers in pre and post dataset, to be able to calculate the mean gene expression in the case of pre and post treatment.</p>
+<p>:::: {.columns}</p>
+<p>::: {.column width=“50%”}</p>
+<p>Unclead data</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>      code_class         gene   accesion_number pre_count_1 post_count_1
+1     Endogenous         CCNO       NM_021147.4          14           14
+2     Endogenous          MYC       NM_002467.3         632          427
+3     Endogenous        CD79A       NM_001783.3          10           17
+4     Endogenous        FSTL3       NM_005860.2          45           59
+5     Endogenous         VCAN    NM_001126336.2        1141          838
+6     Endogenous       CX3CL1       NM_002996.3          59           57
+7     Endogenous        ERBB2       NM_004448.2         315          807
+8     Endogenous      FAM124B    NM_001122779.1          21           23
+9     Endogenous         AKT1       NM_005163.2        1050         1259
+10    Endogenous          KDR       NM_002253.2          79          152
+11    Endogenous          EGF    NM_001178130.2          78            8
+12    Endogenous      MAGEA12    NM_001166386.1         125            7
+13    Endogenous        IFNA1       NM_024013.1          65           27
+14    Endogenous        TGFB3    NM_001329938.1          75          130
+15    Endogenous        MFGE8    NM_001114614.1         528          494
+16    Endogenous        CXCL2       NM_002089.1          87           18
+17    Endogenous        CCND2       NM_001759.2         144          226
+18    Endogenous     PDZK1IP1       NM_005764.3          27           17
+19    Endogenous         JAG2       NM_002226.4          38           30
+20    Endogenous           C5    NM_001317163.1          21           74
+21    Endogenous        CD79B    NM_001039933.1          13           11
+22    Endogenous        CXCR2       NM_001557.3          17           23
+23    Endogenous       PSMB10       NM_002801.3          79           77
+24    Endogenous         ZEB1    NM_001128128.2         138          219
+25    Endogenous         ANLN       NM_018685.2         121           22
+26    Endogenous         TAF3       NM_031923.3          19           22
+27    Endogenous        CD276    NM_001024736.1         939          482
+28    Endogenous        ICAM1       NM_000201.2          70           29
+29    Endogenous         IL16       NM_004513.4          52           67
+30    Endogenous        CXCL3       NM_002090.2          17           10
+31    Endogenous         PRR5       NM_015366.3          48           36
+32    Endogenous         CTSW       NM_001335.3          13           14
+33    Endogenous        CXCR4    NM_001008540.1         298          147
+34    Endogenous       IFNGR2       NM_005534.3         483          326
+35    Endogenous        CDH11       NM_001797.2         725          735
+36    Endogenous       COL6A3       NM_004369.3        1878         1155
+37    Endogenous         GZMK       NM_002104.2          17           12
+38    Endogenous         IRF2       NM_002199.3         165          184
+39    Endogenous        RPL7A       NM_000972.2        2589         4987
+40    Endogenous       GPR160       NM_014373.1         198          678
+41    Endogenous         MICA       NM_000247.1          52           41
+42    Endogenous       TAPBPL       NM_018009.4          88          132
+43    Endogenous       CXCL14       NM_004887.4         167         6855
+44    Endogenous         CD14    NM_001174105.1          88          213
+45    Endogenous         IL18    NM_001243211.1          65           34
+46    Endogenous      CLEC14A       NM_175060.1          24           95
+47    Endogenous        HMGB1       NM_002128.5         102          140
+48    Endogenous        KIF2C       NM_006845.2          64           23
+49    Endogenous         RNLS    NM_001031709.2          35           69
+50    Endogenous        RPTOR    NM_001163034.1         126           99
+51    Endogenous         CD68       NM_001251.2         109           66
+52    Endogenous        CCL13       NM_005408.2           9           16
+53    Endogenous         CYBB       NM_000397.3         169          243
+54    Endogenous      PLA2G2A       NM_000300.2          16           31
+55    Endogenous        FGF13    NM_001139498.1          22           46
+56    Endogenous        CNTFR       NM_147164.2          15           22
+57    Endogenous        CD244    NM_001166663.1          17           11
+58    Endogenous       CSF2RB       NM_000395.2          17           24
+59    Endogenous       MAP3K7       NM_003188.3         278          389
+60    Endogenous        FASLG       NM_000639.2          16           14
+61    Endogenous        CD209       NM_021155.2          13           32
+62    Endogenous         IRF7       NM_004029.2         465          177
+63    Endogenous        PTCD2    NM_001284403.1         117          174
+64    Endogenous       PIK3R2       NM_005027.3         382          256
+65    Endogenous       LILRA5       NM_181879.2          23           17
+66    Endogenous         IL32       NM_004221.4         297          165
+67    Endogenous        CCND3    NM_001136017.2          45           83
+68    Endogenous        BIRC5       NM_001168.2         198           24
+69    Endogenous       LGALS9       NM_002308.3          42           41
+70    Endogenous       RASAL1    NM_001193520.1          39           28
+71    Endogenous     PDCD1LG2       NM_025239.3          39           33
+72    Endogenous         IL11       NM_000641.3          51           18
+73    Endogenous         PRKX       NM_005044.4          19           13
+74    Endogenous         SNCA    NM_001146055.1          16           19
+75    Endogenous       ADGRE1    NM_001256252.1          16            9
+76    Endogenous        PSMB9       NM_002800.4         115           73
+77    Endogenous        RUNX3    NM_001031680.2          26           38
+78    Endogenous       PGPEP1    NM_001300927.1          33           60
+79    Endogenous         MELK       NM_014791.2         160           53
+80    Endogenous        ISG15       NM_005101.3        1631          150
+81    Endogenous       EIF2B4    NM_001034116.1         117          104
+82    Endogenous         IRF9       NM_006084.4         548          421
+83    Endogenous         IL1A       NM_000575.3          32           22
+84    Endogenous        FCRL2    NM_001159488.1          13           20
+85    Endogenous     EIF4EBP1       NM_004095.3        1412          128
+86    Endogenous        LTBP1       NM_000627.3         160           99
+87    Endogenous       CD40LG       NM_000074.2           9           13
+88    Endogenous         HEY1    NM_001040708.1         166          367
+89    Endogenous     HLA-DQA1       NM_002122.3         295           15
+90    Endogenous         PRLR       NM_000949.5         601         1434
+91    Endogenous    TNFRSF11A    NM_001270949.1          40           20
+92    Endogenous         AREG       NM_001657.3          57           46
+93    Endogenous         BBC3       NM_014417.4         180          210
+94    Endogenous         EDN1       NM_001955.2          36           23
+95    Endogenous       PARP12       NM_022750.3         264          130
+96    Endogenous       PIK3CG    NM_001282426.1          38           53
+97    Endogenous          IL4       NM_172348.1          13           11
+98    Endogenous        F2RL1       NM_005242.4          48           19
+99    Endogenous        CXCL6       NM_002993.3          20           17
+100   Endogenous      TNFSF18       NM_005092.3          17           14
+101   Endogenous         JAK3       NM_000215.2          44           23
+102   Endogenous         NKG7       NM_005601.3          33           58
+103   Endogenous        TAPBP       NM_003190.4         533          546
+104   Endogenous         MTOR       NM_004958.3         200          183
+105   Endogenous         SELP       NM_003005.3          13           22
+106   Endogenous        HLA-E       NM_005516.5         670          644
+107   Endogenous         GOT1       NM_002079.2         265          228
+108   Endogenous        SMAP1    NM_001044305.2         157          219
+109   Endogenous       CDKN1A       NM_000389.2         430          216
+110   Endogenous       CD45RA       NM_002838.4           8           20
+111   Endogenous        HNF1A       NM_000545.6          12           21
+112   Endogenous       TICAM1       NM_182919.3          36           31
+113   Endogenous         C1QA       NM_015991.3         100           79
+114   Endogenous         CD86    NM_001206924.1          25           19
+115   Endogenous        ITGA4       NM_000885.5         108           76
+116   Endogenous         ROR2    NM_001318204.1         129           62
+117   Endogenous        WNT7B       NM_058238.2          97           12
+118   Endogenous         FLT1       NM_002019.4         381          429
+119   Endogenous       CTAG1B       NM_001327.2          58           13
+120   Endogenous       CLEC7A       NM_197954.2          83           96
+121   Endogenous      TNFRSF4       NM_003327.3          18           22
+122   Endogenous       MS4A6A       NM_152852.2          27           44
+123   Endogenous       ANGPT2       NM_001147.2         113           79
+124   Endogenous        APH1B    NM_001145646.1         169          234
+125   Endogenous         RORC    NM_001001523.1          56           67
+126   Endogenous      NECTIN2    NM_001042724.1         286          578
+127   Endogenous         DPP4       NM_001935.3          31           23
+128   Endogenous         CCL2       NM_002982.3         789          150
+129   Endogenous          NF1       NM_000267.3         168          178
+130   Endogenous       S100A9       NM_002965.3        1519           32
+131   Endogenous       NFKBIA       NM_020529.2        1304          903
+132   Endogenous       BNIP3L    NM_001330491.1         267          102
+133   Endogenous         CST2       NM_001322.2          24           44
+134   Endogenous        APOL6       NM_030641.3         178          140
+135   Endogenous         BRD4    NM_001330384.1         320          191
+136   Endogenous      SLC16A1       NM_003051.3         264           72
+137   Endogenous         THBD       NM_000361.2          35           56
+138   Endogenous        TIGIT       NM_173799.2          15           14
+139   Endogenous         VSIR       NM_022153.1          17           26
+140   Endogenous       TRIM21       NM_003141.3         118           62
+141   Endogenous          NBN       NM_002485.4         371          151
+142   Endogenous         WNT4       NM_030761.4          15           33
+143   Endogenous        CXCL8       NM_000584.3          54           12
+144   Endogenous         FGF9       NM_002010.2          11           14
+145   Endogenous        C5AR1       NM_001736.3          17           17
+146   Endogenous     TNFRSF1B       NM_001066.2          25           40
+147   Endogenous     HLA-DRB5       NM_002125.3          17         1866
+148   Endogenous         GLUL       NM_002065.6        1920         6088
+149   Endogenous          LY9    NM_001033667.2           7           16
+150   Endogenous         TAP1       NM_000593.5         295          124
+151   Endogenous        IFIH1       NM_022168.3         778          225
+152   Endogenous       DEPTOR    NM_001283012.1         138          160
+153   Endogenous        CSF1R       NM_005211.3         186          275
+154   Endogenous        MARCO       NM_006770.3          21           17
+155   Endogenous        NFIL3    NM_001289999.1         133           83
+156   Endogenous        IKBKG    NM_001099856.4          46           65
+157   Endogenous         CD58    NM_001144822.1          36           39
+158   Endogenous        LOXL2       NM_002318.2          64           41
+159   Endogenous        SPRY4       NM_030964.3          42           81
+160   Endogenous        NFAM1       NM_145912.5           9           13
+161   Endogenous          SYK       NM_003177.5          61           53
+162   Endogenous         COMP       NM_000095.2         314          247
+163   Endogenous         IFI6       NM_002038.3       24292         1707
+164   Endogenous      RASGRF1    NM_001145648.1         329           15
+165   Endogenous        HDAC5    NM_001015053.1         101          216
+166   Endogenous        BAMBI       NM_012342.2          43          220
+167   Endogenous       MAGEC1       NM_005462.4          12           18
+168   Endogenous          FYN       NM_002037.5          89          150
+169   Endogenous       TNFSF4    NM_001297562.1          40           26
+170   Endogenous        CD274       NM_014143.3          31           15
+171   Endogenous       PRKACB       NM_182948.2          47           81
+172   Endogenous        IFIT2       NM_001547.4         164           31
+173   Endogenous        PPARG       NM_005037.5          31           85
+174   Endogenous         PTEN       NM_000314.6         178          244
+175   Endogenous        FOXP3       NM_014009.3          20           25
+176   Endogenous       SREBF1    NM_001005291.1         870        10672
+177   Endogenous         CD36    NM_001001548.2          99          494
+178   Endogenous        AXIN1       NM_181050.1          83           74
+179   Endogenous        KLRK1       NM_007360.3          19           19
+180   Endogenous         GBP1       NM_002053.2         108           22
+181   Endogenous       CXCL11       NM_005409.4         175           16
+182   Endogenous       CXCL10       NM_001565.3         770           51
+183   Endogenous        RIPK1       NM_003804.3         157          346
+184   Endogenous          REN       NM_000537.3           6           13
+185   Endogenous         PRF1    NM_001083116.1          17           17
+186   Endogenous      EIF2AK2    NM_001135652.2         997          545
+187   Endogenous          LIF       NM_002309.4          43           21
+188   Endogenous         BRD3       NM_007371.3         225          295
+189   Endogenous        IGF2R       NM_000876.2         133          315
+190   Endogenous         FPR1       NM_002029.3          26           34
+191   Endogenous        DUSP5       NM_004419.3        1036          402
+192   Endogenous          APC    NM_001127510.2         394          595
+193   Endogenous        HDAC3       NM_003883.3         224          400
+194   Endogenous         CES3    NM_001185176.1          55           13
+195   Endogenous         OAS2       NM_016817.2        1380          173
+196   Endogenous       HDAC11    NM_001330636.1          51           86
+197   Endogenous        THBS1       NM_003246.2        1778         1329
+198   Endogenous      SLC11A1       NM_000578.3          41           21
+199   Endogenous    MAGEA3/A6       NM_005362.3         470           10
+200   Endogenous       ARID1A       NM_006015.4         316          291
+201   Endogenous         CD48       NM_001778.3          26           11
+202   Endogenous         GZMA       NM_006144.3          13           19
+203   Endogenous       ICOSLG       NM_015259.4         130           92
+204   Endogenous       PIK3R5       NM_014308.3          37           39
+205   Endogenous         GZMM       NM_005317.2          13           14
+206   Endogenous        WNT5A       NM_003392.3         109           25
+207   Endogenous         TLR4       NR_024168.1          79          103
+208   Endogenous         GZMB       NM_004131.4           8            5
+209   Endogenous        PARP9    NM_001146103.1         445          176
+210   Endogenous         LY96    NM_001195797.1         154          147
+211   Endogenous        RAD50       NM_005732.3         612         1386
+212   Endogenous          MX1    NM_001144925.2         451          127
+213   Endogenous        CENPF       NM_016343.3         126           11
+214   Endogenous         SELL       NM_000655.4           9           24
+215   Endogenous      TNFSF10       NM_003810.3         378          277
+216   Endogenous      IL12RB2    NM_001319233.1          23           10
+217   Endogenous        CXCL9       NM_002416.2          22           26
+218   Endogenous        TRAT1       NM_016388.3           5           13
+219   Endogenous         STC1       NM_003155.2          61          129
+220   Endogenous        IL2RB       NM_000878.2          18           19
+221   Endogenous       LILRB4    NM_001278426.3          44           69
+222   Endogenous         SOX2       NM_003106.2           9           12
+223   Endogenous          HCK    NM_001172129.1          55           59
+224   Endogenous        WNT2B    NM_001291880.1          20           43
+225   Endogenous         IL1B       NM_000576.2          19           15
+226   Endogenous         TLR1       NM_003263.3          60           53
+227   Endogenous        CCL22       NM_002990.3          15           11
+228   Endogenous        ICAM2       NM_000873.3          19           36
+229   Endogenous      MAP3K12       NM_006301.3          59           76
+230   Endogenous         JAG1       NM_000214.2         119          178
+231   Endogenous      CCL3/L1       NM_021006.5         122           19
+232   Endogenous        SOCS1       NM_003745.1          39           12
+233   Endogenous         BCL2       NM_000633.2         198          472
+234   Endogenous       MAP3K8    NM_001244134.1         213           69
+235   Endogenous         MMP1       NM_002421.2          47           24
+236   Endogenous       CMKLR1       NM_004072.2          40          118
+237   Endogenous     TNFRSF17       NM_001192.2          10           18
+238   Endogenous         TLR8       NM_138636.4          21           26
+239   Endogenous         TPM1       NM_000366.5         580          406
+240   Endogenous      CXorf36       NM_024689.2          48          141
+241   Endogenous        NLRP3    NM_001079821.2          16           17
+242   Endogenous      DEFB134    NM_001302695.1          16           23
+243   Endogenous     HLA-DQA2       NM_020056.4          25           25
+244   Endogenous       CX3CR1    NM_001171171.1          11           82
+245   Endogenous        APLNR       NM_005161.4           7           41
+246   Endogenous         MXI1    NM_001008541.1          88           73
+247   Endogenous         FZD9       NM_003508.2          16           15
+248   Endogenous       COL4A5       NM_000495.4         101          354
+249   Endogenous         FCAR       NM_133278.2          13           11
+250   Endogenous        BRCA2       NM_000059.3          85           78
+251   Endogenous        SFRP4       NM_003014.2         163          447
+252   Endogenous         TLR3       NM_003265.2          89           43
+253   Endogenous        IL2RG       NM_000206.1          21           22
+254   Endogenous         CD84    NM_001184879.1          60           87
+255   Endogenous     HLA-DPA1       NM_033554.2         330          591
+256   Endogenous         RBL2    NM_001323611.1         427         1334
+257   Endogenous        CCL18       NM_002988.3         135          170
+258   Endogenous         IRF3    NM_001197122.1         126          104
+259   Endogenous      TNFRSF8       NM_001243.3           4            9
+260   Endogenous      KIR3DL2       NM_006737.2           5            7
+261   Endogenous      TNFSF13       NM_003808.3          55           52
+262   Endogenous       CLECL1       NM_172004.3          18           27
+263   Endogenous    TNFRSF10B       NM_003842.3          59           30
+264   Endogenous       MAGEC2       NM_016249.3          16           14
+265   Endogenous       CDKN2A       NM_000077.4          91          131
+266   Endogenous          ADM       NM_001124.2         178           75
+267   Endogenous         PNOC    NM_001284244.1          35           37
+268   Endogenous        CD247       NM_198053.2          39           40
+269   Endogenous        PTPRC       NM_080921.3          61           48
+270   Endogenous         OAS3       NM_006187.3         756          156
+271   Endogenous         LAG3       NM_002286.5          86           58
+272   Endogenous        FOSL1       NM_005438.3         118          108
+273   Endogenous        EOMES    NM_001278182.1          38           32
+274   Endogenous       IL10RA       NM_001558.2          76           64
+275   Endogenous        WDR76       NM_024908.3          70           89
+276   Endogenous         GPC4       NM_001448.2          51           41
+277   Endogenous       SLAMF7       NM_021181.3          35           56
+278   Endogenous        RSAD2       NM_080657.4        1136          147
+279   Endogenous         TLR5       NM_003268.5          88           74
+280   Endogenous        VEGFA    NM_001171623.1        1871          269
+281   Endogenous       COL5A1       NM_000093.4         710          331
+282   Endogenous         CD3D       NM_000732.4          41           59
+283   Endogenous         FBP1    NM_001127628.1         226          779
+284   Endogenous        ERO1A       NM_014584.2        1094          736
+285   Endogenous        CCL21       NM_002989.2          18           33
+286   Endogenous         E2F3    NM_001243076.2         174          130
+287   Endogenous         LDHA    NM_001135239.1        7634          526
+288   Endogenous        MS4A1       NM_021950.3          32           67
+289   Endogenous         CD69       NM_001781.2          45           47
+290   Endogenous     SERPINB5       NM_002639.4          46           33
+291   Endogenous          FAP       NM_004460.2         331          136
+292   Endogenous        ITGA2       NM_002203.3         160           21
+293   Endogenous      SIGLEC5       NM_003830.3          16           22
+294   Endogenous       SIRPB2    NM_001134836.1          21           21
+295   Endogenous     EPM2AIP1       NM_014805.3         333          166
+296   Endogenous        FGF18       NM_003862.2          12           19
+297   Endogenous         HRAS       NM_005343.3         134          201
+298   Endogenous        CCND1       NM_053056.2         823         2876
+299   Endogenous        LAMB3       NM_000228.2          63           43
+300   Endogenous          ID4       NM_001546.3          24           52
+301   Endogenous         CCL4       NM_002984.2          53           48
+302   Endogenous         GZMH       NM_033423.3          15           14
+303   Endogenous         API5    NM_001142930.1         525          456
+304   Endogenous       PTGER4       NM_000958.2          32           42
+305   Endogenous        ITGB8       NM_002214.2          39          247
+306   Endogenous         TNKS       NM_003747.2         120          166
+307   Endogenous          B2M       NM_004048.2        8147         3820
+308   Endogenous         TP53       NM_000546.2         118          102
+309   Endogenous       MAGEB2       NM_002364.4          16           10
+310   Endogenous          LYZ       NM_000239.2         298          420
+311   Endogenous        NCAM1       NM_000615.6           9           83
+312   Endogenous        TCL1A    NM_001098725.1           6            4
+313   Endogenous          HDC       NM_002112.3           7           23
+314   Endogenous         CD27       NM_001242.4          15           30
+315   Endogenous        SBNO2    NM_001100122.1         181          146
+316   Endogenous       PECAM1       NM_000442.4         251          571
+317   Endogenous     SERPINH1    NM_001207014.1         131           58
+318   Endogenous         SPP1       NM_000582.2        3435          448
+319   Endogenous         EGFR       NM_005228.3          57           50
+320   Endogenous        CASP8       NM_001228.4          35           24
+321   Endogenous        CCNA1    NM_001111045.1          15           11
+322   Endogenous      TNFAIP3    NM_001270508.1          36           18
+323   Endogenous       CDC25C       NM_001790.4          33           17
+324   Endogenous        CXCR6       NM_006564.1          16           20
+325   Endogenous         DLL1       NM_005618.3          13           29
+326   Endogenous         OAS1    NM_001032409.1        1120          150
+327   Endogenous     HLA-DQB1       NM_002123.3          59            7
+328   Endogenous        ROBO4       NM_019055.5          26           52
+329   Endogenous        NFKB1       NM_003998.3         242          126
+330   Endogenous        IFI27       NM_005532.3       11191         2564
+331   Endogenous      HLA-DMB       NM_002118.3         104          176
+332   Endogenous       CDKN1C       NM_000076.2          43          224
+333   Endogenous        CEP55       NM_018131.3          70            9
+334   Endogenous         ARG1       NM_000045.3          13           16
+335   Endogenous        PLOD2       NM_182943.2         642          217
+336   Endogenous        LAIR1    NM_001289023.2          36           43
+337   Endogenous         SHC2       NM_012435.2          40          159
+338   Endogenous        STAT3       NM_003150.3         997          849
+339   Endogenous       CD45RO       NM_080921.3         122           77
+340   Endogenous          CD2       NM_001767.3         105           68
+341   Endogenous         IL7R       NM_002185.3          31           16
+342   Endogenous         FLNB    NM_001164319.1         673         1468
+343   Endogenous        PSMB5    NM_001130725.1         528          445
+344   Endogenous       SLC1A5    NM_001145144.1         195          749
+345   Endogenous       RICTOR    NM_001285439.1         250         1094
+346   Endogenous        ZAP70       NM_001079.3          34           25
+347   Endogenous      TNFAIP6       NM_007115.3         151           57
+348   Endogenous         BTLA    NM_001085357.1           8           14
+349   Endogenous         RELA       NM_021975.3         156          123
+350   Endogenous         MMP7       NM_002423.3         184           13
+351   Endogenous         TCF3       NM_003200.3         201          105
+352   Endogenous         IRF8       NM_002163.2          40           34
+353   Endogenous         NOS2       NM_000625.4           6           10
+354   Endogenous          A2M       NM_000014.4         694         1423
+355   Endogenous        CCL20    NM_001130046.1          20            8
+356   Endogenous        MKI67       NM_002417.2         308           30
+357   Endogenous       IFNGR1       NM_000416.2         202          440
+358   Endogenous        INHBA       NM_002192.2         161           80
+359   Endogenous        WNT5B       NM_030775.2          35           17
+360   Endogenous        CXCL5       NM_002994.4          21           19
+361   Endogenous        SOX10       NM_006941.3           8            9
+362   Endogenous         EGR1       NM_001964.2         127          162
+363   Endogenous        STAT4    NM_001243835.1          23           34
+364   Endogenous        IFIT3    NM_001031683.3         490           67
+365   Endogenous         GMIP    NM_001288998.1          12           18
+366   Endogenous        ARNT2       NM_014862.3         153          157
+367   Endogenous        UBE2C       NM_007019.2         188           13
+368   Endogenous         CHUK       NM_001278.4         222          211
+369   Endogenous          GHR       NM_000163.2          64          140
+370   Endogenous         TPI1       NM_000365.5        2927         1072
+371   Endogenous       HAVCR2       NM_032782.3          81           52
+372   Endogenous         GOT2       NM_002080.3         505          733
+373   Endogenous       PIK3CA       NM_006218.2         103          176
+374   Endogenous       TNFSF9       NM_003811.3           7           16
+375   Endogenous         IDO1       NM_002164.5          24           17
+376   Endogenous         APOE       NM_000041.2         553          284
+377   Endogenous       LILRB2    NM_001278405.1          27           29
+378   Endogenous        PARP4       NM_006437.3         283          183
+379   Endogenous         PFKM       NM_000289.5         133          172
+380   Endogenous         THY1       NM_006288.3         305          265
+381   Endogenous        SAMD9       NM_017654.3         497           88
+382   Endogenous        TGFB1       NM_000660.4         420          421
+383   Endogenous         CD8A       NM_001768.6          24           35
+384   Endogenous         SELE       NM_000450.2          23           18
+385   Endogenous       CDKN2B       NM_004936.3          77          101
+386   Endogenous          CD5    NM_001346456.1          18           24
+387   Endogenous        HLA-A       NM_002116.7        1921          529
+388   Endogenous         FZD8       NM_031866.1          21          462
+389   Endogenous       BCL2L1       NM_001191.3         231          333
+390   Endogenous      TNFRSF9       NM_001561.5          22            9
+391   Endogenous       XCL1/2       NM_002995.2          37           13
+392   Endogenous       MAGEA4    NM_001011548.1          10           12
+393   Endogenous         PMS2       NM_000535.6         249          281
+394   Endogenous        KLRD1       NM_002262.3          18           15
+395   Endogenous       NFATC2       NM_173091.2          73           81
+396   Endogenous        VEGFB       NM_003377.3         154           98
+397   Endogenous        CDC20       NM_001255.1          52           16
+398   Endogenous         OTOA    NM_001161683.1          11           16
+399   Endogenous    TPSAB1/B2       NM_003294.3          84          148
+400   Endogenous        P4HA1       NM_000917.3         415           73
+401   Endogenous       P2RY13       NM_023914.2           9           33
+402   Endogenous         EXO1       NM_006027.3          37           20
+403   Endogenous         CD70       NM_001252.3           6           20
+404   Endogenous         DDB2       NM_000107.2         166          137
+405   Endogenous     NDUFA4L2       NM_020142.3          26           45
+406   Endogenous       IFITM1       NM_003641.3        3082          426
+407   Endogenous       IFNAR1       NM_000629.2         220          378
+408   Endogenous        TREM1    NM_001242589.2          44           13
+409   Endogenous       CXCL13       NM_006419.2          66           54
+410   Endogenous       TWIST2    NM_001271893.3           6            9
+411   Endogenous     HLA-DRB1       NM_002124.3         572          309
+412   Endogenous        FGFR1    NM_001174064.1         286          248
+413   Endogenous       TBXAS1       NM_001061.4          40          121
+414   Endogenous         NCR1    NM_001145457.2           5            9
+415   Endogenous        SOX11       NM_003108.3          25           17
+416   Endogenous         TLR2    NM_001318787.1         129           82
+417   Endogenous         TWF1       NM_002822.4         541          753
+418   Endogenous         CCL5       NM_002985.2          64           47
+419   Endogenous        ITGAL       NM_002209.2          22           89
+420   Endogenous        MYCT1       NM_025107.2          23           36
+421   Endogenous         CD96       NM_005816.4          13           17
+422   Endogenous        PROM1    NM_001145847.1          20           12
+423   Endogenous         OASL       NM_003733.2         158           15
+424   Endogenous         IFNG       NM_000619.2          11           14
+425   Endogenous        BATF3       NM_018664.2          23           18
+426   Endogenous         EZH2       NM_004456.4         107           27
+427   Endogenous         IRF5       NM_002200.3          34           24
+428   Endogenous         PCK2    NM_001018073.2         137          184
+429   Endogenous        EPCAM       NM_002354.2         498          438
+430   Endogenous         CD19       NM_001770.4          19           32
+431   Endogenous         GBP4       NM_052941.4          93           77
+432   Endogenous         MSH6       NM_000179.2          72           76
+433   Endogenous    TNFRSF11B       NM_002546.3          30           26
+434   Endogenous       NOTCH1       NM_017617.3          54           71
+435   Endogenous        CASP9    XM_011542270.1          40           43
+436   Endogenous       RAD51C       NM_058216.2          45          125
+437   Endogenous      HLA-DMA       NM_006120.3         333          350
+438   Endogenous        SFRP1       NM_003012.3          29           78
+439   Endogenous       MAGEA1       NM_004988.4          23           14
+440   Endogenous       ENTPD1    NM_001098175.1         107          195
+441   Endogenous        ROCK1       NM_005406.2          94          135
+442   Endogenous       FCGR2A       NM_021642.3         184          288
+443   Endogenous         NGFR       NM_002507.3          23           44
+444   Endogenous        ALDOC       NM_005165.2         419          473
+445   Endogenous        CCNE1       NM_001238.1          59           22
+446   Endogenous        ITGAX       NM_000887.4         115          104
+447   Endogenous          BLM       NM_000057.3          60           52
+448   Endogenous        MLANA       NM_005511.1          20           18
+449   Endogenous       FCGR1A       NM_000566.3          49           81
+450   Endogenous         CD47       NM_001777.3         925          409
+451   Endogenous         CSF2       NM_000758.3          13           19
+452   Endogenous         CDH5       NM_001795.3          31           85
+453   Endogenous       SLC7A5       NM_003486.6         316          174
+454   Endogenous       GIMAP4       NM_018326.2         103          177
+455   Endogenous        HIF1A       NM_181054.2         705          384
+456   Endogenous         CDK2    NM_001290230.1         188           98
+457   Endogenous        PDCD1       NM_005018.1          12           14
+458   Endogenous         ATF3       NM_001674.3          66           31
+459   Endogenous         TIE1       NM_005424.4          40           81
+460   Endogenous         CD44    NM_001001392.1         630          188
+461   Endogenous        ALDOA       NM_000034.3        4299         4732
+462   Endogenous          FAS       NM_000043.3          35           14
+463   Endogenous        MRE11    NM_001330347.1         156          188
+464   Endogenous         IL10       NM_000572.2          14           12
+465   Endogenous         BMP2       NM_001200.3          10          240
+466   Endogenous          BAX       NM_004324.3         291          159
+467   Endogenous      EIF5AL1    NM_001099692.1           5           14
+468   Endogenous          KIT       NM_000222.2          16           36
+469   Endogenous         CDK6    NM_001145306.1          27           35
+470   Endogenous         SPIB       NM_003121.3          10           10
+471   Endogenous       PFKFB3       NM_004566.3          36           33
+472   Endogenous       CXCL12       NM_199168.3          18           59
+473   Endogenous         CSF3       NM_000759.3           7           10
+474   Endogenous      KIR2DL3       NM_015868.2          17           22
+475   Endogenous         CD40       NM_001250.5          40           67
+476   Endogenous         IRF1       NM_002198.2         223          158
+477   Endogenous         MGMT       NM_002412.3         183          299
+478   Endogenous        GLUD1       NM_005271.2         334          648
+479   Endogenous        IFI35       NM_005533.4         240          192
+480   Endogenous          PF4       NM_002619.3          14           22
+481   Endogenous        GPSM3    NM_001276501.1          39           69
+482   Endogenous       SLC2A1       NM_006516.2          72           42
+483   Endogenous          IL2       NM_000586.2          15           21
+484   Endogenous        SNAI1       NM_005985.3          60           62
+485   Endogenous       CTNNB1    NM_001098209.1        1955         1539
+486   Endogenous       NOTCH2       NM_024408.3         351          206
+487   Endogenous        NFKB2    NM_001077494.3         124           77
+488   Endogenous         IL33       NM_033439.3          18           53
+489   Endogenous        TREM2       NM_018965.3          64           98
+490   Endogenous        LAMC2       NM_005562.2          43           30
+491   Endogenous         AQP9    NM_001320635.1          45           24
+492   Endogenous        PRKCA       NM_002737.2          17           30
+493   Endogenous         TSLP       NM_033035.4          15           17
+494   Endogenous      HLA-DOB       NM_002120.3           9           33
+495   Endogenous      ANGPTL4    NM_001039667.2          93           10
+496   Endogenous     TNFRSF25       NM_148970.1          43           94
+497   Endogenous       MS4A4A    NM_001243266.1          84          124
+498   Endogenous       CLEC5A       NM_013252.2          39           29
+499   Endogenous        ITGAM       NM_000632.3          19           15
+500   Endogenous         MMP9       NM_004994.2          57           77
+501   Endogenous          CD7       NM_006137.6          14           16
+502   Endogenous          VHL       NM_198156.1          70           73
+503   Endogenous      OLFML2B       NM_015441.1          45           59
+504   Endogenous          IL6       NM_000600.3          24           21
+505   Endogenous     TNFRSF1A       NM_001065.2         330          342
+506   Endogenous         DKK1       NM_012242.2          14           12
+507   Endogenous        FANCA    NM_001018112.1          38           25
+508   Endogenous          TNF       NM_000594.3          58           38
+509   Endogenous          LTB       NM_002341.1          18           23
+510   Endogenous     PPARGC1B    NM_001172699.1          25           41
+511   Endogenous      RPS6KB1    NM_001272042.1         133          819
+512   Endogenous         CD38       NM_001775.2          24           20
+513   Endogenous        DTX3L       NM_138287.3         598          351
+514   Endogenous      TMEM173       NM_198282.1         279          227
+515   Endogenous        NEIL1       NM_024608.2          66           51
+516   Endogenous        HELLS    NM_001289067.1         168           65
+517   Endogenous       TGFBR1    NM_001130916.2         206          386
+518   Endogenous       MB21D1       NM_138441.2          45           84
+519   Endogenous         CCR2    NM_001123041.2          17           12
+520   Endogenous         MSH2       NM_000251.1         227          193
+521   Endogenous        RAD51       NM_133487.3          26            9
+522   Endogenous     TNFRSF18       NM_148901.1          26           23
+523   Endogenous     FCGR3A/B       NM_000570.4         325          145
+524   Endogenous        STAT1       NM_007315.3        2167          456
+525   Endogenous         CTSS       NM_004079.3         430          385
+526   Endogenous         PDK1       NM_002610.3         435          252
+527   Endogenous        ITGAV    NM_001144999.2         612         1041
+528   Endogenous       ANGPT1    NM_001199859.1          21           53
+529   Endogenous        BCL6B       NM_181844.3          15           43
+530   Endogenous         CDH2       NM_001792.3          48           35
+531   Endogenous        CSF3R       NM_000760.3         166          124
+532   Endogenous         RELB       NM_006509.3          82           56
+533   Endogenous       CXCL16    NM_001100812.1         109          124
+534   Endogenous         IL6R       NM_000565.3          27           71
+535   Endogenous        PDGFA       NM_033023.4          35           47
+536   Endogenous       PIK3R1    NM_001242466.1         119          173
+537   Endogenous          HK1       NM_000188.2         499          292
+538   Endogenous          AXL       NM_001699.4          65           75
+539   Endogenous          HK2       NM_000189.4         658          329
+540   Endogenous       PDGFRB       NM_002609.3         347          409
+541   Endogenous         FADD       NM_003824.3          92          489
+542   Endogenous         CD74    NM_001025159.2        2455         2542
+543   Endogenous        RIPK2       NM_003821.5         124          176
+544   Endogenous       CD45RB ENST00000367367.1          45           38
+545   Endogenous          BAD       NM_004322.3          86           67
+546   Endogenous          PKM    NM_001206796.2        5714         2857
+547   Endogenous        KLRB1       NM_002258.2          15           20
+548   Endogenous      ADORA2A       NM_000675.5         128           33
+549   Endogenous        IFIT1    NM_001270930.1        1506          116
+550   Endogenous        UBE2T       NM_014176.1          46           26
+551   Endogenous        RPL23       NM_000978.3        3210         5939
+552   Endogenous         ARG2       NM_001172.3          32           70
+553   Endogenous       TGFBR2    NM_001024847.2         114          238
+554   Endogenous       CRABP2    NM_001199723.1        2655         1783
+555   Endogenous          BLK    NM_001330465.1          18           18
+556   Endogenous        CCL14       NM_032962.4          41          416
+557   Endogenous        CCNB1       NM_031966.2         421          135
+558   Endogenous        STAT2       NM_005419.2         998          514
+559   Endogenous        IKBKB    NM_001190720.2         238          260
+560   Endogenous         ZEB2    NM_001171653.1         214          283
+561   Endogenous       LRRC32       NM_005512.2          85          142
+562   Endogenous      IL22RA1       NM_021258.2          33           33
+563   Endogenous         ELOB       NM_007108.2          42           54
+564   Endogenous        ITGA1       NM_181501.1          70           92
+565   Endogenous         IL24    NM_001185158.1          20           20
+566   Endogenous        PVRIG       NM_024070.3          49           41
+567   Endogenous          RB1       NM_000321.2         252          229
+568   Endogenous        SRP54    NM_001146282.1         170          175
+569   Endogenous        ICAM3       NM_002162.3          90           79
+570   Endogenous         CCR5       NM_000579.3          49           44
+571   Endogenous        CTLA4    NM_001037631.2          25           19
+572   Endogenous          GLS       NM_014905.4          68           69
+573   Endogenous        ITGAE       NM_002208.4         120          219
+574   Endogenous          MET       NM_000245.2         110           96
+575   Endogenous        WNT3A       NM_033131.3          18           30
+576   Endogenous         TYMP    NM_001113755.2         752          388
+577   Endogenous        IFI16    NM_001206567.1         207          169
+578   Endogenous          PVR    NM_001135768.2          68           77
+579   Endogenous        P4HA2    NM_001017973.1         157          314
+580   Endogenous        BRIP1       NM_032043.2          71           49
+581   Endogenous         ESR1       NM_000125.2          23         1154
+582   Endogenous         DAB2    NM_001244871.1         120          129
+583   Endogenous        DUSP1       NM_004417.3         111          719
+584   Endogenous         CD8B       NM_172213.2          30           31
+585   Endogenous       ACVR1C       NM_145259.2          29           33
+586   Endogenous         IL15       NM_000585.4          25           26
+587   Endogenous      KIR3DL1    NM_001322168.1          19           21
+588   Endogenous         CDH1       NM_004360.3        3142          758
+589   Endogenous         HES1       NM_005524.2         267          152
+590   Endogenous          IHH       NM_002181.2          18           28
+591   Endogenous        CCL19       NM_006274.2          24           35
+592   Endogenous           C2       NM_000063.5         107           44
+593   Endogenous         TLR7       NM_016562.3          23           29
+594   Endogenous        IL2RA       NM_000417.2          19           14
+595   Endogenous       PRKAA2       NM_006252.3          27           62
+596   Endogenous      COL11A2    NM_001163771.1          13           14
+597   Endogenous    TNFRSF10D       NM_003840.4          22           30
+598   Endogenous      SIGLEC8       NM_014442.2          13           15
+599   Endogenous           PC       NM_000920.3         103          108
+600   Endogenous        IL17A       NM_002190.2          24           20
+601   Endogenous         GLI1       NM_005269.2          19           18
+602   Endogenous         GNG4    NM_001098721.1          37           51
+603   Endogenous         LDHB    NM_001174097.2         572          465
+604   Endogenous         DTX4       NM_015177.1          78           29
+605   Endogenous         CD3G       NM_000073.2          14           16
+606   Endogenous       S100A8       NM_002964.4        2954           16
+607   Endogenous      ZC3H12A       NM_025079.2          29           30
+608   Endogenous         IER3       NM_003897.3         280          817
+609   Endogenous          CD4       NM_000616.4          29           33
+610   Endogenous      S100A12       NM_005621.1          21           18
+611   Endogenous          CD6    NM_001254751.1          16           22
+612   Endogenous        CD163       NM_203416.2         144           83
+613   Endogenous        DUSP2       NM_004418.3          22           25
+614   Endogenous        HERC6    NM_001165136.1         158           56
+615   Endogenous         MRC1       NM_002438.2          23           64
+616   Endogenous         DLL4       NM_019074.2          36           53
+617   Endogenous       SAMSN1    NM_001256370.1          63           69
+618   Endogenous         CD28    NM_001243077.1          19           41
+619   Endogenous         TAP2       NM_018833.2         321          120
+620   Endogenous         ICOS       NM_012092.3           6           14
+621   Endogenous      TNFSF12       NM_003809.2          45          100
+622   Endogenous       IFITM2       NM_006435.2         956          569
+623   Endogenous        DNMT1    NM_001130823.2         319          236
+624   Endogenous       TNFSF8       NM_001244.3          32           28
+625   Endogenous        TGFB2    NM_001135599.3          48           49
+626   Endogenous      TMEM140       NM_018295.3          64           41
+627   Endogenous      COL11A1       NM_001854.3         514          133
+628   Endogenous       GIMAP6       NR_024115.1          20           40
+629   Endogenous         IRF4       NM_002460.1          33           79
+630   Endogenous        BNIP3       NM_004052.3         445          240
+631   Endogenous         FPR3       NM_002030.4         225           79
+632   Endogenous        HLA-C       NM_002117.4        1786          695
+633   Endogenous        VEGFC       NM_005429.4         135           69
+634   Endogenous      SIGLEC1       NM_023068.3          58           66
+635   Endogenous          BID       NM_001196.3          40           34
+636   Endogenous       MAPK10    NM_001318067.1          62           76
+637   Endogenous         FCN1       NM_002003.4          16           24
+638   Endogenous        H2AFX       NM_002105.2          71           33
+639   Endogenous         CBLC    NM_001130852.1          34           35
+640   Endogenous        CASP3       NM_032991.2         224          225
+641   Endogenous        PIAS4       NM_015897.2         200           62
+642   Endogenous      HLA-DRA       NM_019111.3        1430         2507
+643   Endogenous        ULBP2       NM_025217.2          19           24
+644   Endogenous        CASP1       NM_001223.4          71           77
+645   Endogenous        MS4A2       NM_000139.3          18           19
+646   Endogenous      HSD11B1       NM_181755.2          21           24
+647   Endogenous         GAS1       NM_002048.2          47           41
+648   Endogenous         FUT4       NM_002033.3          41           42
+649   Endogenous         CSF1       NM_000757.5          59           71
+650   Endogenous       FAM30A       NR_026800.2          23           25
+651   Endogenous        ITPK1    NM_001142593.2         273         1750
+652   Endogenous        BCAT1       NM_005504.6          81           26
+653   Endogenous         CD80       NM_005191.3          43           20
+654   Endogenous         C1QB       NM_000491.3         302          312
+655   Endogenous         RELN       NM_005045.3          18           27
+656   Endogenous        ICAM5       NM_003259.3          16           14
+657   Endogenous        MAML2       NM_032427.1          39           53
+658   Endogenous         OLR1       NM_002543.3         107           73
+659   Endogenous       NFKBIE       NM_004556.2          58           43
+660   Endogenous        WNT11    XM_011545241.2          20           19
+661   Endogenous       LILRA3    NM_001172654.2          28           31
+662   Endogenous     TNFSF13B    NM_001145645.2          51           81
+663   Endogenous         TDO2       NM_005651.3         102           27
+664   Endogenous       MAP3K5       NM_005923.3          64          125
+665   Endogenous        HLA-F    NM_001098479.1         303          151
+666   Endogenous         CD3E       NM_000733.3          28           42
+667   Endogenous         RRM2       NM_001034.1         714           44
+668   Endogenous           C7       NM_000587.2          33           81
+669   Endogenous     TNFRSF14       NM_003820.3         203          197
+670   Endogenous        FCGRT       NM_004107.4         216          403
+671   Endogenous         WNT2       NM_003391.2          41           24
+672   Endogenous         MICB       NM_005931.3          40           21
+673   Endogenous        HMGA1       NM_145902.2         253          110
+674   Endogenous        IL21R       NM_021798.3          19           13
+675   Endogenous       CD300A    NM_001256841.1          38           34
+676   Endogenous       TWIST1       NM_000474.3         160           93
+677   Endogenous        IL1RN       NM_000577.3          34           19
+678   Endogenous        CXCL1       NM_001511.3          18            9
+679   Endogenous        SFXN1    NM_001322977.1         662         1899
+680   Endogenous         GNLY       NM_012483.3          11           36
+681   Endogenous         NID2       NM_007361.3         231          168
+682   Endogenous      NECTIN1       NM_002855.4         180           90
+683   Endogenous     SERPINA1    NM_001127702.1         164         1414
+684   Endogenous        PDGFB       NM_002608.2          45           51
+685   Endogenous        HLA-B       NM_005514.6        4911         2885
+686   Endogenous        VCAM1       NM_001078.3         190          124
+687   Endogenous     HLA-DPB1       NM_002121.5         383          805
+688   Endogenous      HLA-DOA       NM_002119.3          29           49
+689   Endogenous         GBP2       NM_004120.4         128           77
+690   Endogenous          ATM       NM_000051.3         343          396
+691   Endogenous        PSMB8       NM_004159.4         275          176
+692   Endogenous         MLH1       NM_000249.2         173          132
+693   Endogenous        PLA1A       NM_015900.2          23           31
+694   Endogenous         NT5E       NM_002526.3         109           52
+695   Endogenous        PALMD       NM_017734.4          23           74
+696   Endogenous         UBA7       NM_003335.2         148           83
+697   Endogenous       PIK3CD    NM_001350234.1          36           36
+698   Endogenous         NOD2       NM_022162.1          36           40
+699   Endogenous      CEACAM3    NM_001277163.2          33           39
+700   Endogenous        RIPK3       NM_006871.3          43           76
+701   Endogenous        IL1R2       NR_048564.1          16            6
+702   Endogenous         JAK1       NM_002227.1         316          413
+703   Endogenous         ENO1       NM_001428.3        5271          843
+704   Endogenous       LILRA1    NM_001278318.1          27           23
+705   Endogenous         BBS1       NM_024649.4          83           97
+706   Endogenous        MYD88       NM_002468.3         214          176
+707   Endogenous        CXCR3    NM_001142797.1          13           20
+708   Endogenous         CD1C       NM_001765.2           9           22
+709   Endogenous         TLR9       NM_017442.2          20           28
+710   Endogenous         CCL7       NM_006273.3          67           23
+711   Endogenous         CPA3       NM_001870.2          68          142
+712   Endogenous       SH2D1A    NM_001114937.2          20           29
+713   Endogenous         CCR4       NM_005508.4          33           24
+714   Endogenous        HDAC4       NM_006037.3          46           33
+715   Endogenous        POLD1    NM_001256849.1          44           41
+716   Endogenous       PTPN11    NM_001330437.1         610          922
+717   Endogenous         JAK2       NM_004972.2         152          236
+718   Endogenous       WNT10A       NM_025216.2          17           16
+719   Endogenous        ITGB2       NM_000211.3         166          174
+720   Endogenous         TYMS       NM_001071.1         269           45
+721   Endogenous        KAT2B       NM_003884.4         125          310
+722   Endogenous        ITGA6    NM_001316306.1          65          246
+723   Endogenous        TBX21       NM_013351.1          24           28
+724   Endogenous        BRCA1       NM_007294.3          42           70
+725   Endogenous      COL17A1       NM_000494.3          51           35
+726   Endogenous        BIRC3       NM_001165.4          20           31
+727   Endogenous         KRAS       NM_004985.3         151          181
+728   Endogenous       IL11RA       NM_147162.1          39           89
+729   Endogenous        SIRPA    NM_001040023.1         101           98
+730   Endogenous        CEBPB       NM_005194.3         357          267
+731   Endogenous        VTCN1    NM_001253849.1         755           68
+732   Endogenous         SGK1       NM_005627.3         161          110
+733   Endogenous        NLRC5       NM_032206.4         135           66
+734   Endogenous         CCL8       NM_005623.2         271           46
+735   Endogenous        TRAF1    NM_001190945.1          25           82
+736   Endogenous       ADAM12       NM_003474.5         523          104
+737   Endogenous        MMRN2       NM_024756.2          61          121
+738   Endogenous        PTGS2       NM_000963.1          29           40
+739   Endogenous        SMAD5       NM_005903.5         224          685
+740   Endogenous          LCK       NM_005356.4          34           46
+741   Endogenous        ITGB3       NM_000212.2          45           73
+742   Endogenous       FCGR2B    NM_001002273.1          99           88
+743   Endogenous         NRAS       NM_002524.4         294          248
+744   Endogenous         IL34    NM_001172771.1          40           55
+745   Endogenous        LAMA1       NM_005559.3          57           43
+746   Endogenous       CLEC4E       NM_014358.3          34           33
+747   Endogenous       IL18R1    NM_001282399.1          40           37
+748   Endogenous         MFNG       NM_002405.3          98           29
+749   Endogenous       TTC30A       NM_152275.3         124          170
+750   Endogenous    TNFRSF10C       NM_003841.3          73           54
+751     Positive     POS_C(8)      ERCC_00002.1        3852         4739
+752     Positive   POS_A(128)      ERCC_00117.1       36727        43726
+753     Positive POS_F(0.125)      ERCC_00034.1          75           85
+754     Positive     POS_D(2)      ERCC_00092.1         725          898
+755     Positive    POS_B(32)      ERCC_00112.1       14523        17129
+756     Positive   POS_E(0.5)      ERCC_00035.1         150          158
+757     Negative     NEG_C(0)      ERCC_00019.1          27           29
+758     Negative     NEG_D(0)      ERCC_00076.1           8           15
+759     Negative     NEG_E(0)      ERCC_00098.1          24           20
+760     Negative     NEG_A(0)      ERCC_00096.1          17           29
+761     Negative     NEG_H(0)      ERCC_00154.1          12           11
+762     Negative     NEG_G(0)      ERCC_00144.1          14            7
+763     Negative     NEG_F(0)      ERCC_00126.1          39           39
+764     Negative     NEG_B(0)      ERCC_00041.1          20           17
+765 Housekeeping          UBB       NM_018955.3        3440         4712
+766 Housekeeping         PUM1    NM_001020658.1         615          750
+767 Housekeeping         TLK2       NM_006852.3         144          418
+768 Housekeeping      DNAJC14       NM_032364.5         201          244
+769 Housekeeping        SF3A1       NM_005877.4         315          313
+770 Housekeeping       POLR2A       NM_000937.2         460          550
+771 Housekeeping         SDHA       NM_004168.3         339          570
+772 Housekeeping      STK11IP       NM_052902.2         103          100
+773 Housekeeping        NRDE2       NM_017970.3         179          336
+774 Housekeeping          TBP    NM_001172085.1         117          230
+775 Housekeeping         OAZ1       NM_004152.2        2242         1825
+776 Housekeeping     TBC1D10B       NM_015527.3          92           86
+777 Housekeeping         GUSB       NM_000181.1         146          177
+778 Housekeeping        PSMC4       NM_006503.2         209          359
+779 Housekeeping         TFRC       NM_003234.1         489          142
+780 Housekeeping        ABCF1       NM_001090.2         170          258
+781 Housekeeping        TMUB2       NM_177441.2          82          172
+782 Housekeeping       MRPL19       NM_014763.3         232          223
+783 Housekeeping         G6PD       NM_000402.4          92          199
+784 Housekeeping        ERCC3       NM_000122.1         454          403
+    pre_count_2 post_count_2 pre_count_3 post_count_3 pre_count_4 post_count_4
+1           324           23        1465           24          87           13
+2          2138          570         529          105          55          102
+3            31           49          35            9         110           12
+4           135          751         123          103          31           40
+5          5611        15209        8545         3362        1618         2285
+6          1564          361         257          197          73          129
+7          3997         3936        2597          566         232          121
+8            83           97         124           38          46           54
+9          4795         5862        7387          779         888          882
+10          470          388         292           65         107          122
+11          167           59         219           52          32          216
+12           10           20          11           16          12           12
+13           85           68          26           21          20           31
+14         1110          872        1059          236          75          142
+15         4017         2217        2339         1203         467          534
+16          746           85          36          166          33           34
+17         1756         1347         799          349         512          122
+18          452           21         798          145          27           31
+19          184           54         105           24          16           25
+20          266          247         424           92          45           70
+21           18           36          23            7          25           11
+22           50           45          47           51          25           43
+23          476          580         974           88         263          122
+24          751          876         863          315         189          284
+25          187          614         645           33          78           61
+26           57           86         106           13          27           22
+27         1844         3676        2301          522         346          334
+28          247          284         304           68          98           92
+29          610          629         899          206         287          149
+30           66           31          17           24          12           17
+31          410          328         189           53          40           33
+32           72           96         116           20          16           23
+33          281         1309        1339          391         472          433
+34         2115         1703        2727          545         700          738
+35         3245         4603        3999         1976        1167         1515
+36         4334        14695        8730         3523        1809         2069
+37           78          194         332           45         149           53
+38          777          526         892          202         287          175
+39        26951        12249       20207         3808        4053         4854
+40         1414         1819        3115          629        1002         1826
+41          626          385         438          167          36           81
+42          735          343         514           93         127          114
+43         7977          783        4406          675         582          414
+44          627          415         381           88         114           74
+45           81          170         294          127         297          154
+46          424          226         197           47          96          118
+47          464          339         225          127         121           52
+48           42           77          61           17          19           22
+49          285          119         230           41          38           55
+50          564          385         484          109          63           55
+51          471         1063        1112          152         235          180
+52           31           21          14            7           8           12
+53         1446         1225        2188          474         871          362
+54           73           57          49           11          30          138
+55          149          134         247           40          20          181
+56           83           15          10           16          23           11
+57           32           17          30           20          23           15
+58           96          114          86           14          20           16
+59         1499          974         970          435         441          284
+60           36           49          94           22          59           17
+61          116           65          48           21          43           28
+62          802         1827        1883          195         175          199
+63          175          193         282           78          82           78
+64         1731         1722        1377          188          84          166
+65           67          108          78           23          34           45
+66          693         1869        1591          237        1220          276
+67          696          370         310           68          43           94
+68          214          662         322           41          67           64
+69          233          537         435           45          44           38
+70           36           43          35           28          32           42
+71           74          122         108           44         112           61
+72          119          266         192           50          29           33
+73           16           28          15           13          15           20
+74          227           92          64           57          31           80
+75           49           38          64           28          19           17
+76          268          308         493           56         246           93
+77          385          180         182           43          64           39
+78          384          280         430           43          37           49
+79          101          326         150           45          80           47
+80          578         2098        1190           90         102          228
+81          664          498         549          107          68           97
+82         1535         1133        1784          259         332          268
+83          125           95         105           29          28           31
+84           23           35          47           26          90           12
+85         1231          908        1167          251         285          109
+86          450          527        1634          215         106          173
+87           27           56          44           14          25           22
+88         1068          338         222           95         268          234
+89         1238         1428        5217          909        3675          599
+90          967         1147        1404          501         377          135
+91          146          113         315           56          42          219
+92         2011           83          14           16          11           20
+93          630         1101         944          164         122          197
+94          386          123          41           53          27           43
+95          681          574         695          151         234          202
+96          200          271         409          101         170           64
+97            8           15          10           20          20           15
+98          249          108         135           76          41           36
+99          177           23          11           25          11           17
+100          49           45          29           17          17           16
+101         170          121         149           33          75           42
+102         327          239         526           53         349          108
+103        2299         3846        3535          458         372          589
+104        1081          585         904          154         110          141
+105          97           21          25           24          32           16
+106        4796         3354        4470          628        1618          996
+107         877          657         790          182         165          292
+108         761          529         668          220         242          191
+109         900         1884        1322          247         261          170
+110          52           50          71           13          34           15
+111          21           38          22           19          13           14
+112         109          176         166           36          29           29
+113         859          894        1205          165         438          262
+114          60          132         133           42          63           40
+115         398          605         638          103         238           51
+116         714          812        1063          190          96          110
+117          37          118         256           85          30           28
+118         771          628         409          160         375          333
+119          14            5          10            9          13            8
+120         151          252         319          307         136          153
+121          36           50          56           33          22           20
+122         117          136         126           63         137          115
+123         162          389         143           77          38           79
+124         521          398         292          130         148          162
+125         366          228        1456          180         127          151
+126        3528         3515        2733          331         328          692
+127         105          119          95           48          49           39
+128        1097         1712        1079          243         265          183
+129         734          571         528          165          92           71
+130         396           81          30          246         316          246
+131        5314         5481        6963         1103        1624         1571
+132        1250         1297        1350          254         300          295
+133          14          273          95           37          28           35
+134         708          730         865          154         267          166
+135        2527         2266        2502          327         186          201
+136         278          199         238           87          94           49
+137         236          153         274           17          24           35
+138          21           88         154           15          83           18
+139         437          143         263           52          63           44
+140         349          449         372           86         135           97
+141        1134         1061         948          231         310          240
+142         228          108          40           49           9            8
+143          33           64          24           14          13           19
+144          19           20          16           14           7           10
+145          41          114          81           18          16           21
+146         491          425         483           87         134           87
+147        2862            7        7191         1853           5         1507
+148       10375         4901       27761         1922        3855         1029
+149          59           60          81           14          67           26
+150         405          606         678           81         373          210
+151         902         1614        1147          220         370          386
+152        1113          307         734          322         275         1479
+153        1133          806        1553          672         916          569
+154          27           24          28           22          11           31
+155         578          596         218          232         150          127
+156         441          448         474           53          61           31
+157         163           90         222           52          40           41
+158         358          336         277           85          59           51
+159         855          384         475           50          46           36
+160          53           81          94           29          26           23
+161         247          354         341          113         119           64
+162          46          612        1018          439         184          458
+163       11399        14987        7569          624         537         1077
+164          30           52          45           36          23           14
+165         721          616         703           78          64          103
+166         462         1873        2797          320         383          241
+167          14           17          10            8          15           26
+168         724          776         730          112         168          120
+169          46          158          63           28          35           27
+170         103           95          78           18          38           19
+171        1675          214         301           68          99          836
+172         292          676         290           35          97           69
+173         210          179         122           41          80           78
+174        1111          802        1017          232         185          248
+175          48          121         197           24          34           26
+176        5387         7254        2081          773        1784          897
+177        1744         1202         258           34         263          248
+178         420          294         477           65          48           55
+179          84           76         150           27          97           27
+180         273          385         309           67         302           90
+181          19          475         139           27         428          102
+182         273         1681         976          190        1341          415
+183        1310         1246        1476          296         293          244
+184          43           14          11            9           5            3
+185          71           77          74           12          26           15
+186        1445         1817        1500          416         433          317
+187         123          242         125           34          37           17
+188        2058         1996        2131          380         297          287
+189         880          603         650          184         195          182
+190         145          262         243           52          59           77
+191        1862         1247        1061           89         398          231
+192        1254         1533        1589          358         287          299
+193         997          658         840          152         146          153
+194          31          115         318           12          13           18
+195        1455         3175        3176          196         465          263
+196         625          327         362           88          67           26
+197        5385        15560       12075         3021        1032         1817
+198          39          161          93           41          15           46
+199          13           26          11           16           7           12
+200        1886         1515        2128          375         261          240
+201          62          171         175           23          66           32
+202          49           82         106           25         106           29
+203         259          393         355          134         114           59
+204         185          364         373           62          99           91
+205          30           60          53            9          19           16
+206         540          373         453          297          31           51
+207         699          726        1046          233         321          263
+208          16           19          12            6          10            7
+209         702          757        1050          112         336          327
+210         403          652         654          242         567          271
+211        1609         1340        1532          477         592          283
+212         480         1210         735           66          57           75
+213         142         1067         439           59          52           37
+214          85          135         131           23          34           23
+215        5182         1560        5154          802        3620          809
+216          22           55          48           11          64           26
+217         107          396        1235           46        1304           93
+218          38           52          90           11          43           24
+219         306          631         426           38          32           24
+220         179          281         535           29         130           29
+221         150          378         729          117         157           94
+222          39           30           8           15           5           17
+223         363          538         577          132         120          109
+224         128          527         187           49          24           27
+225         132           77         146           25          18           11
+226         212          196         301          168         138          156
+227          45          161          90           10          23           11
+228         235          125         154           23          83           52
+229         205          171         164           53          11           22
+230        1067         1169         595          346         222          255
+231          79          511         262           48          62           72
+232         106          125         150           23         100           27
+233        1202         1009        1081          239         193          250
+234        1028          533         370          196         204          179
+235          73          196          17           12          61           22
+236         230          322         439           95         172          117
+237          21           20          28            8         262            9
+238         137           87          63           28         107           53
+239        4875         2120        2463          571         279          379
+240         489          223         201           74          99           96
+241          74           64          81           35          21           13
+242          10           37          10           19          15           18
+243          22          920          72         1070          92            3
+244         596          124         899          254          34           30
+245         161          233         174           22          25           15
+246         797          179         431           60          52          102
+247          18           19          27           18          13            7
+248        1226         1453        1713          149          43           72
+249          26           30          12           10          12           12
+250         185          430         151           48         103           52
+251         810         2838        3873          757         539          337
+252         321          253         420          131         165          107
+253         153          235         355           54         362           36
+254         322          708         910          143         317          202
+255        2305         2564        7421         2880        2838         1142
+256        2735         2489        2454          525         550          985
+257         137          103          61          165         155          142
+258        1171          680        1026          142         103          143
+259          15           14          14           12           8            7
+260          13           18           7           11           8           12
+261         616          515         374          112          62           55
+262          77           81         133           46          72           42
+263         390          220         396           61          95           88
+264          26           31         130           16          12            8
+265         166          243         186          146         101          108
+266          86           90          50           67          62           80
+267          16           33          13           45          44           36
+268          26           39          42           27          48           46
+269         126          196         278           96         213          121
+270        1142         2239        1310          163         133          175
+271          87          226         190           84         136           66
+272         188          166         111           94          80           86
+273          39           50         116           28         118           40
+274         283          311         502          128         284          135
+275         126          262         220           50          56           47
+276         249          176         844          194          71           81
+277          55           96         119           42         154           60
+278         430         2283         912          242         285          252
+279         289          576         665          204         145          124
+280         693          724         410          123         127          140
+281         840         5543        3269         1087         465          727
+282          87          144         244           66         239           88
+283        1223         1773        2169          307         446          219
+284         978          690        1096          319         531          817
+285         586          179          62           29          29           21
+286         524          481         528          136         147          143
+287        3795         3477        4876         1137        1313         1528
+288          42           80         122           42          37           34
+289          60          157         147           53          77           68
+290        1563           49          13           85          19           43
+291         166         1693         910          698         482          352
+292         498          273         387          182          64          162
+293          29           53          48           13          28           18
+294          34           98          69           37          28           50
+295        1262          892         765          206         278          191
+296          23           59          49           26          22           27
+297         886          850         442          118          54          119
+298        4277        17657        4159         1212         332          377
+299        2955          457         326          194          26           25
+300         602          112          92           70          31           55
+301         122          301         288           34          85           74
+302           8           19          30           17          40           11
+303        2172         2643        1762          389         511          453
+304         497          275         277           52          52           39
+305        1218          141         707          486          99          107
+306         720          590         684          168         198          247
+307       24913        25552       24990         3683       11795         5834
+308         892          822         730          162         200          164
+309          49           56          29           18          23           15
+310        1561         1594        3080          547        4676          900
+311          33           31          29           18           9           14
+312           8           27          12            5           5            4
+313         163          243          72           34          58           15
+314          59          137         249           19         320           19
+315         568          576        1239          151         121           71
+316        2083         1589        1876          325        1273          799
+317         462         3394         853          358         121          121
+318        1623         6098        3180         1567          85          731
+319        1069          168          72           94          37           58
+320         132          144         201           36          60           83
+321          69           28           9           13          13           14
+322         183          162         177           55          88           51
+323          17           59          46            7          23            7
+324          59           87         113           31         175           28
+325         553          175          78           56          20           17
+326         968         1685        1381          128         248          299
+327         173          309         858          221         403          119
+328         331          214         191           34          29           51
+329        1290          706        2169          328         349          522
+330        3336        14237        6907          659         690         1234
+331         709          910        1428          462         884          455
+332        1256          710         323          124         115          125
+333          61          162         104           22          26           23
+334          44           33          18           20          16           27
+335         309          658         371          239         137          174
+336         174          303         365           62         107           73
+337         395          862         111          174          44           30
+338        4106         2986        4471         1196        1013          909
+339         411          580         935          284         758          240
+340         305          424         447           94         167           73
+341         190          487         298           42         149           92
+342        5618         3097        2605          752         714          553
+343        2136         2282        3342          303         374          475
+344        3679         1118        1834          547         561         1424
+345         988          712         813          394         268          472
+346         140          195         351           40         106           29
+347         127          605         301          250          54          131
+348          23           23          26           10          30           16
+349        1175          788        1202          140         104          173
+350        1590          644          56          217          48           69
+351        1170         1367        1087          240         188          104
+352         167          325         579          121         185           77
+353          19           28          14            7           9           10
+354       16503         4973        6063         1842        3129         2001
+355          19           37          32           22          35           15
+356         257          978         431           59         103           80
+357        2178         1082        1461          760         505          545
+358          90         1514         584          210         168          174
+359         256          113          46           42          19           15
+360          32           16          13           17          14           16
+361        2183           41          15           46          16           14
+362        4093          604         598          173         111          127
+363         179          121         159           71          88           43
+364         353         1164         486           75         112          111
+365          78          101         113           17          18           18
+366         287          575         978           89          32           36
+367          91          834         176           23          67           34
+368         906          881        1102          138         145          166
+369         382         1005         506           50          76          102
+370        4991         5671        3489          697         728          699
+371         215          585         578          149         249          185
+372        1431         1758        1176          271         511          379
+373         528          404         575          185         189          318
+374          14           24          18           17          15           16
+375          48          151          83           16         117           28
+376        2402         7712        4077          407        1377         1068
+377         139          124         226           54          68           49
+378         904         1055         692          297         394          342
+379         496          357         280          109          72          141
+380         977         3022        1572          516         319          367
+381         526         1142         793          223         557          319
+382        1701         2771        2433          578         557          481
+383         130          184         296           31          90           34
+384         146          107          35           29          69           40
+385         120          448         607          192          77          134
+386          58           87         147           21          43           15
+387       15117        13803       10570         1390        2879         1351
+388         570          131         291           41          59           25
+389        1024         1289        1253          265         392          390
+390          38           50          64           24          86           11
+391          57           72          45           16          35           22
+392           9           14          11           11          13           10
+393         592          453         492          181         230          189
+394          99           88         108           43          69           49
+395         314          473         623           99         200           62
+396        1191          736        1092          135         186          277
+397          85          132         136           18          21           23
+398          11           22          13           20           9           10
+399         829         5853        1887          437        1530          273
+400         207          336         451          131         156          107
+401         290          132         281           96          70           37
+402         107          321         162           25          40           42
+403          16           95          22           23          34            8
+404         637          705         660          153         145          145
+405         131          137          81           26          31           25
+406        5458        12843        7022          929        1253          911
+407         762          746         900          255         406          511
+408          33           46          28           23          15           23
+409        6373          330         190           20         463           39
+410          14           15          10            8          10            6
+411        3846         5813       12715         1867        1853         1187
+412        1890          995         534           92          71           62
+413         463          428         947          212         269          196
+414          26           31          47           12          21           17
+415          16          118          61           39          17           16
+416         480          433         500          253         199          236
+417        2583         2351        3101          620         756          524
+418         301          421         705           65         444           91
+419         248          320         714           76         246           48
+420         115           65          47           21          29           41
+421          53          113         168           33         159           36
+422         273           24         855          171         124           18
+423          86          481         239           25          47           33
+424          17           20          15           19          49           12
+425         137          112         126           39          25           30
+426         170          388         253           52          92           45
+427          92          225         219           34          34           23
+428         658          746        1094          106         128          139
+429        1202          783        1165          165         239          583
+430          31           54          50           17          73           30
+431         228          277         515           89         458          145
+432         298          241         285           67          69           58
+433          59           37          22           65          16           12
+434         885          626         988           93          93           81
+435         264          157         212           66          48           38
+436         222          211         219           50          40           93
+437        1137         1405        2983          667        1068          582
+438        7367          144         191          165          39           46
+439          30           28          21           20          21           22
+440        1273          664         932          304         448          289
+441         540          329         486          123         119          156
+442         741          955        1459          744         846          707
+443        1472           54          79           67          31           83
+444         632          147         178           93          40          190
+445         117          212          91           31          30           45
+446         460          897        1526          295         216          116
+447          48          158          57           33          32           35
+448          32           32           9           15          10           11
+449         107          268         423          118         128          120
+450        2127         2109        1160          489         504          434
+451          14           14          14           15          15           19
+452         382          273         242           71          85           75
+453         355          517         138           67         155           42
+454         764          703         725          219         510          348
+455        1247         1620         999          586         836          295
+456        1269         1261        1287          149         138          111
+457          19           30          57           20          30           18
+458         171          277         217           35          53           48
+459         327          342         254           45          72           80
+460        1581         3640        1674          513         358          126
+461       13281         8295       11514         1698        2312         1657
+462         127          126         104           44          46           25
+463         727          545         542          250         200          111
+464          24           55          42           14          23           16
+465          92           64          25           29          23           28
+466         902         1184        1370          183         255          213
+467          19           20           5           13          13           14
+468         554          364         153          160         182           40
+469         392          260         344           68          70           88
+470          27           40          46           16          21           10
+471        1441          291         312           64          44           38
+472        1541          482         920          136         111          101
+473          14            9           5           15           2           16
+474          25           21          19           24          19           19
+475         382          249         355           83         109           67
+476         634          578        1175          258         729          202
+477         779          733        1050          244         192          232
+478        4005         2944        3818          723         585          670
+479         484          644         764          100         176          107
+480          20           15          12           12          18           18
+481         274          312         334           92         164           88
+482         147           80          97           43          27           55
+483          23           27          13           17          30           22
+484         129          178         104           73          53           69
+485       12692         8136        8567         2889        2092         2286
+486        4075         1689        2716          555         423          394
+487         909         1193        2124          171         132          127
+488         615           89          62           33          40           66
+489         550          678        1111          237         194          301
+490         950          163         116          225          19          277
+491         117          118          15           26          23           75
+492         193          112         113           54          30          104
+493          51           22          16           25          17           23
+494          28           34          61           27         180           11
+495          44           33         142           20          16           22
+496         492          261         426          136          65           81
+497         375          654         540          158         559          499
+498          31          139          74          149          17           74
+499          97          153         204           42          40           39
+500         812          183         157           25          53           27
+501          33           54          83           12          19           29
+502         429          350         413           85          75           55
+503         223          607         343          154         135          110
+504          51           25          29           14          24           22
+505        2032         1572        1467          477         235          232
+506          55           14          18           22          12           22
+507          92          172         120           15          13           27
+508         123          326         234           46          72           34
+509         111          215         275           42          76           25
+510         155          115         171           38          29           33
+511         583          442         448          189         113          895
+512          28           59          53           16         171            7
+513        1092         1228        2376          303         527          401
+514         904          734        1154          338         273          309
+515         432          351         406           78          61           45
+516         405          530         478           61          60           72
+517        2568         1689        2081          879         594          551
+518         192          224         305           52         197           70
+519         120           91          68           31         228           30
+520         908          891        1056          306         198          270
+521          47          120          58           11          27            9
+522          53           66          50           31          31           20
+523         441         1859        1846          381         351          318
+524        3352         4220        4271          596        2080          895
+525        1447         2863        2801          960        3944         1218
+526         348          248         382          128         850          187
+527        2623         3344        3345         1271         873         2022
+528         114           99          53           29          30           43
+529         114          113         144           28          21           40
+530          45          530          76           41          38           42
+531         403          423         422          140          88           92
+532         272          408         481           94         109           79
+533         756          607         976          292         275          173
+534         193          157         278           52          78           36
+535        1154          177         140           57          47           26
+536        2252          715         951          233         153          253
+537        2330         1311        2143          222         203          247
+538         343          504         485          154          93          119
+539         300          896         525           66         110          412
+540        3181         3354        1977          571         309          387
+541         607         3706         509          563          87           60
+542       15993        15141       36135         6166        9687         3755
+543         486          474         416          138         172          299
+544         155          247         298           80         158           81
+545         765          401         591           52          52          111
+546        8733         8615        6035         1913        1167         1422
+547          67           53          76           28          86           37
+548          66          132         307           26          38           23
+549         693         1752         743          107          60          215
+550         102          389         146           33          41           38
+551       16936         9301       12551         3335        3322         2815
+552          86           81          86           54          28           24
+553        1127          672         719          287         450          448
+554        3664        12227       20241         2236         975          791
+555           6           12          16           20          22           14
+556        2421          243         435          161         247          542
+557         309         1093         667           95         118           70
+558        3581         3903        3599          819         874          752
+559         601          483         811          158         112           98
+560        1391         1165        1136          316         548          435
+561         317          648         645          150         189          168
+562          89           44          15           32          26           20
+563         109          133         167           53          44           54
+564         647          344         213           61          82           73
+565          20           47           3           28          20           26
+566         305          263         473           53          72           58
+567         931         1088         854          352         454          269
+568         468          424         600          108         196          196
+569         311          376         531          124         276          113
+570         116          163         262           72         252           55
+571          22           76         151           30         116           25
+572         692          717         602          105          77           51
+573         456          644         380          175         298          158
+574        1159           85          59          102          59           67
+575          17           22           8           29          15           27
+576        2964         5178        3311          421         638          647
+577        1022          897         714          345         410          328
+578         353          229         172           40          24           26
+579         209          315         361          124         101           78
+580         125          317         208           54          46          187
+581        3720         2923        3282          182         863          754
+582         711          658         729          234         226          228
+583        1403          740         589          164         241          486
+584          93           79         123           35          76           30
+585          47           35         112           28          33           49
+586          42           30          90           38          61           50
+587          22           13          15           29          28           21
+588        7733         8486        6465          276        1355         3140
+589        2566         1989        1539          343         267           65
+590          20           20          24           17          25           26
+591         110          345         181           41          52           24
+592          82          241         283           40         130           72
+593          37           78          99           34          46           39
+594          31           37          42           34          36           22
+595         187           40         164           60          22           31
+596          58           32           9           17          17            8
+597          81           36          62           36          28           37
+598          22           54          34           13          35           44
+599        1023          166         294           51          44          101
+600          77           53          13           26          22           24
+601         124           51          33           35          21           28
+602          17           63          14           16          16           25
+603        2565          808         601          272         315          262
+604         330          461         106           67          37           38
+605          17           21          33           25          60           23
+606         249           80          22           80          70          180
+607         186          100         137           28          28           31
+608        2538          812        2325          106         317           61
+609         148          151         216           51          57           29
+610          60           42           8           32          21           44
+611          68          122         248           46          76           31
+612         462          729         331           80         289          605
+613          73           45          45           22          28           29
+614         376          374         157           66          59           67
+615         320           96         102           97         201          201
+616         252          179         153           33          41           40
+617         114          556         408          113         383          137
+618          80           91         264           54          68           25
+619         860          749         788          115         255          173
+620          17           52          84           25          78           22
+621         692          776         728          142          95           85
+622        2987         4922        4443          953         602         1085
+623        1553         1391        1267          306         269          215
+624          49           85         101           30          42           35
+625         246          123         314          248          88           58
+626         176          283         245           48          91           56
+627          41         6891        3184         1455         513         1000
+628         231          117         123           38          68           60
+629         103          214         174           47         673           37
+630         332          221         354          209         135          150
+631         231          857         511          138         394          255
+632        6150         4264        7607          575        1252          644
+633         307          305         265           85         133          113
+634         296          487         439           43          40           70
+635         196          144         193           71          53           30
+636         113           32          35           34          26           22
+637         118           40          42           30          32           29
+638         163          196         163           36          52           67
+639          82          130         217           29          22           21
+640         670          680         844          195         399          157
+641         597          593         896          116          81          108
+642        6505         6785       16375         5762       10826         4397
+643          57           68          46           29          18           20
+644         368          214         407          102         177           95
+645          66          284          94           29          53           26
+646          39           30          27           18          22           25
+647        1034          869         289          128          40           65
+648         163          208         231           60          53           47
+649         812          317         639          138          80           78
+650          50           46          27           23         137           21
+651         818         1268         996          159         214          254
+652          83          344         194           94          96           98
+653          56          198         219           45          39           33
+654        1642         2311        2848          575        1721         1326
+655         419           25          19           21          19           27
+656          63           18          19           33          17           23
+657         385          156         131          101          56           61
+658          59          755         664          203         178          252
+659         143          179         153           49          70           47
+660          70           34          44           61          27           24
+661          15           14          18           21          25           32
+662         174          176         216           77         143           65
+663          26          157          44           29          63           45
+664         613          177         421          215         127          155
+665         666          490         593          140         205           95
+666         106          146         206           63         149           65
+667         451         1340         766          108         223          195
+668         156           58         110           23          79          117
+669        1726          829        2747          196         265          237
+670        2857         3464        1718          343         379          303
+671         100           99          47           29          89           27
+672         165          244         380           40         109           72
+673         642          759        1607          100          91           95
+674          16           38          48           17          38           17
+675         148          189         194           71          45           43
+676          97          138          51           35          14           25
+677         141           74          35           26          18           15
+678         199           40           8           15          19           13
+679         732          760         732          305         285          313
+680         134           84         228           34         197           26
+681         565         1442         974          477         182          327
+682        2622          549         605          187         114          160
+683        8474          133         222          226         225           95
+684         119          200         146           30          27           21
+685       29639        22468       24741         3051        6006         3822
+686         625          713         324          136         286          131
+687        3055         2714        7874         2692        4927         2049
+688         105          112         248           72          93           50
+689         430          525         545          185         287          109
+690        1465          845        1719          487         620          449
+691        1017          838        1179          126         412          230
+692         799          779         533          162         165          129
+693          36           35         434           40          42           37
+694         289          432         201           83          95           92
+695         575          162         139           87          53          120
+696         620          532         627          165         143           87
+697         142          111         153           40          54           28
+698         137           88         380           41          80           33
+699          26           15          25           30          23           35
+700          90          112         180           33          70           25
+701          46           32          21           23          20           49
+702        2933         1219        2159          524         377          464
+703        8845         2938        4519         1029         655          855
+704          51           55          89           38          37           28
+705         406          169         310           96          70           89
+706        1092         1135        1248          160         148          136
+707          32           55         113           28          39           23
+708          68           25          49           41          15           19
+709          45           61          40           39          35           29
+710          44           69          17           26          19           21
+711         288         1846         416          245         961          111
+712          37           72         101           35          75           47
+713          55          108         204           54         104           35
+714         269          176         305          106          51           89
+715         147          175         165           40          35           33
+716        2215         1690        1767          452         455          404
+717        2467          967        1219          290         414          254
+718          44           47          59           28          68           28
+719         752         1675        1344          452         380          240
+720         412          634         342           83          99           84
+721        1221          571         997          227         392          488
+722        1882          448         855          187         397          497
+723          28           29          42           41          31           24
+724         163          255         185           51          52           30
+725        4401          151          18          321          31           47
+726          65           43          60           30          44           26
+727         979          658         591          141         196          153
+728         585          127         164           82          51           42
+729         630          445         451          185         172          164
+730        2224         1065        1124          345         293          373
+731        2273          701         332         1702         276           87
+732        1200          830         814          266         252          227
+733         240          371         506           93         127           97
+734         131          257          88           61         124           78
+735         204          298         608           98          65           46
+736        1374         2706        1901          869         436          381
+737         616          246         177           82          96          117
+738         129           72          16           47          40           38
+739        1463          956        1387          369         280          200
+740          92          157         258           57         154           50
+741         128           83          64           72          50           63
+742         220          413         598          199         452          364
+743        1238         1228        1248          330         290          262
+744         297           67          76           63          50           44
+745         240          102          28           89          54           57
+746          72           76          21           41          38           41
+747          43           79          50           42          75           61
+748         119          106         120           27          51           47
+749         364          344         685          125         126          129
+750         302           73         339           82         107           74
+751        2453         2224        1729         4504        3552         4425
+752       27681        23254       17945        42598       31296        38967
+753          46           66          50           88          57           84
+754         470          503         338          925         602          845
+755       10228         8647        6685        16351       13062        16298
+756         103           88          70          169         139          189
+757          13           22          11           20          26           31
+758          17           14          15           18          21           16
+759          16           26          14           20          27           22
+760          12           12           7           20          12           17
+761          11           21          17           14          19            9
+762           7           13           5           14          13           17
+763          19           17          17           38          29           26
+764          10           18          12           35          32           33
+765       13464        15704        9279         3538        5928         3098
+766        3278         1478        2483          658         451          533
+767         561          533         515          130         135          517
+768        1057          972        1130          110         112          143
+769        1616         1190        1164          260         227          327
+770        3813         2452        2351          570         342          449
+771        2417         2032        2642          467         286          425
+772         470          359         633           80          79          120
+773         589          369         587          171         159          134
+774         737          411         541          211         195          117
+775        7198         8339        7887         1315        2365         1823
+776         578          594         503          111          54          115
+777         979          638        1180          146         224          149
+778        1253         1265        1665          140         205          205
+779         971          389         707          248         207          184
+780         901          870         976          163         187          162
+781         628          527         633          125          55           88
+782         771          675         645          211         200          169
+783         336          342         317           61          48           87
+784        1321         1163        1321          449         423          578
+    pre_count_5 post_count_5
+1            20           15
+2           147          125
+3            53           13
+4            73          103
+5          1997         4576
+6           207          132
+7           550          379
+8            57           56
+9          1662         1172
+10          297          144
+11           11           56
+12           10           15
+13           21           30
+14          267          274
+15          938          821
+16           45           38
+17          333          622
+18           31           23
+19           31           25
+20           51           71
+21           12           18
+22           20           37
+23          150          155
+24          334          402
+25           80           66
+26           36           29
+27          562          904
+28           80           92
+29          312          204
+30           16           23
+31           99           67
+32           28           24
+33          299          668
+34          554          594
+35         1440         2616
+36         2091         6004
+37           80           73
+38          222          235
+39         5099         4202
+40          790          546
+41           82           87
+42          174          122
+43         1686          613
+44          111          153
+45           96          125
+46          157          139
+47          177          100
+48           31           28
+49           50           57
+50          143          112
+51          232          243
+52           11           16
+53          396          421
+54           12           66
+55           88           48
+56            9           17
+57           18           21
+58           22           19
+59          400          476
+60           34           30
+61           25           34
+62          283          375
+63           93          112
+64          169          182
+65           26           32
+66          357          547
+67           75           55
+68          159           72
+69           43           52
+70           22           25
+71           65           70
+72           44           62
+73           18            9
+74           36           41
+75           18           25
+76           91           77
+77           37           46
+78           38           38
+79          113           78
+80          533          447
+81          108           96
+82          671          344
+83           20           38
+84           24           12
+85          341          257
+86          184          157
+87           25           20
+88          233          326
+89           13          637
+90          684          643
+91           42           37
+92          334           15
+93          228          173
+94           50           64
+95          299          238
+96           73          108
+97           15           15
+98           83           68
+99           13           14
+100          17           28
+101          59           38
+102          95           87
+103         696          430
+104         204          188
+105          39           26
+106        1116         1037
+107         360          225
+108         332          242
+109         271          239
+110          49           20
+111          18           17
+112          26           47
+113         166          253
+114          31           70
+115         149          113
+116          82          306
+117          31           45
+118         869          375
+119          13            6
+120         109          241
+121          21           33
+122          92          107
+123         141          187
+124         174          284
+125          58          108
+126        1137          492
+127          38          106
+128         238          375
+129         162          161
+130         167           46
+131        1623         1896
+132         290          481
+133         118           73
+134         201          250
+135         232          320
+136         109          159
+137          60           30
+138          42           24
+139          59           48
+140         123          188
+141         242          320
+142          16           17
+143          20           27
+144           7            9
+145          11           18
+146         103          105
+147          13            6
+148        1633         1587
+149          39           26
+150         151          173
+151         306          377
+152         317          245
+153         430          624
+154          26           23
+155         156          177
+156          41           60
+157          61           63
+158          54          127
+159          90           92
+160          18           19
+161          79           94
+162         205          208
+163        3674         2681
+164          23           29
+165          83          110
+166         851          897
+167          14           10
+168         186          181
+169          46           79
+170          22           21
+171          93          169
+172          44           85
+173          71           95
+174         260          345
+175          29           22
+176        1612          803
+177         227          937
+178          44           51
+179          39           47
+180          91          140
+181          76          124
+182         245          621
+183         357          345
+184           8            6
+185          19           25
+186         637          733
+187          39           50
+188         493          531
+189         274          225
+190          34          120
+191         623          134
+192         396          698
+193         179          223
+194          14           25
+195         264          815
+196          80           76
+197        3261         6280
+198          28           46
+199          17            8
+200         379          365
+201          42           47
+202          43           43
+203          67          137
+204          68           89
+205          12           13
+206          43           84
+207         219          297
+208           6           11
+209         452          343
+210         309          437
+211         546          829
+212         206          234
+213          90          127
+214          32           20
+215         475          961
+216          24           20
+217         135           82
+218          32           21
+219          46          241
+220          55           32
+221          79          107
+222          22           18
+223          92          151
+224          29           45
+225          18           25
+226          98          155
+227          18           17
+228          60           45
+229          51           29
+230         662          622
+231          70          118
+232          33           53
+233         210          379
+234         184          162
+235          40           17
+236         121          123
+237          51           29
+238          47           44
+239         427          756
+240         191          167
+241          32           23
+242          20           20
+243         797         1181
+244          64           42
+245          45           26
+246         115           63
+247          16            9
+248          73          347
+249          21           10
+250         109          100
+251        1984          896
+252          68          130
+253         134           92
+254         171          257
+255        1211         1833
+256        1228          886
+257         152          146
+258         149          144
+259           7           13
+260           7            5
+261          55           63
+262          58           44
+263          74           68
+264          20            7
+265         107          153
+266          58           79
+267          49           40
+268          42           35
+269         124          120
+270         205          347
+271          73          115
+272         110          119
+273          60           55
+274         167          127
+275          57           76
+276          90           88
+277          70           53
+278         230          872
+279         127          171
+280         216          127
+281         635         2215
+282         115           84
+283        1178          684
+284         548          484
+285         138           86
+286         239          136
+287        1245         1529
+288          82           32
+289          60           62
+290          77           38
+291         429         1482
+292         108          134
+293          20           21
+294          34           50
+295         385          469
+296          51           21
+297         178          114
+298         914         2329
+299         177          102
+300         140           93
+301          48           73
+302          21           17
+303         687         1039
+304          71           83
+305         214           96
+306         158          235
+307        5651         8227
+308         224          259
+309          20           17
+310        1866          771
+311          39           15
+312          14            7
+313          24           50
+314          77           29
+315         154          133
+316         877          720
+317         172          664
+318        1148         1236
+319         112           86
+320          35           62
+321          17           15
+322          61           54
+323          22           11
+324          42           33
+325          60           38
+326         238          428
+327          11          128
+328          46           53
+329         353          314
+330        2349         2884
+331         458          566
+332         203          192
+333          29           24
+334          17           23
+335         252          404
+336          51           89
+337         231          183
+338        1018         1339
+339         274          292
+340         112          165
+341         133           68
+342         976          370
+343         531          526
+344         576          388
+345         404          399
+346          62           47
+347         135          381
+348          20           11
+349         173          135
+350        1678          450
+351         184          262
+352         117          149
+353          10           12
+354        4351         2747
+355          24           19
+356         168          121
+357         554          538
+358         109          464
+359          19           24
+360          16            8
+361          54           36
+362         253          236
+363          96           71
+364          87          327
+365          15           22
+366         208          153
+367         102           94
+368         269          207
+369         632          482
+370        1090          960
+371         141          248
+372         801          640
+373         218          248
+374          19           14
+375          34           44
+376        1034         2491
+377          61           55
+378         402          493
+379         107          154
+380         502         1285
+381         248          375
+382         600          953
+383          56           61
+384          80           77
+385         131          233
+386          39           21
+387        4509         4491
+388          44           45
+389         746          462
+390          16           47
+391          16           31
+392           9           11
+393         222          255
+394          42           27
+395         129          176
+396         194          215
+397          33           29
+398          11           17
+399         734         1180
+400         112          215
+401          56           52
+402          54           36
+403          17           45
+404         143          187
+405          57           30
+406        1325         1606
+407         375          329
+408          12           28
+409         201           25
+410           6           10
+411         765         1407
+412         160          135
+413         193          210
+414          16           21
+415          33           61
+416         171          224
+417         786          735
+418         147          124
+419          75           72
+420          58           44
+421          68           47
+422         119           50
+423          33           53
+424          13           14
+425          30           39
+426          64           79
+427          40           38
+428         144          150
+429         482          304
+430          40           33
+431         166          120
+432         105           93
+433          20           23
+434         109          108
+435          72           52
+436         101           50
+437         579          706
+438         307          182
+439          22           32
+440         431          396
+441         162          126
+442         423          535
+443         104           66
+444         546           89
+445          78           48
+446         256          289
+447          82           47
+448          13           26
+449          69          121
+450         454          559
+451          22           23
+452         137          102
+453          90           76
+454         334          286
+455        1178          814
+456         172          196
+457          22           14
+458          38           33
+459         137          109
+460         221          523
+461        2557         1484
+462          54           65
+463         227          287
+464           8           19
+465          42           38
+466         314          275
+467          10            8
+468         139          292
+469          65           92
+470          15           16
+471          45           85
+472         131           94
+473           7           15
+474          20           17
+475          97           98
+476         283          243
+477         195          228
+478         758          582
+479         176          181
+480          11           22
+481         184           88
+482          32           32
+483          11           18
+484          80           82
+485        2733         3255
+486         468          589
+487         156          135
+488         111           60
+489         207          349
+490         165           46
+491          33           31
+492          83           47
+493          17           26
+494          53           34
+495          15           44
+496         123           70
+497         251          326
+498          34           80
+499          31           37
+500         220           28
+501          13           24
+502          61          109
+503          86          341
+504          19           16
+505         405          516
+506          28           12
+507          37           33
+508          39           65
+509          65           38
+510          35           30
+511         787          166
+512          60           19
+513         533          569
+514         287          249
+515          53          109
+516         167          110
+517         426          850
+518          60           91
+519          61           46
+520         452          440
+521          35           16
+522          51           39
+523         107          729
+524        1264         1251
+525        2075         1687
+526         201          142
+527         979         1529
+528          40           76
+529          51           37
+530          51           57
+531         115          101
+532          83           94
+533         211          280
+534          58           37
+535          66           38
+536         247          299
+537         276          225
+538         103          194
+539         541          129
+540         695          865
+541         132          488
+542        4256         5368
+543         137          157
+544          86           96
+545          83           68
+546        2512         2884
+547          51           29
+548          41           36
+549         469          446
+550          46           40
+551        3960         3545
+552          53           28
+553         465          487
+554        2513         2526
+555          18           19
+556         500          357
+557         204          227
+558        1076         1316
+559         132          109
+560         571          663
+561         222          339
+562          33           36
+563          53           69
+564         149          127
+565          21           22
+566          46           58
+567         396          418
+568         244          216
+569         130          134
+570          67           70
+571          43           24
+572          62           79
+573         234          251
+574         181           87
+575          23           13
+576         445          932
+577         392          579
+578          39           51
+579         144          179
+580         189           95
+581        1100          651
+582         220          326
+583         291          228
+584          31           50
+585          32           60
+586          37           28
+587          24           18
+588        4475         3540
+589         449          404
+590          37           16
+591         103           70
+592          45           66
+593          40           53
+594          28           34
+595          45           29
+596          21           17
+597          31           34
+598          27           32
+599         118          103
+600          20           28
+601          55           25
+602          19           17
+603         696          393
+604          41          134
+605          29           20
+606          48           28
+607          18           22
+608         382           91
+609          41           35
+610          25           18
+611          46           35
+612         197          169
+613          22           19
+614         119          109
+615         145           87
+616          95           81
+617         130          259
+618          38           55
+619         196          156
+620          29           24
+621         112          120
+622         791         1088
+623         294          326
+624          40           67
+625         141          139
+626          64           84
+627         362         3524
+628          63           50
+629         212           72
+630         167          187
+631         173          313
+632         670          731
+633         150          169
+634          61           94
+635          57           74
+636          26           45
+637          30           22
+638          59           44
+639          40           32
+640         365          280
+641         126          101
+642        4299         5723
+643          38           26
+644         109          134
+645          40           64
+646          30           22
+647          84          119
+648          52           62
+649          99           88
+650          62           16
+651         455          297
+652          84          135
+653          42           89
+654         664          967
+655          17           33
+656          22           19
+657          72          121
+658          43          358
+659          59           57
+660          19           30
+661          32           32
+662          78          115
+663          86           54
+664         179          128
+665         212           92
+666          89           63
+667         374          227
+668         301          111
+669         168          246
+670        1134          605
+671          24           94
+672          45           59
+673         106           79
+674          12           21
+675          48           75
+676          22           20
+677          25           24
+678          13           20
+679         622          447
+680          41           31
+681         339          741
+682         207          130
+683         186          127
+684          51           36
+685        4081         3240
+686         287          372
+687        2321         2541
+688          55           66
+689         181          138
+690         624          534
+691         161          195
+692         212          216
+693          34           50
+694         110          136
+695          82           83
+696         111          133
+697          70           53
+698          50           47
+699          35           21
+700          43           40
+701          16           30
+702         486          463
+703        1153         1248
+704          34           40
+705          95           92
+706         154          183
+707          25           18
+708          53           34
+709          29           32
+710          25           31
+711         338          782
+712          41           25
+713          45           37
+714          82           78
+715          40           48
+716         591          581
+717         373          337
+718          42           27
+719         409          501
+720         365          122
+721         279          285
+722         302          279
+723          33           26
+724          48           60
+725         367          117
+726          31           34
+727         231          212
+728          66           68
+729         163          280
+730         386          392
+731         225          188
+732         370          351
+733         103          125
+734          52          122
+735          62           68
+736         375         2032
+737         173           97
+738          31           43
+739         348          477
+740          92           64
+741          75           52
+742         237          342
+743         392          416
+744          69           46
+745          63           69
+746          54           45
+747          58           57
+748          45           38
+749         128          218
+750          64           63
+751        4346         4501
+752       37992        40969
+753          93           82
+754         820          864
+755       15828        16719
+756         169          167
+757          24           31
+758          22           18
+759          24           16
+760          12           19
+761          16           15
+762          14           14
+763          41           36
+764          21           32
+765        7791         4718
+766         667          653
+767         486          151
+768         191          153
+769         267          313
+770         596          572
+771         365          481
+772         120           95
+773         237          220
+774         321          254
+775        1643         2122
+776          97           98
+777         166          177
+778         374          216
+779         258          184
+780         289          194
+781          81          121
+782         290          280
+783          83           71
+784         547          586</code></pre>
+</div>
+</div>
+<p>::: {.column width=“50%”} Cleaned dataset</p>
+</section></section>
 <section id="describment-of-data" class="title-slide slide level1 center">
 <h1>Describment of data</h1>
 
@@ -1489,7 +3845,7 @@
         previewLinks: false,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
-        transition: 'none',
+        transition: 'slide',
 
         // Transition speed (default/fast/slow)
         transitionSpeed: 'default',
