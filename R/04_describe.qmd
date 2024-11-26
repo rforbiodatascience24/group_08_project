@@ -20,7 +20,7 @@ describe_dat_aug_04 <- read.csv(here("data/03_dat_aug_04.csv"))
 
 ## Data description
 
-### Amount of genes investigated in the experiment 
+### Amount of genes investigated in the experiment
 
 ```{r}
 #number of genes (observations)
@@ -69,16 +69,10 @@ describe_dat_aug_01 |>
 
 There is five columns (variables) containing data from pre-treatment experiment and vice verse for post-treatment. This mean there was done 10 experiments, five before treatment and five after treatment.
 
-### The genes there is most up regulated and down regulated in terms of fold change before and after treatment 
+### The genes there is most up regulated and down regulated in terms of fold change before and after treatment
 
 ```{r}
-describe_dat_aug_03 |> 
-  
-  
-
-```
-
-```{r}
+#The 2% most upregulated and the 2% most downregulated for each class are plottet. Here you can see which genes are most up regulated and downregulated from each class. 
 describe_dat_aug_03 |> 
   group_by(code_class) |> 
  mutate(
@@ -92,6 +86,24 @@ describe_dat_aug_03 |>
                        y = log2_fold_change)) + 
   geom_point(aes(color = code_class)) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+
+```
+
+### 
+
+```{r}
+describe_dat_aug_03 |> 
+  group_by(code_class) |> 
+ mutate(
+  biggest_fold_change = case_when(
+    log2_fold_change <= quantile(log2_fold_change, 0.02, na.rm = TRUE) ~ "low",
+    log2_fold_change >= quantile(log2_fold_change, 0.98, na.rm = TRUE) ~ "high",
+    TRUE ~ "middle")
+  ) |> 
+  filter(biggest_fold_change %in% c("high", "low")) |> 
+  arrange(desc(log2_fold_change))
 
 ```
 
