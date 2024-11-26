@@ -118,7 +118,7 @@ top2_fold_change <- describe_dat_aug_03 |>
   theme(plot.title.position = "plot")
   
 
-ggsave(here("results/04_top2_fold_change.png"), plot = top2_fold_change, width = 10, height = 6)
+ggsave(here("results/04_top_2_procent_fold_change.png"), plot = top2_fold_change, width = 10, height = 6)
 ```
 
 ### Which genes are it exactly ?
