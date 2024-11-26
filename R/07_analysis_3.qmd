@@ -63,6 +63,8 @@ mbc_log2_transformed
 ```
 
 ```{r}
+library(tidyverse)
+
 # Extract the person from count_type
 long_data <- long_data %>%
   mutate(person = str_extract(count_type, "\\d+")) # Extract person ID as a new column
@@ -83,6 +85,28 @@ ggplot(wide_data, aes(x = pre_count, y = post_count, color = person)) +
        x = "Pre-count Values",
        y = "Post-count Values",
        color = "Person") +
+  theme_minimal()
+
+
+```
+
+```{r}
+# Transform data to pair pre-count and post-count values by person
+wide_data <- long_data %>%
+  filter(str_detect(count_type, "pre_count|post_count")) %>%
+  mutate(person = str_extract(count_type, "\\d+")) %>%
+  pivot_wider(names_from = count_type, values_from = count_value) %>%
+  drop_na() # Remove rows with NA values
+
+# Example scatterplot for a single pair of pre/post counts
+ggplot(wide_data, aes(x = pre_count_1, y = post_count_1, color = as.factor(person))) +
+  geom_point(size = 3) +
+  labs(
+    title = "Scatter Plot of Pre-count vs Post-count Values",
+    x = "Pre-count Values",
+    y = "Post-count Values",
+    color = "Person"
+  ) +
   theme_minimal()
 
 
