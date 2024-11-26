@@ -17,12 +17,30 @@ log2_fold_change <- read.csv(here("data/03_dat_aug_03.csv"))
 
 ```{r}
 log2_fold_change |>
-  ggplot(aes(x = code_class, # set code_class as x-axis
-             y = log2_fold_change,  # set log2_fold_change as y-axis
-             fill = code_class)) + # color by code_class
-   labs(
-    x = NULL, # set the x-axis title to nothing
-    y = "log2 Fold Change") + # set the y-axis title
-    scale_fill_brewer(palette = "Paired") + # set color theme
-    geom_boxplot() # plot
+  ggplot(aes(
+    x = code_class, # set code_class as x-axis
+    y = log2_fold_change,  # set log2_fold_change as y-axis
+    fill = code_class)) + # color by code_class
+  
+  labs(
+    title = "Log2 Fold Change Differences Between Gene Classes",
+    x = NULL,
+    y = "Log2 Fold Change",
+    fill = "Gene Class"
+    ) +
+  
+  scale_fill_brewer(palette = "Paired") +
+  geom_boxplot() +
+  scale_x_discrete(expand = expansion(mult = c(0.2, 0.2))) +
+  
+  theme(
+    axis.text.x = element_text(size = 8,
+                               angle = 0,
+                               vjust = 1,
+                               hjust = 0.5),
+    axis.text.y = element_text(size = 8),# Rotate labels if needed
+    axis.title.x = element_text(margin = margin(t = 10)),
+    axis.title.y = element_text(size = 8),
+    plot.title.position = "plot"
+  )
 ```
