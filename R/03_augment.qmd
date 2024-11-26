@@ -15,16 +15,6 @@ mbc_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
 # Augmentation
 
 ```{r}
-# print(mbc_clean_aug)
-# mbc_clean_aug <- mbc_clean_aug |> 
-#   rowwise() |> 
-#   mutate(filtered_mean_pre = calculate_filtered_mean(as.numeric(c_across(starts_with("pre_count"))))) |> 
-#   ungroup()
-# 
-# mbc_clean_aug <- mbc_clean_aug |> 
-#   rowwise() |> 
-#   mutate(filtered_mean_post = calculate_filtered_mean(as.numeric(c_across(starts_with("post_count"))))) |> 
-#   ungroup()
 
 # Replace outliers for both pre_count and post_count columns in a single step
 df <- mbc_clean_aug |>
@@ -44,7 +34,6 @@ write_csv(df, here("data/03_dat_aug_01.csv"))
 #### Make long data frame with a row for each "count" variable
 
 ```{r}
-####### Do we use this long_data? #################
 # make a longer data frame with a row for each "count" variable
 long_data <- df |> 
   pivot_longer(
