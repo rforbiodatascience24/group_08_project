@@ -81,7 +81,7 @@ density_plot_of_gene_classes <-
   scale_x_log10() +
   scale_y_continuous(breaks = seq(0, 1, by = 0.25)) +
   facet_wrap("type") +
-  labs(title = "Density plot of code class",
+  labs(title = "Density Plot of Code Class",
        x = "Mean Expression ",
        y = "Density",
        fill = "Gene Class") + 
@@ -109,13 +109,13 @@ top2_fold_change <- describe_dat_aug_03 |>
   ggplot(mapping = aes(x = gene,
                        y = log2_fold_change)) + 
   geom_point(aes(color = code_class, shape = biggest_fold_change)) + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(title = "Top 2% most upregulated and downregulated genes after treatment by code class",
+  labs(title = "Top 2% Most Upregulated and Downregulated Genes After Treatment by Code Class",
        x = "Genes",
        y = "Fold Change",
        color = "Gene Class",
        shape = "Top or Buttom 2%") + 
-  theme(plot.title.position = "plot")
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),  plot.title.position = "plot") 
+  
   
 
 ggsave(here("results/04_top_2_procent_fold_change.png"), plot = top2_fold_change, width = 10, height = 6)
