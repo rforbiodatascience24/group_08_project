@@ -23,11 +23,10 @@ df_wide <- df_clean |>
   rowwise() |> 
   mutate(mean_pre = round(mean(c_across(starts_with("pre_count")), na.rm = TRUE),1),
          mean_post = round(mean(c_across(starts_with("post_count")), na.rm = TRUE),1)) |> 
-  ungroup()
-  mutate(log2_fold_change = log2(mean_post / mean_pre)) |> 
-  select("code_class", "name", "log2_fold_change")
-  select("code_class", "gene", "log2_fold_change")
+  ungroup() |> 
+  mutate(log2_fold_change = log2(mean_post / mean_pre)) 
 
+# view data
 print(df_wide)
 
 # Save data
