@@ -40,7 +40,8 @@ long_data <- df |>
     cols = starts_with("pre_count") | starts_with("post_count"), # select count columns
     names_to = "count_type",  # new column for column names
     values_to = "count_value" # new column for values
-  ) 
+  ) |> 
+  relocate(treatment = count_type) # rename count_type to treatment 
 
 write_csv(long_data, here("data/03_dat_aug_02.csv"))
 
@@ -55,7 +56,6 @@ mbc_log2_transformed <- long_data |>
   mutate(count_type = case_when(
                           str_detect(count_type, "^pre") ~ 0, # change "pre" to 0
                           str_detect(count_type, "^post") ~ 1)) |> # change "post" to 1
-  relocate(treatment = count_type) # rename count_type to treatment 
 
 write_csv(mbc_log2_transformed, here("data/03_dat_aug_05.csv"))
 
