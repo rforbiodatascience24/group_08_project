@@ -7,10 +7,6 @@ editor: visual
 ## Load Libraries
 
 ```{r}
-colnames(long_data)
-```
-
-```{r}
 library(tidyverse)
 library(ggplot2)
 library(here)
@@ -21,7 +17,7 @@ source("99_proj_func.R")
 
 ```{r}
 # load data
-long_data <- read_csv(here("data/03_dat_aug_02.csv"))
+mbc_log2_transformed <- read_csv(here("data/03_dat_aug_05.csv"))
 # view data
 print(long_data)
 ```
@@ -29,85 +25,41 @@ print(long_data)
 ## Analysis
 
 ```{r}
-# Prepare the data
-scatter_data <- long_data |> 
-  filter(grepl("pre_count_|post_count_", count_type)) |>  # Filter for pre and post counts
-  pivot_wider(names_from = count_type, values_from = count_value) |>  # Reshape the data
-  mutate(person = str_extract(count_type, "\\_(d+)")) # Extract person ID from count_type
-
-# Create the scatterplot
-ggplot(scatter_data, aes(x = pre_count_values, y = post_count_values, color = person)) +
-  geom_point(size = 3, alpha = 0.8) +
-  labs(
-    title = "Pre-Count vs Post-Count Scatterplot",
-    x = "Pre-Count Values",
-    y = "Post-Count Values",
-    color = "Person"
-  ) +
-  theme_minimal()
-
-```
-
-```{r}
-
-print(long_data)
-
-```
-
-```{r}
-mbc_log2_transformed <- read_csv(here("data/03_dat_aug_05.csv"))
-```
-
-```{r}
 mbc_log2_transformed
 ```
 
+### Calculate slope
+
 ```{r}
-library(tidyverse)
-
-# Extract the person from count_type
-long_data <- long_data %>%
-  mutate(person = str_extract(count_type, "\\d+")) # Extract person ID as a new column
-
-# Filter rows to include only pre_count and post_count
-filtered_data <- long_data %>%
-  filter(str_detect(count_type, "pre_count|post_count")) # Keep only pre_count and post_count rows
-
-# Pivot data to wide format for pre_count and post_count
-wide_data <- filtered_data %>%
-  pivot_wider(names_from = count_type, values_from = count_value) %>%
-  select(person, pre_count = pre_count_1, post_count = post_count_1) # Adjust these column names as needed
-
-# Scatter plot
-ggplot(wide_data, aes(x = pre_count, y = post_count, color = person)) +
-  geom_point(size = 3) +
-  labs(title = "Scatter Plot of Pre-count vs Post-count Values",
-       x = "Pre-count Values",
-       y = "Post-count Values",
-       color = "Person") +
-  theme_minimal()
-
-
+# Calculate slopes for each person
+slopes <- wide_data |> 
+  group_by(patient) |> 
+  summarize(slope = lm(log2(post_count) ~ log2(pre_count))$coefficients[2]) # Extract slope
 ```
 
 ```{r}
-# Transform data to pair pre-count and post-count values by person
-wide_data <- long_data %>%
-  filter(str_detect(count_type, "pre_count|post_count")) %>%
-  mutate(person = str_extract(count_type, "\\d+")) %>%
-  pivot_wider(names_from = count_type, values_from = count_value) %>%
-  drop_na() # Remove rows with NA values
 
-# Example scatterplot for a single pair of pre/post counts
-ggplot(wide_data, aes(x = pre_count_1, y = post_count_1, color = as.factor(person))) +
-  geom_point(size = 3) +
-  labs(
-    title = "Scatter Plot of Pre-count vs Post-count Values",
-    x = "Pre-count Values",
-    y = "Post-count Values",
-    color = "Person"
-  ) +
-  theme_minimal()
+long_data <- long_data |> 
+  mutate(patient = str_extract(count_type, "\\d+")) # extract experiments individually
 
+wide_data <- long_data |> 
+  pivot_wider(names_from = count_type, values_from = count_value) |> 
+  rowwise() |> 
+  mutate(pre_count = get(paste0("pre_count_", patient)),
+         post_count = get(paste0("post_count_", patient))) |> 
+  ungroup()
+
+# Scatter plot with dynamic faceting
+ggplot(wide_data, aes(x = log2(pre_count), y = log2(post_count), color = patient)) +
+  geom_point(size = 0.3) +
+  geom_text(data = slopes, aes(x = Inf, y = Inf, label = sprintf("Slope: %.2f", slope)),
+            inherit.aes = FALSE, hjust = 2, vjust = 1.5, color = "black", size = 3) + 
+  geom_smooth(method = "lm") +
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values",
+       x = "Log2 Pre-count Values",
+       y = "Log2 Post-count Values",
+       color = "Patient") +
+  theme_minimal() +
+  facet_wrap(~ patient, scales = "free")
 
 ```
