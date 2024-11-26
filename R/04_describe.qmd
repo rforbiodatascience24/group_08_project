@@ -14,10 +14,13 @@ library(here)
 
 ```{r}
 describe_dat_aug_01 <- read.csv(here("data/03_dat_aug_01.csv"))
-describe_dat_aug_02 <- read.csv(here("data/03_dat_aug_02.csv"))
+describe_dat_aug_03 <- read.csv(here("data/03_dat_aug_03.csv"))
+describe_dat_aug_04 <- read.csv(here("data/03_dat_aug_04.csv"))
 ```
 
 ## Data description
+
+### Amount of genes investigated in the experiment 
 
 ```{r}
 #number of genes (observations)
@@ -28,6 +31,8 @@ describe_dat_aug_01 |>
 ```
 
 there is 784 variables which means there is 784 different genes in the experiment
+
+### Amount of classes and genes in each class
 
 ```{r}
 #which different classes the genes are in 
@@ -50,6 +55,8 @@ describe_dat_aug_01 |>
 There is four different classes: endogenous, housekeeping, negative and positive.\
 There is 750 genes in endogenous, 20 genes in housekeeping, 8 genes in negative and 6 genes in positive
 
+### Amount of pre-treatment and post-treatment experiments
+
 ```{r}
 describe_dat_aug_01 |> 
     select(starts_with("pre")) |> 
@@ -62,25 +69,34 @@ describe_dat_aug_01 |>
 
 There is five columns (variables) containing data from pre-treatment experiment and vice verse for post-treatment. This mean there was done 10 experiments, five before treatment and five after treatment.
 
+### The genes there is most up regulated and down regulated in terms of fold change before and after treatment 
+
 ```{r}
-analysis_dat_aug_03 |> 
-  group_by(code_class) |> 
-  mutate(
-    biggest_fold_change = case_when(
-      log2_fold_change <= quantile(log2_fold_change, 0.2) ~ "low",
-      log2_fold_change >= quantile(log2_fold_change, 0.8) ~ "high",
-      TRUE ~ "middle"
-    )
-  ) |> 
-  filter(biggest_fold_change %in% c("high", "low")) |> 
-  ggplot(mapping = aes(x = name,
-                       y = log2_fold_change)) + 
-  geom_point(aes(color = code_class))
+describe_dat_aug_03 |> 
+  
+  
 
 ```
 
 ```{r}
-ggplot(data = analysis_dat_aug_04, aes(x = mean_count, fill = code_class)) +
+describe_dat_aug_03 |> 
+  group_by(code_class) |> 
+ mutate(
+  biggest_fold_change = case_when(
+    log2_fold_change <= quantile(log2_fold_change, 0.02, na.rm = TRUE) ~ "low",
+    log2_fold_change >= quantile(log2_fold_change, 0.98, na.rm = TRUE) ~ "high",
+    TRUE ~ "middle")
+  ) |> 
+  filter(biggest_fold_change %in% c("high", "low")) |> 
+  ggplot(mapping = aes(x = gene,
+                       y = log2_fold_change)) + 
+  geom_point(aes(color = code_class)) + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+```{r}
+ggplot(data = describe_dat_aug_04, aes(x = mean_count, fill = code_class)) +
   geom_density(alpha = 0.5) +
   theme_minimal() +
   scale_x_log10() +
