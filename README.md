@@ -22,7 +22,7 @@ We have adhered to using tidyverse functions when applicable and have followed t
 
 ## Data Availability
 
-Data can be found in the NCBI GEO database under the accesion: GSE261815. Link provided below:
+Data can be found in the NCBI GEO database under the accesion: GSE261815. Data retrieval is done automatically in the source code through URLs to the files. Link to files provided below:
 
 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE261815>
 
