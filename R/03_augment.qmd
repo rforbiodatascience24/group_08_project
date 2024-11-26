@@ -15,16 +15,6 @@ mbc_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
 # Augmentation
 
 ```{r}
-# print(mbc_clean_aug)
-# mbc_clean_aug <- mbc_clean_aug |> 
-#   rowwise() |> 
-#   mutate(filtered_mean_pre = calculate_filtered_mean(as.numeric(c_across(starts_with("pre_count"))))) |> 
-#   ungroup()
-# 
-# mbc_clean_aug <- mbc_clean_aug |> 
-#   rowwise() |> 
-#   mutate(filtered_mean_post = calculate_filtered_mean(as.numeric(c_across(starts_with("post_count"))))) |> 
-#   ungroup()
 
 # Replace outliers for both pre_count and post_count columns in a single step
 df <- mbc_clean_aug |>
