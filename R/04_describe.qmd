@@ -8,6 +8,7 @@ output: html_document
 ```{r}
 library(tidyverse)
 library(here)
+library(dplyr)
 ```
 
 ## Load data
@@ -36,8 +37,8 @@ there is 784 variables which means there is 784 different genes in the experimen
 #which different classes the genes are in 
 describe_dat_aug_01 |>
   group_by(code_class) |> 
-  count()
-  summarise(n = n()) 
+  summarise(n = n()) |> 
+  print()
 
 describe_dat_aug_01 |>
   ggplot(aes(x = code_class)) +
@@ -59,11 +60,13 @@ There is 750 genes in endogenous, 20 genes in housekeeping, 8 genes in negative 
 ```{r}
 describe_dat_aug_01 |> 
     select(starts_with("pre")) |> 
-  ncol()
+  ncol() |> 
+  print()
 
 describe_dat_aug_01 |> 
     select(starts_with("post")) |> 
-  ncol()
+  ncol() |> 
+  print()
 ```
 
 There is five columns (variables) containing data from pre-treatment experiment and vice verse for post-treatment. This mean there was done 10 experiments, five before treatment and five after treatment.
@@ -82,7 +85,7 @@ ggplot(data = describe_dat_aug_04, aes(x = mean_count, fill = code_class)) +
        y = "Density")
 ```
 
-This plot assess the variation in gene expression and observe any shifts between the "pre" and "post" conditions across the different code classes. The "negative" genes does general have low expression
+This plot does assess the variation in gene expression across the different code classes and observe any shifts between the "pre" and "post" conditions.
 
 ### The genes there is most up regulated and down regulated in terms of fold change before and after treatment
 
@@ -116,6 +119,7 @@ describe_dat_aug_03 |>
     TRUE ~ "middle")
   ) |> 
   filter(biggest_fold_change %in% c("high", "low")) |> 
-  arrange(desc(log2_fold_change)) #from highest log2fold change to lowest
+  arrange(desc(log2_fold_change)) |> #from highest log2fold change to lowest 
+  print()
 
 ```
