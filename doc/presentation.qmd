@@ -34,7 +34,6 @@ For both pre and post data
 #| echo: true
 #| results: hide
 
-
 library(tidyverse)
 library(here)
 
@@ -79,6 +78,8 @@ map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", paste0("pre
 
 ```{r}
 #| echo: true
+#| results: hide
+
 # list all files in the current directory
 all_files <- list.files(".", full.names = TRUE)
 
@@ -89,16 +90,33 @@ gz_files <- grep("\\.gz$", all_files, value = TRUE)
 file.remove(gz_files)
 ```
 
-## Example file for one loaded pre dataset
+## Example file for **one** loaded **pre** dataset
+
+Five dataset for pre and post treatment each, all looking like:
 
 ```{r}
 #| echo: true
-head(read.csv(here("data/01_dat_load_pre_data_GSM8152441.csv")))
+
+# Displaying the first few rows of the dataset
+print(read.csv(here("data/01_dat_load_pre_data_GSM8152441.csv")))
 ```
 
 # Making the data tidy
 
-## 
+## Workflow
+
+1st
+
+![](../images/clean_workflow.png)
+
+A workflow overview of data cleaning and tidying:
+
+2nd
+
+![](images/clean_workflow.png)
+
+3rd
+![](images/clean_workflow.png)
 
 # Augment of data
 
