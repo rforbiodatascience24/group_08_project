@@ -105,17 +105,8 @@ print(read.csv(here("data/01_dat_load_pre_data_GSM8152441.csv")))
 
 ## Workflow
 
-1st
-
-![](../images/clean_workflow.png)
-
 A workflow overview of data cleaning and tidying:
 
-2nd
-
-![](images/clean_workflow.png)
-
-3rd
 ![](images/clean_workflow.png)
 
 # Augment of data
