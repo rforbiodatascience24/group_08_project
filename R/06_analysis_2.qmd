@@ -4,7 +4,7 @@ format:
   html:
     embed-resources: true
 editor: visual
-output-dir: results/
+output-dir: "../results/06_analysis_2.html"
 ---
 
 ## Load Libraries
@@ -21,7 +21,7 @@ source("99_proj_func.R")
 
 ```{r}
 # load data
-mbc_log2_transformed <- read_csv(here("data/03_dat_aug_05.csv"))
+mbc_log2_transformed <- read_csv(here("data/03_dat_aug_02.csv"))
 # view data
 print(mbc_log2_transformed)
 ```
