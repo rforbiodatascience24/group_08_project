@@ -4,7 +4,7 @@ format:
   html:
     embed-resources: true
 editor: visual
-output-dir: results/
+output-dir: "../results/06_analysis_2.html"
 ---
 
 ## Load Libraries
