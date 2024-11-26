@@ -1,17 +1,19 @@
 ---
-title: "07_analysis_3"
+title: "06_analysis_2"
 format:
   html:
     embed-resources: true
 editor: visual
+output-dir: "../results/06_analysis_2.html"
 ---
 
 ## Load Libraries
 
 ```{r}
 library(tidyverse)
-library(ggplot2)
+library(broom)
 library(here)
+library(ggrepel)
 source("99_proj_func.R")
 ```
 
@@ -19,60 +21,203 @@ source("99_proj_func.R")
 
 ```{r}
 # load data
-long_data <- read_csv(here("data/03_dat_aug_02.csv"))
-#long_data <- read_csv(here("data/03_dat_aug_02.csv"))
-wide_data <- read.csv(here("data/03_dat_aug_01.csv"))
+mbc_log2_transformed <- read_csv(here("data/03_dat_aug_02.csv"))
 # view data
-print(long_data)
-print(wide_data)
+print(mbc_log2_transformed)
 ```
 
 ## Analysis
 
+#### Nest data
+
+```{r}
+mbc_log2_transformed_nested <- mbc_log2_transformed |> # define new tbl
+  group_by(gene) |> # group by name
+  nest() # nest data by each gene
+
+# view nested data
+mbc_log2_transformed_nested
+```
+
+### Fitting Linear Models for Log2-Transformed Values by Treatment
+
+```{r}
+mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
+  mutate(model_object = map( # add a model_object column
+    .x = data, # use data column as input
+    .f = ~lm(formula = log2_transformed ~ treatment, # model log2 transformed values based on treatment
+             data = .x)))
+
+# view new nested data with lm results
+mbc_log2_transformed_nested
+```
+
+### Tidying Linear Model Results with Confidence Intervals
+
+```{r}
+mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
+  mutate(model_object_tidy = map( # add a tidy model_object column
+    .x = model_object,
+    .f = ~tidy(x = .x,
+               conf.int = TRUE,
+               conf.level = 0.95)))
+# view new nested data with tidy lm results
+mbc_log2_transformed_nested
+```
+
+### Unnesting Tidy Linear Model Results
+
+```{r}
+estimates <- mbc_log2_transformed_nested |> 
+  unnest(model_object_tidy) # unnest nested tbl
+estimates
+```
+
+### Filtering and Selecting Treatment Effects from Linear Model Estimates
+
+```{r}
+estimates <- estimates |> 
+  filter(term == "treatment") |> # choose only "treatment"
+  select(gene, # select variables of interest
+         p.value, 
+         estimate, 
+         conf.low, 
+         conf.high) |> 
+  ungroup() # ungroup tbl
+
+# view result
+estimates
+```
+
+### Forest plot of q-values
+
+```{r}
+q_value_estimates <- estimates |> 
+  mutate(q.value = p.adjust(p.value)) |> # add adjusted p-values
+  filter(q.value < 0.05) # filter for all q-values below 0,05
+
+if (nrow(q_value_estimates) > 0) { # if: there are any q-values below below 0,05, make plot
+  q_value_estimates_plot <- q_value_estimates |> 
+    ggplot(aes(x = estimate, # set x as estimate 
+               y = fct_reorder(gene, # set y as gene 
+                               estimate))) +
+    geom_point() +
+    geom_errorbarh(aes(xmax = conf.low, xmin = conf.high)) +
+    theme_minimal(base_size = 8) +
+    geom_vline(xintercept = 0, linetype = "solid", color = "black") +
+    labs(
+    title = "Significant Immune-Related Genes in Premenopausal ER+/HER2− \nAdvanced Breast Cancer",
+    x = "Estimates (95% Confidence Intervals)",
+    y = "Gene",
+    caption = "Genes identified as significant (by q-value) after treatment with \npembrolizumab, exemestane, and leuprolide."
+  ) +
+    theme(plot.title.position = "plot")
+  ggsave(here("results/forest_plot_q_value.png"), 
+         plot = q_value_estimates_plot, 
+         width = 10, 
+         height = 6) 
+} else { # else: explain why not
+  print("There are no q-values below 0.05")
+}
+  
+```
+
+### Forest plot
+
 ```{r}
 
-ggplot(wide_data, aes(x = log2(pre_count_1), y = log2(post_count_1))) +
-  geom_point(size = 1, color = "red") +
-  geom_smooth(method = "lm") +
-  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 1",
-       x = "Log2 Pre-count Values",
-       y = "Log2 Post-count Values",
-       color = "Patient") +
-  theme_minimal() 
+estimates <- estimates |> 
+  mutate(p_significance = case_when(
+                                    p.value < 0.05  ~ "yes", # annotate p-value below 0,05 to "yes"
+                                    p.value > 0.05 ~ "no"))  # annotate p-value above 0,05 to "no"
+p_value_estimates_plot <- estimates |> 
+  filter(p_significance == "yes") |> # filter out insignificant genes
+  ggplot(aes(x = estimate, # set x as estimate 
+             y = fct_reorder(gene, # set y as gene 
+                             estimate))) +
+  geom_point() +
+  geom_errorbarh(aes(xmax = conf.low, 
+                     xmin = conf.high)) +
+  theme_minimal(base_size = 8) +
+  geom_vline(xintercept = 0, 
+             linetype = "solid", 
+             color = "black") +
+  labs(
+  title = "Significant Immune-Related Genes in Premenopausal \nER+/HER2− Advanced Breast Cancer",
+  x = "Estimates (95% Confidence Intervals)",
+  y = "Gene",
+  caption = "Genes identified as significant by non-adjusted p-value after treatment with \npembrolizumab, exemestane, and leuprolide."
+) +
+  theme(plot.title.position = "plot")
 
-ggplot(wide_data, aes(x = log2(pre_count_2), y = log2(post_count_2))) +
-  geom_point(size = 1, color = "green") +
-  geom_smooth(method = "lm") +
-  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 2",
-       x = "Log2 Pre-count Values",
-       y = "Log2 Post-count Values",
-       color = "Patient") +
-  theme_minimal() 
+ggsave(here("results/07_forest_plot_p_value.png"), 
+         plot = p_value_estimates_plot, 
+         width = 10, 
+         height = 6)
+```
 
-ggplot(wide_data, aes(x = log2(pre_count_3), y = log2(post_count_3))) +
-  geom_point(size = 1, color = "purple") +
-  geom_smooth(method = "lm") +
-  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 3",
-       x = "Log2 Pre-count Values",
-       y = "Log2 Post-count Values",
-       color = "Patient") +
-  theme_minimal() 
+#### Volcano plot
 
-ggplot(wide_data, aes(x = log2(pre_count_4), y = log2(post_count_4))) +
-  geom_point(size = 1, color = "orange") +
-  geom_smooth(method = "lm") +
-  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 4",
-       x = "Log2 Pre-count Values",
-       y = "Log2 Post-count Values",
-       color = "Patient") +
-  theme_minimal() 
-  
-ggplot(wide_data, aes(x = log2(pre_count_5), y = log2(post_count_5))) +
-  geom_point(size = 1, color = "lightblue") +
-  geom_smooth(method = "lm") +
-  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 5",
-       x = "Log2 Pre-count Values",
-       y = "Log2 Post-count Values",
-       color = "Patient") +
-  theme_minimal() 
+```{r}
+estimates <- estimates |> 
+  mutate(log_of_p = (-log10(p.value))) # create a new column with -10log10(p)
+#| fig-width: 8
+#| fig-height: 5.5
+#| dpi: 300
+volcano_plot <- estimates |> 
+  ggplot(aes(x = estimate, # plot results
+             y = log_of_p)) + 
+  geom_point(alpha = 0.05) + # add semi-transparancy 
+  geom_point(data = estimates |> # highlight signifanct genes in turquoise 
+              filter(p_significance == "yes"), 
+              color = "turquoise", 
+              alpha = 0.6) +
+  geom_point(data = estimates |> # dye insignifanct genes red 
+             filter(p_significance == "no"), 
+             color = "tomato", 
+             alpha = 0.3) +
+  geom_text_repel(data = estimates |> # label significant points with gene name
+                  filter(p_significance == "yes"), 
+                  aes(label = gene), 
+                  size = 2, 
+                  color = "turquoise", 
+                  max.overlaps = 50) +
+  theme_minimal(base_size = 8) +
+  geom_hline(yintercept = 0, linetype = "solid", color = "black") +
+  labs(
+  title = "Immune Microenvironment in Response to Pembrolizumab, Exemestane, and Leuprolide \nin Premenopausal ER+/HER2− Advanced Breast Cancer",
+  subtitle = "Significantly expressed genes (by non-adjusted p-values, highlighted in turquoise) \nafter treatment with pembrolizumab, exemestane, and leuprolide \nin pre- and post-treatment samples",
+  x = "Estimates",
+  y = "-log10(p-value)"
+) +
+  theme(plot.title.position = "plot")
+
+ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"),
+       plot = volcano_plot,
+       width = 8, 
+       height = 5.5)
+```
+
+### comparing slopes with log 2 fold in percent difference
+
+```{r}
+
+######## skal denne slettes? ##########
+
+# comparing slopes with log 2 fold in percent difference
+#estimate_summary <- estimates |>
+#  arrange(gene) |> 
+#  summarise(estimate)
+#log2fold <- mbc_clean_aug_wide |> 
+#  arrange(gene) |> 
+#  summarise(log2_fold_change)
+# calculate  percent difference and rename the column
+#percent_difference <- estimate_summary |> 
+#  bind_cols(log2fold) |> 
+#  mutate(percent_difference = round((estimate - log2_fold_change) / log2_fold_change * 100, 2)) %>%
+#  select(percent_difference)
+
+# percent_difference
+
+
 ```
