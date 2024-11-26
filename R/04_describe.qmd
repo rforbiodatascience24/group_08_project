@@ -89,8 +89,6 @@ density_plot_of_gene_classes <-
   
 
 ggsave(here("results/04_density_plot_of_gene_classes.png"), plot = density_plot_of_gene_classes, width = 10, height = 6)
-
-print(density_plot_of_gene_classes)
 ```
 
 This plot does assess the variation in gene expression across the different code classes and observe any shifts between the "pre" and "post" conditions.
