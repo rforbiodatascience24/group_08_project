@@ -16,7 +16,7 @@ log2_fold_change <- read.csv(here("data/03_dat_aug_03.csv"))
 # Boxplot
 
 ```{r}
-log2_fold_change |>
+log2_fold_change_differences_boxplot <- log2_fold_change |>
   ggplot(aes(
     x = code_class, # set code_class as x-axis
     y = log2_fold_change,  # set log2_fold_change as y-axis
@@ -31,8 +31,11 @@ log2_fold_change |>
   
   scale_fill_brewer(palette = "Paired") +
   geom_boxplot() +
+  
+  # using scale dicrete to control the x-axis spacing
   scale_x_discrete(expand = expansion(mult = c(0.2, 0.2))) +
   
+  #Setting the titles and moving the title to the most left part
   theme(
     axis.text.x = element_text(size = 8,
                                angle = 0,
@@ -43,4 +46,11 @@ log2_fold_change |>
     axis.title.y = element_text(size = 8),
     plot.title.position = "plot"
   )
+
+
+# saving plot as png to the results folder
+ggsave(here("results/05_boxplot_log2_fold_change_differences_between_gene_classes.png"), 
+         plot = log2_fold_change_differences_boxplot, 
+         width = 10, 
+         height = 6)
 ```
