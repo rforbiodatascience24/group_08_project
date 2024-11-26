@@ -65,7 +65,7 @@ merged_data <- list(clean_data_list_pre,
   
   # rename count variables to not be named .x.x.x or .y.y etc.
   rename_with(~ case_when(
-    # detect all columns containing count.x and for eact column count       the number of .x or .y and rename the column.
+    # detect all columns containing count.x and for each column count the number of .x or .y and rename the column.
     str_detect(., "^count\\.x") ~ paste0("pre_count_", 
                                          str_count(., "\\.x")),
     
