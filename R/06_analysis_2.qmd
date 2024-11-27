@@ -54,5 +54,5 @@ boxplot_of_gene_class_log2fc <- log2_fold_change |>
   )
 
 # save plot
-ggsave(here("results/05_boxplot_of_gene_class_log2fc.png"), plot = boxplot_of_gene_class_log2fc, width = 10, height = 6)
+ggsave(here("results/06_boxplot_of_gene_class_log2fc.png"), plot = boxplot_of_gene_class_log2fc, width = 10, height = 6)
 ```
