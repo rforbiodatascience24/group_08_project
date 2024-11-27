@@ -1,8 +1,8 @@
 ## Load libraries
 
 ```{r}
-library(tidyverse)
-library(here)
+library("tidyverse")
+library("here")
 ```
 
 ## Import the raw pre data
@@ -42,7 +42,7 @@ data_list <- gzfile_list |>
 
 ```
 
-### Write data to folder
+## Write data to folder
 
 ```{r}
 # rename and write datafiles to data folder
@@ -86,7 +86,7 @@ data_list <- gzfile_list |>
 
 ```
 
-### Write data to folder
+## Write data to folder
 
 ```{r}
 # rename and write datafiles to data folder
