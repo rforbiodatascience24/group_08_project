@@ -35,9 +35,6 @@ mbc_log2_transformed_nested <- mbc_log2_transformed |> # define new tbl
 
 # view nested data
 mbc_log2_transformed_nested
-
-# Check the structure of the first nested data frame to confirm 'treatment'
-head(mbc_log2_transformed_nested$data[[1]])
 ```
 
 ### Fitting linear models for log2-transformed values by treatment
