@@ -40,7 +40,7 @@ mbc_log2_transformed_nested <- mbc_log2_transformed |> # define new tbl
 mbc_log2_transformed_nested
 ```
 
-### Fitting Linear Models for Log2-Transformed Values by Treatment
+### Fitting linear models for log2-transformed values by treatment
 
 ```{r}
 mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
@@ -53,7 +53,7 @@ mbc_log2_transformed_nested <- mbc_log2_transformed_nested |>
 mbc_log2_transformed_nested
 ```
 
-### Tidying Linear Model Results with Confidence Intervals
+### Tidying linear model results with confidence intervals
 
 ```{r}
 mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
@@ -66,7 +66,7 @@ mbc_log2_transformed_nested <- mbc_log2_transformed_nested |>
 mbc_log2_transformed_nested
 ```
 
-### Unnesting Tidy Linear Model Results
+### Unnesting tidy linear model results
 
 ```{r}
 estimates <- mbc_log2_transformed_nested |> 
@@ -74,7 +74,7 @@ estimates <- mbc_log2_transformed_nested |>
 estimates
 ```
 
-### Filtering and Selecting Treatment Effects from Linear Model Estimates
+### Filtering and selecting treatment effects from linear model estimates
 
 ```{r}
 estimates <- estimates |> 
@@ -126,7 +126,6 @@ if (nrow(q_value_estimates) > 0) { # if: there are any q-values below below 0,05
 ### Forest plot
 
 ```{r}
-
 estimates <- estimates |> 
   mutate(p_significance = case_when(
                                     p.value < 0.05  ~ "yes", # annotate p-value below 0,05 to "yes"
