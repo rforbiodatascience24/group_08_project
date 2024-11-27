@@ -21,10 +21,7 @@ source("99_proj_func.R")
 ## Load data
 
 ```{r}
-# load data
 mbc_log2_transformed <- read_csv(here("data/03_dat_aug_02.csv"))
-# view data
-print(mbc_log2_transformed)
 ```
 
 ## Analysis
