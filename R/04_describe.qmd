@@ -156,7 +156,7 @@ describe_dat_aug_01 |>
     TRUE ~ "middle")
   ) |> 
   filter(biggest_fold_change %in% c("High", "Low")) |> 
-  arrange(desc(log2_fold_change)) |> #from highest log2 fold change to lowest 
+  arrange(desc(log2_fold_change)) |> # from highest log2 fold change to lowest 
   print()
 
 ```
