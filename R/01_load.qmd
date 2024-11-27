@@ -1,6 +1,16 @@
+---
+title: "01_load"
+format:
+  html:
+    embed-resources: true
+editor: visual
+output-dir: "../results/01_load.html"
+---
+
 ## Load libraries
 
 ```{r}
+#| message: false
 library("tidyverse")
 library("here")
 ```

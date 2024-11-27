@@ -1,10 +1,20 @@
+---
+title: "06_analysis_2"
+format:
+  html:
+    embed-resources: true
+editor: visual
+output-dir: "../results/06_analysis_2.html"
+---
+
 # Load Libraries
 
 ```{r}
-library(tidyverse)
-library(here)
-library(dplyr)
-library(ggplot2)
+#| message: false
+library("tidyverse")
+library("here")
+library("dplyr")
+library("ggplot2")
 ```
 
 # Load data

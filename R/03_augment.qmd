@@ -1,32 +1,40 @@
-# Load Libraries
+---
+title: "03_augment"
+format:
+  html:
+    embed-resources: true
+editor: visual
+output-dir: "../results/03_augment.html"
+---
+
+## Load Libraries
 
 ```{r}
-library(tidyverse)
-library(here)
+#| message: false
+library("tidyverse")
+library("here")
 source("99_proj_func.R")
 ```
 
-# Load data
+## Load data
 
 ```{r}
 df_clean <- read.csv(here("data/02_dat_clean.csv"))
 ```
 
-# Augmentation
+## Augmentation
 
-### Create wide df
+### Create wide data frame
 
 ```{r}
-
-# Replace outliers for both pre_count and post_count columns in a single step
 df_wide <- df_clean |>
-  replace_outliers_with_na("pre_count") |>
-  replace_outliers_with_na("post_count") |> 
+  replace_outliers_with_na("pre_count") |> # replace outliers for pre_count columns
+  replace_outliers_with_na("post_count") |> # replace outliers for post_count columns
   rowwise() |> 
-  mutate(mean_pre = round(mean(c_across(starts_with("pre_count")), na.rm = TRUE),1),
-         mean_post = round(mean(c_across(starts_with("post_count")), na.rm = TRUE),1)) |> 
+  mutate(mean_pre = round(mean(c_across(starts_with("pre_count")), na.rm = TRUE), 1), # mean of pre counts
+         mean_post = round(mean(c_across(starts_with("post_count")), na.rm = TRUE), 1)) |> # mean of post
   ungroup() |> 
-  mutate(log2_fold_change = log2(mean_post / mean_pre)) 
+  mutate(log2_fold_change = log2(mean_post / mean_pre)) # fold change made of case/control
 
 # view data
 print(df_wide)
@@ -35,7 +43,7 @@ print(df_wide)
 write_csv(df_wide, here("data/03_dat_aug_01.csv"))
 ```
 
-#### Create a long df with a row for each "count" variable
+#### Create a long data frame with a row for each "count" variable
 
 ```{r}
 # make a longer data frame with a row for each "count" variable
@@ -45,7 +53,7 @@ df_long <- df_wide |>
     names_to = "treatment",  # new column for column names
     values_to = "count_value" # new column for values
   ) |> 
-  mutate(log2_transformed = log2(count_value)) |> # calculate log2 of counts
+  mutate(log2_count_value = log2(count_value)) |> # calculate log2 of counts
   mutate(bin_treatment = case_when(
                           str_detect(treatment, "^pre") ~ 0, # change "pre" to 0
                           str_detect(treatment, "^post") ~ 1)) |> # change "post" to 1

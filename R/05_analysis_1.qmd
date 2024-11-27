@@ -1,17 +1,19 @@
 ---
-title: "07_analysis_3"
+title: "05_analysis_1"
 format:
   html:
     embed-resources: true
 editor: visual
+output-dir: "../results/05_analysis_1.html"
 ---
 
 ## Load Libraries
 
 ```{r}
-library(tidyverse)
-library(ggplot2)
-library(here)
+#| message: false
+library("tidyverse")
+library("ggplot2")
+library("here")
 source("99_proj_func.R")
 ```
 

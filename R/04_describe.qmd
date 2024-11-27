@@ -1,14 +1,19 @@
 ---
-title: "04 decribtive statistics"
-output: html_document
+title: "04_describe"
+format:
+  html:
+    embed-resources: true
+editor: visual
+output-dir: "../results/04_describe.html"
 ---
 
 ## Load libraries
 
 ```{r}
-library(tidyverse)
-library(here)
-library(dplyr)
+#| message: false
+library("tidyverse")
+library("here")
+library("dplyr")
 ```
 
 ## Load data
