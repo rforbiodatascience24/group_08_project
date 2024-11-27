@@ -43,7 +43,7 @@ mbc_log2_transformed_nested
 mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
   mutate(model_object = map( # add a model_object column
     .x = data, # use data column as input
-    .f = ~lm(formula = log2_transformed ~ treatment, # model log2 transformed values based on treatment
+    .f = ~lm(formula = log2_count_value ~ bin_treatment, # model log2 transformed values based on treatment
              data = .x)))
 
 # view new nested data with lm results
@@ -75,7 +75,7 @@ estimates
 
 ```{r}
 estimates <- estimates |> 
-  filter(term == "treatment") |> # choose only "treatment"
+  filter(term == "bin_treatment") |> # choose only "treatment"
   select(gene, # select variables of interest
          p.value, 
          estimate, 
@@ -147,6 +147,7 @@ p_value_estimates_plot <- estimates |>
 ) +
   theme(plot.title.position = "plot")
 
+# save plot
 ggsave(here("results/07_forest_plot_p_value.png"), 
          plot = p_value_estimates_plot, 
          width = 10, 
@@ -189,6 +190,7 @@ volcano_plot <- estimates |>
 ) +
   theme(plot.title.position = "plot")
 
+# save plot
 ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"),
        plot = volcano_plot,
        width = 8, 
