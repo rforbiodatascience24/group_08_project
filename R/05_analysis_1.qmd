@@ -30,7 +30,8 @@ The analysis reveal whether there is a linear or non-linear relationship between
 
 ```{r}
 # scatter plots of pre-count vs post-count values for patients 1-5
-ggplot(wide_data, aes(x = log2(pre_count_1), y = log2(post_count_1))) +
+scatter_plot_pre_post_partient1 <- 
+  ggplot(wide_data, aes(x = log2(pre_count_1), y = log2(post_count_1))) +
   geom_point(size = 1, color = "red") +
   geom_smooth(method = "lm") +
   labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 1",
@@ -40,6 +41,7 @@ ggplot(wide_data, aes(x = log2(pre_count_1), y = log2(post_count_1))) +
   theme_minimal() +
   theme(plot.title.position = "plot") # makes the title go to the very left
 
+scatter_plot_pre_post_partient2 <-
 ggplot(wide_data, aes(x = log2(pre_count_2), y = log2(post_count_2))) +
   geom_point(size = 1, color = "green") +
   geom_smooth(method = "lm") +
@@ -50,6 +52,7 @@ ggplot(wide_data, aes(x = log2(pre_count_2), y = log2(post_count_2))) +
   theme_minimal() +
   theme(plot.title.position = "plot") # makes the title go to the very left
 
+scatter_plot_pre_post_partient3 <-
 ggplot(wide_data, aes(x = log2(pre_count_3), y = log2(post_count_3))) +
   geom_point(size = 1, color = "purple") +
   geom_smooth(method = "lm") +
@@ -60,6 +63,7 @@ ggplot(wide_data, aes(x = log2(pre_count_3), y = log2(post_count_3))) +
   theme_minimal() +
   theme(plot.title.position = "plot") # makes the title go to the very left
 
+scatter_plot_pre_post_partient4 <-
 ggplot(wide_data, aes(x = log2(pre_count_4), y = log2(post_count_4))) +
   geom_point(size = 1, color = "orange") +
   geom_smooth(method = "lm") +
@@ -69,7 +73,8 @@ ggplot(wide_data, aes(x = log2(pre_count_4), y = log2(post_count_4))) +
        color = "Patient") +
   theme_minimal() +
   theme(plot.title.position = "plot") # makes the title go to the very left
-  
+
+scatter_plot_pre_post_partient5 <-
 ggplot(wide_data, aes(x = log2(pre_count_5), y = log2(post_count_5))) +
   geom_point(size = 1, color = "lightblue") +
   geom_smooth(method = "lm") +
@@ -79,4 +84,11 @@ ggplot(wide_data, aes(x = log2(pre_count_5), y = log2(post_count_5))) +
        color = "Patient") +
   theme_minimal() + 
   theme(plot.title.position = "plot") # makes the title go to the very left
+
+# save plots
+ggsave(here("results/05_scatter_plot_pre_post_partient1.png"), plot = scatter_plot_pre_post_partient1, width = 10, height = 6)
+ggsave(here("results/05_scatter_plot_pre_post_partient2.png"), plot = scatter_plot_pre_post_partient2, width = 10, height = 6)
+ggsave(here("results/05_scatter_plot_pre_post_partient3.png"), plot = scatter_plot_pre_post_partient3, width = 10, height = 6)
+ggsave(here("results/05_scatter_plot_pre_post_partient4.png"), plot = scatter_plot_pre_post_partient4, width = 10, height = 6)
+ggsave(here("results/05_scatter_plot_pre_post_partient5.png"), plot = scatter_plot_pre_post_partient5, width = 10, height = 6)
 ```
