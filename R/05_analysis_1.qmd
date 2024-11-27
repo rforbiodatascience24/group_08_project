@@ -20,19 +20,16 @@ source("99_proj_func.R")
 ## Load data
 
 ```{r}
-# load data
 long_data <- read_csv(here("data/03_dat_aug_02.csv"))
-#long_data <- read_csv(here("data/03_dat_aug_02.csv"))
 wide_data <- read.csv(here("data/03_dat_aug_01.csv"))
-# view data
-print(long_data)
-print(wide_data)
 ```
 
 ## Analysis
 
-```{r}
+The analysis reveal whether there is a linear or non-linear relationship between pre- and post-count values for each patient
 
+```{r}
+# scatter plots of pre-count vs post-count values for patients 1-5
 ggplot(wide_data, aes(x = log2(pre_count_1), y = log2(post_count_1))) +
   geom_point(size = 1, color = "red") +
   geom_smooth(method = "lm") +
@@ -40,7 +37,8 @@ ggplot(wide_data, aes(x = log2(pre_count_1), y = log2(post_count_1))) +
        x = "Log2 Pre-count Values",
        y = "Log2 Post-count Values",
        color = "Patient") +
-  theme_minimal() 
+  theme_minimal() +
+  theme(plot.title.position = "plot") # makes the title go to the very left
 
 ggplot(wide_data, aes(x = log2(pre_count_2), y = log2(post_count_2))) +
   geom_point(size = 1, color = "green") +
@@ -49,7 +47,8 @@ ggplot(wide_data, aes(x = log2(pre_count_2), y = log2(post_count_2))) +
        x = "Log2 Pre-count Values",
        y = "Log2 Post-count Values",
        color = "Patient") +
-  theme_minimal() 
+  theme_minimal() +
+  theme(plot.title.position = "plot") # makes the title go to the very left
 
 ggplot(wide_data, aes(x = log2(pre_count_3), y = log2(post_count_3))) +
   geom_point(size = 1, color = "purple") +
@@ -58,7 +57,8 @@ ggplot(wide_data, aes(x = log2(pre_count_3), y = log2(post_count_3))) +
        x = "Log2 Pre-count Values",
        y = "Log2 Post-count Values",
        color = "Patient") +
-  theme_minimal() 
+  theme_minimal() +
+  theme(plot.title.position = "plot") # makes the title go to the very left
 
 ggplot(wide_data, aes(x = log2(pre_count_4), y = log2(post_count_4))) +
   geom_point(size = 1, color = "orange") +
@@ -67,7 +67,8 @@ ggplot(wide_data, aes(x = log2(pre_count_4), y = log2(post_count_4))) +
        x = "Log2 Pre-count Values",
        y = "Log2 Post-count Values",
        color = "Patient") +
-  theme_minimal() 
+  theme_minimal() +
+  theme(plot.title.position = "plot") # makes the title go to the very left
   
 ggplot(wide_data, aes(x = log2(pre_count_5), y = log2(post_count_5))) +
   geom_point(size = 1, color = "lightblue") +
@@ -76,5 +77,6 @@ ggplot(wide_data, aes(x = log2(pre_count_5), y = log2(post_count_5))) +
        x = "Log2 Pre-count Values",
        y = "Log2 Post-count Values",
        color = "Patient") +
-  theme_minimal() 
+  theme_minimal() + 
+  theme(plot.title.position = "plot") # makes the title go to the very left
 ```
