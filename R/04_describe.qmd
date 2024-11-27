@@ -145,7 +145,7 @@ top2_procent_fold_change <- describe_dat_aug_01 |>
         plot.title.position = "plot") 
   
 # view plot
-print(top2_fold_change)
+print(top2_procent_fold_change)
 
 # save plot
 ggsave(here("results/04_top_2_procent_fold_change.png"), 
