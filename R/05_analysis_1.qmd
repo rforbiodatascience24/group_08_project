@@ -45,7 +45,8 @@ scatter_plot_pre_post_partient1 <-
 scatter_plot_pre_post_partient2 <-
 ggplot(wide_data, aes(x = log2(pre_count_2), 
                       y = log2(post_count_2))) +
-  geom_point(size = 1, color = "green") +
+  geom_point(size = 1, 
+             color = "green") +
   geom_smooth(method = "lm") +
   labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 2",
        x = "Log2 Pre-count Values",
@@ -57,7 +58,8 @@ ggplot(wide_data, aes(x = log2(pre_count_2),
 scatter_plot_pre_post_partient3 <-
 ggplot(wide_data, aes(x = log2(pre_count_3), 
                       y = log2(post_count_3))) +
-  geom_point(size = 1, color = "purple") +
+  geom_point(size = 1, 
+             color = "purple") +
   geom_smooth(method = "lm") +
   labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 3",
        x = "Log2 Pre-count Values",
@@ -69,7 +71,8 @@ ggplot(wide_data, aes(x = log2(pre_count_3),
 scatter_plot_pre_post_partient4 <-
 ggplot(wide_data, aes(x = log2(pre_count_4), 
                       y = log2(post_count_4))) +
-  geom_point(size = 1, color = "orange") +
+  geom_point(size = 1, 
+             color = "orange") +
   geom_smooth(method = "lm") +
   labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 4",
        x = "Log2 Pre-count Values",
@@ -81,7 +84,8 @@ ggplot(wide_data, aes(x = log2(pre_count_4),
 scatter_plot_pre_post_partient5 <-
 ggplot(wide_data, aes(x = log2(pre_count_5), 
                       y = log2(post_count_5))) +
-  geom_point(size = 1, color = "lightblue") +
+  geom_point(size = 1, 
+             color = "lightblue") +
   geom_smooth(method = "lm") +
   labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 5",
        x = "Log2 Pre-count Values",
