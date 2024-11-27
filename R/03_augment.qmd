@@ -59,9 +59,7 @@ df_long <- df_wide |>
                           str_detect(treatment, "^post") ~ 1)) |> # change "post" to 1
   mutate(treatment = case_when(
                           str_detect(treatment, "^pre") ~ "pre", # change to "pre" 
-                          str_detect(treatment, "^post") ~ "post")) |> # change to "post"
-# view data
-print(df_long)
+                          str_detect(treatment, "^post") ~ "post"))
 
 # save data
 write_csv(df_long, here("data/03_dat_aug_02.csv"))
