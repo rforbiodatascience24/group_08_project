@@ -1,1 +1,18 @@
+## Load libraries
 
+```{r}
+library("here")
+library("quarto")
+
+# load functions
+source(here("R/99_proj_func.R"))
+```
+
+## Rendering the qmd scripts
+
+```{r}
+#|ooutput: false
+
+quarto::quarto_render(here("R/01_load.qmd"))
+
+```
