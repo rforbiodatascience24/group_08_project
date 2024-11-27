@@ -102,14 +102,10 @@ density_gene_class_post <-
        y = "Density",
        fill = "Gene Class") + 
   theme(plot.title.position = "plot") 
-  
-# view plot
-print(density_plot_pre)
-print(density_plot_post)
 
 # save plots
-ggsave(here("results/density_plot_pre.png"), plot = density_gene_class_pre, width = 10, height = 6)
-ggsave(here("results/density_plot_post.png"), plot = density_gene_class_post, width = 10, height = 6)
+ggsave(here("results/04_density_plot_pre.png"), plot = density_gene_class_pre, width = 10, height = 6)
+ggsave(here("results/04_density_plot_post.png"), plot = density_gene_class_post, width = 10, height = 6)
 ```
 
 This plot does assess the variation in gene expression across the different code classes and observe any shifts between the "pre" and "post" conditions.
