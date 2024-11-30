@@ -8,6 +8,7 @@ author: |
   Julie Alsing Haugaard
 format:
   revealjs:
+    code-line-numbers: true
     smaller: true
     scoll: true
     theme: dark
@@ -17,115 +18,101 @@ editor: visual
 
 ```{r}
 library(tidyverse)
+library(here)
+library(readr)
+source("../R/99_proj_func.R")
 ```
 
-# Introduction
+# Analysis on the effect of combination treatment by gene expression for patients with metastatic breast cancer
 
-## Study describtion
+## Study description
 
 This study looks at how a combination of pembrolizumab, exemestane, and leuprolide affects the immune environment in premenopausal women with advanced breast cancer. It tracks changes in immune-related gene expression before and after treatment in 15 patients.
 
-# The raw data from GEO
+## Work method illustrated by a flowchart
 
-## Loading the data
 
-C comment: I think we should show some code here, highlighting the use of map() function to load data...
 
-For both pre and post data
+## Raw -> tidy data
+
+
+::: {.columns}
+
+::: {.column width="35%"}
+```{r}
+#| echo: true
+# Untidy single patient dataset
+print(read.csv(here("data/01_dat_load_pre_data_GSM8152441.csv")))
+```
+:::
+
+::: {.column width="65%"}
+```{r}
+#| echo: true
+# Cleaned cobined pre and post data for 5 patients
+print(read.csv(here("data/02_dat_clean.csv")))
+```
+:::
+
+:::
+
+## Augmentation of the data
 
 ```{r}
 #| echo: true
 #| results: hide
+#| code-line-numbers: "2-4|5-10"
 
-library(tidyverse)
-library(here)
-
-# URL of the gzipped pre-data files
-url_1 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152441&format=file&file=GSM8152441%5F20220128%5F30102613280522%2D01%5F01002%5F04%2ERCC%2Egz"
-url_2 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152442&format=file&file=GSM8152442%5F20220128%5F30102613280522%2D01%5F01004%5F05%2ERCC%2Egz"
-url_3 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152443&format=file&file=GSM8152443%5F20220128%5F30102613280522%2D01%5F01013%5F01%2ERCC%2Egz"
-url_4 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152444&format=file&file=GSM8152444%5F20220128%5F30102613280522%2D01%5F01014%5F02%2ERCC%2Egz"
-url_5 <- "https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM8152445&format=file&file=GSM8152445%5F20220128%5F30102613280522%2D01%5F01015%5F03%2ERCC%2Egz"
-
-# creating list of URLs to map functions
-url_list <- c(url_1, url_2, url_3, url_4, url_5)
-
-# define the destination file names
-data_file_GSM8152441 <- "GSM8152441.gz"
-data_file_GSM8152442 <- "GSM8152442.gz"
-data_file_GSM8152443 <- "GSM8152443.gz"
-data_file_GSM8152444 <- "GSM8152444.gz"
-data_file_GSM8152445 <- "GSM8152445.gz"
-
-# creating list of gzfile names
-gzfile_list <- c(data_file_GSM8152441,
-                 data_file_GSM8152442,
-                 data_file_GSM8152443,
-                 data_file_GSM8152444,
-                 data_file_GSM8152445
-                )
-
-# downloading all the post-data gz files from the URL
-map2(url_list, gzfile_list, ~ download.file(.x, .y, mode = "wb"))
-
-# reading all the gzfiles as csv's
-data_list <- gzfile_list |>
-    map(~ read_csv(.x))
-
-# rename and write datafiles to data folder
-map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", paste0("pre_data_", str_sub(.y, 1, -4), ".csv"))))
-
-```
-
-## Example file of one dataset
-
-Five dataset for pre and post treatment each, all looking like:
-
-```{r}
-#| echo: true
-
-# Displaying the first few rows of the dataset
-print(read.csv(here("data/01_dat_load_pre_data_GSM8152441.csv")))
-```
-
-# Making the data tidy
-
-## Workflow
-
-C comment: Test image of data cleaning overview. Code is not as relevant here i think...
-
-A workflow overview of data cleaning and tidying:
-
-![](images/clean_workflow.png)
-
-# Augment of data
-
-## Removing outliers
-
-Removing outliers in pre and post dataset, to be able to calculate the mean gene expression in the case of pre and post treatment.
-
-Uncleaned data:
-
-```{r}
-
-library(tidyverse)
-library(here)
-source("../R/99_proj_func.R")
-
+# Creating wide data frame
 df_clean <- read.csv(here("data/02_dat_clean.csv"))
 
-print(df_clean)
+df_wide <- df_clean |>
+  # replace outliers for pre and post_count columns
+  replace_outliers_with_na("pre_count") |> 
+  replace_outliers_with_na("post_count") |>
+  rowwise() |> 
+  # calculate means
+  mutate(mean_pre = 
+           round(mean(c_across(starts_with("pre_count")), na.rm = TRUE), 1), 
+         mean_post = 
+           round(mean(c_across(starts_with("post_count")), na.rm = TRUE), 1)) |>
+  ungroup() |> 
+  # fold change made of case/control
+  mutate(log2_fold_change = log2(mean_post / mean_pre)) 
 
+# save data
+write_csv(df_wide, here("data/03_dat_aug_01.csv"))
+
+
+# make a longer data frame with a row for each "count" variable
+df_long <- df_wide |>  
+  pivot_longer(
+    cols = starts_with("pre_count") | starts_with("post_count"), # select count columns
+    names_to = "treatment",  # new column for column names
+    values_to = "count_value" # new column for values
+  ) |> 
+  mutate(log2_count_value = log2(count_value)) |> # calculate log2 of counts
+  mutate(bin_treatment = case_when(
+                          str_detect(treatment, "^pre") ~ 0, # change "pre" to 0
+                          str_detect(treatment, "^post") ~ 1)) |> # change "post" to 1
+  mutate(treatment = case_when(
+                          str_detect(treatment, "^pre") ~ "pre", # change to "pre" 
+                          str_detect(treatment, "^post") ~ "post"))
+
+# save data
+write_csv(df_long, here("data/03_dat_aug_02.csv"))
 ```
 
-## Cleaned data
 
-Insert cleaned data when 03_augment is done
 
-# Describment of data
+## Description results
 
-# Data analysis 1
+## Analysis 1 results
 
-# Data analysis 2
+## Distribution of log2 fold change per class
 
-# Data analysis 3
+## Are there significane in the log2 fold change?
+
+## Results
+
+## Discussion
