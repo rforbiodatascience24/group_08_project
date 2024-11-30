@@ -1,0 +1,93 @@
+---
+title: "08_analysis_4"
+format:
+  html:
+    embed-resources: true
+editor: visual
+output-dir: "../results/08_analysis_4.html"
+---
+
+```{r}
+#| message: false
+library("tidyverse")
+library("here")
+library("patchwork")
+source("99_proj_func.R")
+```
+
+### load data
+
+```{r}
+post_pre_values <- read_csv(here("data/03_dat_aug_02.csv"))
+
+```
+
+## Analysis
+
+```{r}
+# four different plots showing the difference in expression before and after treatment.
+# chose four genes with a significant p-value
+p1_CXCL13 <- post_pre_values |>
+  filter(gene == "CXCL13") |> # filtering for the wanted gene
+  ggplot(aes(x = treatment, 
+             y = count_value)) +
+  geom_point() + # scatter plot
+  theme_minimal() +
+  ggtitle("CXCL13") +
+  theme(axis.title.x = element_blank(), # remove the x- and y axis legends
+        axis.title.y = element_blank(),
+        plot.title = element_text(hjust = 0.5, # move the title of each plot to the middle
+                                  size = 10)) # adjust the size of the title of each plot
+
+p2_CSF3 <- post_pre_values |>
+  filter(gene == "CSF3") |>
+  ggplot(aes(x = treatment, 
+             y = count_value)) +
+  geom_point() +
+  theme_minimal() +
+  ggtitle("CSF3") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        plot.title = element_text(hjust = 0.5, 
+                                  size = 10))
+
+p3_ARG1 <- post_pre_values |>
+  filter(gene == "ARG1") |>
+  ggplot(aes(x = treatment, 
+             y = count_value)) +
+  geom_point() +
+  theme_minimal() +
+  ggtitle("ARG1") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        plot.title = element_text(hjust = 0.5, 
+                                  size = 10))
+
+p4_IRF1 <- post_pre_values |>
+  filter(gene == "IRF1") |>
+  ggplot(aes(x = treatment, 
+             y = count_value)) +
+  geom_point() +
+  theme_minimal() +
+  ggtitle("IRF1") +
+  theme(axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        plot.title = element_text(hjust = 0.5, 
+                                  size = 10))
+
+# combine the four plots to one plot
+gene_ekspression_before_and_after_treatment_4_genes <- (p1_CXCL13 + p2_CSF3 + p3_ARG1 + p4_IRF1) +
+  plot_annotation(title = "Gene Expression before and after treatment",
+                  subtitle = "Comparing CXCL13, CSF3, ARG1, and IRF1") +
+  theme(plot.title.position = "plot") # move title of the combined plot to the very left
+
+# show the plot
+gene_ekspression_before_and_after_treatment_4_genes
+
+# save plot
+ggsave(here("results/08_gene_ekspression_before_and_after_treatment_4_genes.png"), 
+       plot = gene_ekspression_before_and_after_treatment_4_genes, 
+       width = 10, 
+       height = 6)
+
+```
