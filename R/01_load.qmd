@@ -1,8 +1,18 @@
+---
+title: "01_load"
+format:
+  html:
+    embed-resources: true
+editor: visual
+output-dir: "../results/01_load.html"
+---
+
 ## Load libraries
 
 ```{r}
-library(tidyverse)
-library(here)
+#| message: false
+library("tidyverse")
+library("here")
 ```
 
 ## Import the raw pre data
@@ -42,11 +52,11 @@ data_list <- gzfile_list |>
 
 ```
 
-### Write data to folder
+## Write data to folder
 
 ```{r}
 # rename and write datafiles to data folder
-map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", paste0("pre_data_", str_sub(.y, 1, -4), ".csv"))))
+map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", str_c("pre_data_", str_sub(.y, 1, -4), ".csv"))))
 ```
 
 ## Import the raw post data
@@ -86,11 +96,11 @@ data_list <- gzfile_list |>
 
 ```
 
-### Write data to folder
+## Write data to folder
 
 ```{r}
 # rename and write datafiles to data folder
-map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", paste0("post_data_", str_sub(.y, 1, -4), ".csv"))))
+map2(data_list, gzfile_list, ~ write_csv(x = .x, file = here("data", str_c("post_data_", str_sub(.y, 1, -4), ".csv"))))
 ```
 
 ## Deleting all .gz files

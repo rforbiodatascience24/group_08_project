@@ -1,0 +1,50 @@
+## Load libraries
+
+```{r}
+library(quarto)
+library(here)
+library(purrr)
+library(stringr)
+library(dplyr)
+
+# load functions
+source(here("R/99_proj_func.R"))
+```
+
+## Rendering the qmd scripts and afterwards moving the created html's to the results folder
+
+```{r}
+#|output: false
+
+# List of input files
+input_files <- c(
+  "R/01_load.qmd",
+  "R/02_clean.qmd",
+  "R/03_augment.qmd",
+  "R/04_describe.qmd",
+  "R/05_analysis_1.qmd",
+  "R/06_analysis_2.qmd",
+  "R/07_analysis_3.qmd"
+)
+
+# Ensure results directory exists
+results_dir <- here("results")
+#if (!dir.exists(results_dir)) dir.create(results_dir)
+
+# Create a tibble for inputs and outputs
+files_tbl <- tibble(
+  input = here(input_files),
+  output_name = str_replace(basename(input_files), "\\.qmd$", ".html"), # Replace .qmd with .html
+  temp_output = file.path(dirname(here(input_files)), output_name),    # Temporary location
+  final_output = file.path(results_dir, output_name)                  # Final destination
+)
+
+# Render and move files using purrr
+files_tbl %>%
+  mutate(
+    # Render the files
+    rendered = map2(input, output_name, ~ quarto::quarto_render(input = .x, output_file = .y)),
+    # Move the files to results folder
+    moved = map2(temp_output, final_output, ~ file.rename(.x, .y))
+  )
+```

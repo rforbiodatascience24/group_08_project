@@ -1,11 +1,19 @@
+---
+title: "02_clean"
+format:
+  html:
+    embed-resources: true
+editor: visual
+output-dir: "../results/02_clean.html"
+---
+
 ## Load libraries
 
 ```{r}
 #| message: false
-
-library(tidyverse)
-library(here)
-library(readr)
+library("tidyverse")
+library("here")
+library("readr")
 source("99_proj_func.R")
 ```
 
@@ -14,21 +22,19 @@ source("99_proj_func.R")
 ```{r}
 # define list of dataframes for pre data
 data_list_pre <- c(here('data/pre_data_GSM8152441.csv'), 
-               here('data/pre_data_GSM8152442.csv'),
-               here('data/pre_data_GSM8152443.csv'),
-               here('data/pre_data_GSM8152444.csv'),
-               here('data/pre_data_GSM8152445.csv')) |>
-  # map() files into the list
-  map(read_csv) 
+                   here('data/pre_data_GSM8152442.csv'),
+                   here('data/pre_data_GSM8152443.csv'),
+                   here('data/pre_data_GSM8152444.csv'),
+                   here('data/pre_data_GSM8152445.csv')) |>
+  map(read_csv) # map() files into the list
 
 # define list of dataframes for post data
 data_list_post <- c(here('data/post_data_GSM8152447.csv'), 
-               here('data/post_data_GSM8152448.csv'),
-               here('data/post_data_GSM8152449.csv'),
-               here('data/post_data_GSM8152450.csv'),
-               here('data/post_data_GSM8152451.csv')) |>
-  # map() files into the list
-  map(read_csv) 
+                   here('data/post_data_GSM8152448.csv'),
+                   here('data/post_data_GSM8152449.csv'),
+                   here('data/post_data_GSM8152450.csv'),
+                   here('data/post_data_GSM8152451.csv')) |>
+  map(read_csv) # map() files into the list
 ```
 
 ## Clean data
@@ -37,14 +43,12 @@ data_list_post <- c(here('data/post_data_GSM8152447.csv'),
 # define clean list for pre data
 clean_data_list_pre <-
   data_list_pre |> 
-  # use clean_data function to clean the list of data frames
-  map(clean_data)
+  map(clean_data) # use clean_data function to clean the list of data frames
 
 # define clean list for post data
 clean_data_list_post <-
   data_list_post |> 
-  # use clean_data function to clean the list of data frames
-  map(clean_data)
+  map(clean_data) # use clean_data function to clean the list of data frames
 ```
 
 ## Merge data
@@ -53,28 +57,21 @@ clean_data_list_post <-
 # create vector with both lists of data frames
 merged_data <- list(clean_data_list_pre, 
                     clean_data_list_post) |> 
-  # unpack nested dataframes
-  flatten() |>  
-  # join data frames
+  flatten() |>  # unpack nested dataframes
   reduce(inner_join, 
          by = c("name", 
                 "code_class", 
-                "accesion_number")) |> 
-  
-  ##do more efficiently##
-  # rename count variables
-  rename(pre_count_1 = count.x,
-         pre_count_2 = count.x.x,
-         pre_count_3 = count.x.x.x,
-         pre_count_4 = count.x.x.x.x,
-         pre_count_5 = count.x.x.x.x.x,
-         post_count_1 = count.y,
-         post_count_2 = count.y.y,
-         post_count_3 = count.y.y.y,
-         post_count_4 = count.y.y.y.y,
-         post_count_5 = count.y.y.y.y.y
-         ) |> 
-  rename(gene = name) 
+                "accesion_number")) |> # join data frames
+  rename(gene = name) |> 
+  rename_with(~ case_when(
+    str_detect(., "^count\\.x") ~ str_c("pre_count_", 
+                                         str_count(., "\\.x")),
+    
+    str_detect(., "^count\\.y") ~ str_c("post_count_", 
+                                         str_count(., "\\.y")),
+    . == "name" ~ "gene",
+    TRUE ~ .
+  )) # detect all columns containing count.x and for each column count the number of .x or .y and rename the column.
 
 print(merged_data)
 ```

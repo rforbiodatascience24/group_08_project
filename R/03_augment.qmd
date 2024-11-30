@@ -1,123 +1,66 @@
-# Load Libraries
+---
+title: "03_augment"
+format:
+  html:
+    embed-resources: true
+editor: visual
+output-dir: "../results/03_augment.html"
+---
+
+## Load Libraries
 
 ```{r}
-library(tidyverse)
-library(here)
+#| message: false
+library("tidyverse")
+library("here")
 source("99_proj_func.R")
 ```
 
-# Load data
+## Load data
 
 ```{r}
-mbc_clean_aug <- read.csv(here("data/02_dat_clean.csv"))
+df_clean <- read.csv(here("data/02_dat_clean.csv"))
 ```
 
-# Augmentation
+## Augmentation
+
+### Create wide data frame
 
 ```{r}
-# print(mbc_clean_aug)
-# mbc_clean_aug <- mbc_clean_aug |> 
-#   rowwise() |> 
-#   mutate(filtered_mean_pre = calculate_filtered_mean(as.numeric(c_across(starts_with("pre_count"))))) |> 
-#   ungroup()
-# 
-# mbc_clean_aug <- mbc_clean_aug |> 
-#   rowwise() |> 
-#   mutate(filtered_mean_post = calculate_filtered_mean(as.numeric(c_across(starts_with("post_count"))))) |> 
-#   ungroup()
-
-# Replace outliers for both pre_count and post_count columns in a single step
-df <- mbc_clean_aug |>
-  replace_outliers_with_na("pre_count") |>
-  replace_outliers_with_na("post_count") |> 
+df_wide <- df_clean |>
+  replace_outliers_with_na("pre_count") |> # replace outliers for pre_count columns
+  replace_outliers_with_na("post_count") |> # replace outliers for post_count columns
   rowwise() |> 
-  mutate(mean_pre = round(mean(c_across(starts_with("pre_count")), na.rm = TRUE),1),
-         mean_post = round(mean(c_across(starts_with("post_count")), na.rm = TRUE),1)) |> 
-  ungroup()
+  mutate(mean_pre = round(mean(c_across(starts_with("pre_count")), na.rm = TRUE), 1), # mean of pre counts
+         mean_post = round(mean(c_across(starts_with("post_count")), na.rm = TRUE), 1)) |> # mean of post
+  ungroup() |> 
+  mutate(log2_fold_change = log2(mean_post / mean_pre)) # fold change made of case/control
 
-print(df)
+# view data
+print(df_wide)
 
-# Save data
-write_csv(df, here("data/03_dat_aug_01.csv"))
+# save data
+write_csv(df_wide, here("data/03_dat_aug_01.csv"))
 ```
 
-#### Make long data frame with a row for each "count" variable
+#### Create a long data frame with a row for each "count" variable
 
 ```{r}
-####### Do we use this long_data? #################
 # make a longer data frame with a row for each "count" variable
-long_data <- df |> 
+df_long <- df_wide |>  
   pivot_longer(
     cols = starts_with("pre_count") | starts_with("post_count"), # select count columns
-    names_to = "count_type",  # new column for column names
+    names_to = "treatment",  # new column for column names
     values_to = "count_value" # new column for values
-  ) 
-
-write_csv(long_data, here("data/03_dat_aug_02.csv"))
-
-print(long_data)
-
-```
-
-#### Log2 transform count values (not mean_count values)
-
-```{r}
-mbc_log2_transformed <- long_data |>
-  mutate(log2_transformed = log2(count_value)) |> # calculate log2 of counts
-  mutate(count_type = case_when(
-                          str_detect(count_type, "^pre") ~ 0, # # change every instance that contains "pre" to 0
-                          str_detect(count_type, "^post") ~ 1)) |> # change every instance that contains "post" to 1
-  relocate(treatment = count_type) # rename count_type to treatment 
-
-write_csv(mbc_log2_transformed, here("data/03_dat_aug_05.csv"))
-
-
-```
-
-### make the data set longer with pivot longer
-
-```{r}
-colnames(mbc_clean_aug)
-```
-
-```{r}
-mbc_clean_aug_long <- 
-df |> 
-  pivot_longer(
-    cols = starts_with("mean"),
-    names_to = "type",
-    values_to = "mean_count"
   ) |> 
-  select("code_class", "gene", "type", "mean_count") |> 
-  mutate(type = case_when(
-    type == "mean_pre" ~ "pre",
-    type == "mean_post" ~ "post"
-  ))
-mbc_clean_aug_long
+  mutate(log2_count_value = log2(count_value)) |> # calculate log2 of counts
+  mutate(bin_treatment = case_when(
+                          str_detect(treatment, "^pre") ~ 0, # change "pre" to 0
+                          str_detect(treatment, "^post") ~ 1)) |> # change "post" to 1
+  mutate(treatment = case_when(
+                          str_detect(treatment, "^pre") ~ "pre", # change to "pre" 
+                          str_detect(treatment, "^post") ~ "post"))
 
-```
-
-## adding log transformed count
-
-```{r}
-mbc_clean_aug_long_log_trans <- 
-mbc_clean_aug_long |> 
-  mutate(log2_transformed = log2(mean_count))
-mbc_clean_aug_long_log_trans
-
-write_csv(mbc_clean_aug_long_log_trans, here("data/03_dat_aug_04.csv"))
-```
-
-## Making log2 fold change on case/control
-
-```{r}
-#laver log2 fold change på datasæt inden at det er blevet gjort long så man ikke behøver at lave det wide
-
-mbc_clean_aug_log2fc <- mbc_clean_aug |> 
-  mutate(log2_fold_change = log2(filtered_mean_post / filtered_mean_pre)) |> 
-  select("code_class", "name", "log2_fold_change")
-mbc_clean_aug_log2fc
-
-write_csv(mbc_clean_aug_log2fc, here("data/03_dat_aug_03.csv"))
-
+# save data
+write_csv(df_long, here("data/03_dat_aug_02.csv"))
 ```

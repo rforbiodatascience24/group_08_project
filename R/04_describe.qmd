@@ -1,52 +1,172 @@
-# Load Libraries
+---
+title: "04_describe"
+format:
+  html:
+    embed-resources: true
+editor: visual
+output-dir: "../results/04_describe.html"
+---
+
+## Load libraries
 
 ```{r}
-library(tidyverse)
-library(here)
+#| message: false
+library("tidyverse")
+library("here")
+library("dplyr")
 ```
 
-# Load data
+## Load data
 
 ```{r}
-long_data <- read_csv(here("data/03_dat_aug_02.csv"))
+describe_dat_aug_01 <- read.csv(here("data/03_dat_aug_01.csv"))
+describe_dat_aug_02 <- read.csv(here("data/03_dat_aug_02.csv"))
 ```
 
-```{r}
-selected_genes <- long_data |> 
-  slice(1:280) |> # select the first 28 genes
-  mutate(
-    count_cat = case_when( # create new category for pre and post
-      grepl("^pre", count_type) ~ "Pre", 
-      grepl("^post", count_type) ~ "Post"
-      )
-    ) 
+## Data description
 
+### Amount of genes investigated in the experiment
+
+```{r}
+# number of genes (observations)
+describe_dat_aug_01 |> 
+  dim()
 ```
 
-# Plot
+there is 784 variables which means there is 784 different genes in the experiment
+
+### Amount of classes and genes in each class
 
 ```{r}
+# identify the classes of genes 
+describe_dat_aug_01 |> 
+  group_by(code_class) |> 
+  summarise(n = n()) |> 
+  print()
 
-# create scatter plot
-ggplot(selected_genes, aes(x = name, y = count_value, color = count_cat)) +
-  geom_point(size = 5, shape = 21) +
-  geom_point(aes(y = filtered_mean_pre), shape = 3, color = "darkblue", size =1) +  # Add pre means
-  geom_point(aes(y = filtered_mean_post), shape = 4, color = "darkred", size = 1) +
+# histogram of gene classes and the number of genes in them 
+describe_dat_aug_01 |>
+  ggplot(aes(x = code_class)) +
+  geom_bar() + 
   labs(
-    title = "Scatter Plot of Pre and Post Counts",
-    x = "Gene",
-    y = "Count",
-    color = "Pre/Post"
+    title = "Histogram of Classes",
+    x = "Classes",
+    y = "Number of Genes"
   ) +
+  theme_minimal()
+
+```
+
+There is four different classes: endogenous, housekeeping, negative and positive.\
+There is 750 genes in endogenous, 20 genes in housekeeping, 8 genes in negative and 6 genes in positive
+
+### Amount of pre-treatment and post-treatment experiments
+
+```{r}
+describe_dat_aug_01 |> 
+    select(starts_with("pre")) |> 
+  ncol() |> 
+  print()
+
+describe_dat_aug_01 |> 
+    select(starts_with("post")) |> 
+  ncol() |> 
+  print()
+```
+
+There is five columns (variables) containing data from pre-treatment experiment and vice verse for post-treatment. This mean there was done 10 experiments, five before treatment and five after treatment.
+
+### Density plot of gene expression by code class in pre and post conditions
+
+```{r}
+density_gene_class_pre <- 
+  ggplot(data = describe_dat_aug_02, aes(x = mean_pre, 
+                                         fill = code_class)) +
+  geom_density(alpha = 0.5) + # a bit transparent
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7)
-  ) +
-    scale_y_continuous(
-    limits = c(0, 500)  # Set the y-axis range between 0 and 500
-  )
+  scale_x_log10() + # log x scale
+  scale_y_continuous(breaks = seq(0, 1, by = 0.25)) +
+  labs(title = "Density Plot of Pre Gene Class",
+       x = "Mean Expression ",
+       y = "Density",
+       fill = "Gene Class") + 
+  theme(plot.title.position = "plot") # makes the title go to the very left
 
+density_gene_class_post <- 
+  ggplot(data = describe_dat_aug_02, aes(x = mean_post, 
+                                         fill = code_class)) +
+  geom_density(alpha = 0.5) +
+  theme_minimal() +
+  scale_x_log10() +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.25)) +
+  labs(title = "Density Plot of Post Gene Class",
+       x = "Mean Expression ",
+       y = "Density",
+       fill = "Gene Class") + 
+  theme(plot.title.position = "plot") 
 
-  ggsave("04_key_plot_1.png", width = 8, height = 6, dpi = 300)
+# save plots
+ggsave(here("results/04_density_plot_pre.png"), 
+       plot = density_gene_class_pre, 
+       width = 10, 
+       height = 6)
 
-        
+ggsave(here("results/04_density_plot_post.png"), 
+       plot = density_gene_class_post, 
+       width = 10, 
+       height = 6)
+```
+
+This plot does assess the variation in gene expression across the different code classes and observe any shifts between the "pre" and "post" conditions.
+
+### The genes there is most up regulated and down regulated in terms of fold change before and after treatment of each gene class
+
+```{r}
+# the 2% most upregulated and the 2% most downregulated after treatment for each class are plottet. Here you can see which genes are most up regulated and downregulated after treatment from each class. 
+top2_procent_fold_change <- describe_dat_aug_01 |> 
+  group_by(code_class) |> 
+ mutate(
+  biggest_fold_change = case_when(
+    log2_fold_change <= quantile(log2_fold_change, 0.02, na.rm = TRUE) ~ "Low", # 2% most downregulated
+    log2_fold_change >= quantile(log2_fold_change, 0.98, na.rm = TRUE) ~ "High", # 2% most up regulated
+    TRUE ~ "middle") # the in betweens are in the catagory "middle"
+  ) |> 
+  filter(biggest_fold_change %in% c("High", "Low")) |> # only plot of the 2% most down- and up regulated
+  ggplot(mapping = aes(x = gene,
+                       y = log2_fold_change)) + 
+  geom_point(aes(color = code_class, 
+                 shape = biggest_fold_change)) + 
+  labs(title = "Top 2% Most Upregulated and Downregulated Genes After Treatment by Code Class",
+       x = "Genes",
+       y = "Fold Change",
+       color = "Gene Class",
+       shape = "Top or Buttom 2%") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),  
+        plot.title.position = "plot") 
+  
+# view plot
+print(top2_procent_fold_change)
+
+# save plot
+ggsave(here("results/04_top_2_procent_fold_change.png"), 
+       plot = top2_procent_fold_change, 
+       width = 10, 
+       height = 6)
+```
+
+### Which genes are it exactly that are most up- and down regulated ?
+
+```{r}
+describe_dat_aug_01 |> 
+  group_by(code_class) |> 
+ mutate(
+  biggest_fold_change = case_when(
+    log2_fold_change <= quantile(log2_fold_change, 0.02, na.rm = TRUE) ~ "Low",
+    log2_fold_change >= quantile(log2_fold_change, 0.98, na.rm = TRUE) ~ "High",
+    TRUE ~ "middle")
+  ) |> 
+  filter(biggest_fold_change %in% c("High", "Low")) |> 
+  arrange(desc(log2_fold_change)) |> # from highest log2 fold change to lowest 
+  print()
+
 ```

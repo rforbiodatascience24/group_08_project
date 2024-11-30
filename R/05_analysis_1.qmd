@@ -1,28 +1,122 @@
-# Load Libraries
+---
+title: "05_analysis_1"
+format:
+  html:
+    embed-resources: true
+editor: visual
+output-dir: "../results/05_analysis_1.html"
+---
+
+## Load Libraries
 
 ```{r}
-library(tidyverse)
-library(here)
-library(dplyr)
-library(ggplot2)
+#| message: false
+library("tidyverse")
+library("ggplot2")
+library("here")
+source("99_proj_func.R")
 ```
 
-# Load data
+## Load data
 
 ```{r}
-log2_fold_change <- read.csv(here("data/03_dat_aug_03.csv"))
+long_data <- read_csv(here("data/03_dat_aug_02.csv"))
+wide_data <- read.csv(here("data/03_dat_aug_01.csv"))
 ```
 
-# Boxplot
+## Analysis
+
+The analysis reveal whether there is a linear or non-linear relationship between pre- and post-count values for each patient
 
 ```{r}
-fold_change_data |>
-  ggplot(aes(x = code_class, # set code_class as x-axis
-             y = log2_fold_change,  # set log2_fold_change as y-axis
-             fill = code_class)) + # color by code_class
-   labs(
-    x = NULL, # set the x-axis title to nothing
-    y = "log2 Fold Change") + # set the y-axis title
-    scale_fill_brewer(palette = "Paired") + # set color theme
-    geom_boxplot() # plot
+# scatter plots of pre-count vs post-count values for patients 1-5
+scatter_plot_pre_post_partient1 <- 
+  ggplot(wide_data, aes(x = log2(pre_count_1), 
+                        y = log2(post_count_1))) +
+  geom_point(size = 1, color = "red") +
+  geom_smooth(method = "lm") +
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 1",
+       x = "Log2 Pre-count Values",
+       y = "Log2 Post-count Values",
+       color = "Patient") +
+  theme_minimal() +
+  theme(plot.title.position = "plot") # makes the title go to the very left
+
+scatter_plot_pre_post_partient2 <-
+ggplot(wide_data, aes(x = log2(pre_count_2), 
+                      y = log2(post_count_2))) +
+  geom_point(size = 1, 
+             color = "green") +
+  geom_smooth(method = "lm") +
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 2",
+       x = "Log2 Pre-count Values",
+       y = "Log2 Post-count Values",
+       color = "Patient") +
+  theme_minimal() +
+  theme(plot.title.position = "plot") # makes the title go to the very left
+
+scatter_plot_pre_post_partient3 <-
+ggplot(wide_data, aes(x = log2(pre_count_3), 
+                      y = log2(post_count_3))) +
+  geom_point(size = 1, 
+             color = "purple") +
+  geom_smooth(method = "lm") +
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 3",
+       x = "Log2 Pre-count Values",
+       y = "Log2 Post-count Values",
+       color = "Patient") +
+  theme_minimal() +
+  theme(plot.title.position = "plot") # makes the title go to the very left
+
+scatter_plot_pre_post_partient4 <-
+ggplot(wide_data, aes(x = log2(pre_count_4), 
+                      y = log2(post_count_4))) +
+  geom_point(size = 1, 
+             color = "orange") +
+  geom_smooth(method = "lm") +
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 4",
+       x = "Log2 Pre-count Values",
+       y = "Log2 Post-count Values",
+       color = "Patient") +
+  theme_minimal() +
+  theme(plot.title.position = "plot") # makes the title go to the very left
+
+scatter_plot_pre_post_partient5 <-
+ggplot(wide_data, aes(x = log2(pre_count_5), 
+                      y = log2(post_count_5))) +
+  geom_point(size = 1, 
+             color = "lightblue") +
+  geom_smooth(method = "lm") +
+  labs(title = "Scatter Plot of Pre-count vs Post-count Values Patient 5",
+       x = "Log2 Pre-count Values",
+       y = "Log2 Post-count Values",
+       color = "Patient") +
+  theme_minimal() + 
+  theme(plot.title.position = "plot") # makes the title go to the very left
+
+# save plots
+ggsave(here("results/05_scatter_plot_pre_post_partient1.png"), 
+       plot = scatter_plot_pre_post_partient1, 
+       width = 10, 
+       height = 6)
+
+ggsave(here("results/05_scatter_plot_pre_post_partient2.png"), 
+       plot = scatter_plot_pre_post_partient2, 
+       width = 10, 
+       height = 6)
+
+ggsave(here("results/05_scatter_plot_pre_post_partient3.png"), 
+       plot = scatter_plot_pre_post_partient3, 
+       width = 10, 
+       height = 6)
+
+ggsave(here("results/05_scatter_plot_pre_post_partient4.png"), 
+       plot = scatter_plot_pre_post_partient4, 
+       width = 10, 
+       height = 6)
+
+ggsave(here("results/05_scatter_plot_pre_post_partient5.png"), 
+       plot = scatter_plot_pre_post_partient5, 
+       width = 10, 
+       height = 6)
 ```
