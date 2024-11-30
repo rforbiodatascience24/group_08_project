@@ -91,3 +91,11 @@ ggsave(here("results/08_gene_ekspression_before_and_after_treatment_4_genes.png"
        height = 6)
 
 ```
+
+Notes on what the genes could effect within breast cancer:
+
+-   CXCL13 drives migratory activity in breast cancer cells
+
+-   ARG1 suppresses breast cancer cell growth and migration in vitro and in mice
+
+-   Irf1 supports growth and migration of breast cancer cells
