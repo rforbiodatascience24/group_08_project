@@ -202,10 +202,10 @@ ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"),
 ## Analysis
 
 ```{r}
-significant_gene_list <- estimates |>  
-  arrange(p.value) |> 
-  slice(1:4) |> 
-  pull(gene)
+significant_gene_list <- estimates |>  # create a list of significant genes 
+  arrange(p.value) |> # arrange based on ascending p-value
+  slice(1:4) |> # extract the first 4 rows
+  pull(gene) # extract the gene names
 
 # four different plots showing the difference in expression before and after treatment.
 # chose four genes with highest significant p-value
