@@ -51,18 +51,18 @@ print(read.csv(here("data/01_dat_load_pre_data_GSM8152441.csv")))
 
 ### Tidy data
 
+
 ```{r}
 #| echo: true
-
-options(width = 1000)  # Set a wide enough value
-options(max.print = 10000)  # Increase the max print limit
-
 # Cleaned cobined pre and post data for 5 patients
-print(read.csv(here("data/02_dat_clean.csv")))
+read.csv(here("data/02_dat_clean.csv"))
 ```
+
+
 :::
 
 ## Augmentation of the data {.scrollable}
+
 
 ```{r}
 #| echo: true
