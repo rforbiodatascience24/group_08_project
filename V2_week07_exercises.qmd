@@ -1,0 +1,161 @@
+---
+title: "week07_exercises.qmd"
+output: html_document
+---
+
+# [Yeast cell cycle / transcriptomics exercise #2]{.underline}
+
+# PART 1: Network analysis of the Alpha Factor Arrest data
+
+## Network analysis
+
+The final part of the analysis of the alpha-factor arrest data set we started in the previous exercise, is to map it onto the Yeast protein-protein interaction network we worked with in week 4.
+
+## Load Libraries
+
+```{r}
+library(tidygraph)
+library(igraph)
+library(ggraph)
+library(ggplot2)
+```
+
+**TASK: reload base session, prepare Excel data for import**
+
+```{r}
+load("/home/projects/22140/exercise4.Rdata")
+load("/home/projects/22140/exercise6.Rdata")
+# Calculate log2fc from expression
+expr$log2fc <- log2(expr$GSM287992/expr$GSM287991)
+# Add log2fc to your node attribute table
+node_attributes_updated <- merge(x = node_attributes, y = expr[!duplicated(expr$SysName),c(1,6)], by.x = "ID", by.y = "SysName", all.x = TRUE)
+# If you haven't worked with the "merge" command, take a moment to understand the line above. It's a super useful command
+```
+
+**TASK: Visualize the Log2(FC)**
+
+-   Plot the network using ggraph with the following mappings:
+
+-   Color nodes by log2FC
+
+-   Use the "scale_color_gradient2" argument to ggraph to color down regulated nodes blue, (mid color gray), and up regulated red
+
+-   Set node shape based on whether the log2fc is lower than -2 or higher than 2. Hint:
+
+```{r}
+g <- graph_from_data_frame(d = interactions, 
+                           directed = FALSE, 
+                           vertices = node_attributes_updated)
+
+ggraph(g) +
+  geom_edge_link() +
+  geom_node_point(aes(color = log2fc, shape = abs(log2fc)>2), size = 3) +
+  scale_color_gradient2(low = "red", mid = "gray", midpoint = 0, high = "blue")
+
+```
+
+The KAR genes are involved in the karyogamy process (also discussed in the answers for last weeks exercise), and it makes good sense that they are overexpressed in the alpha-factor arrested genes. (Alpha-factor triggers the mating response, which in turn prepares for a fusion of the nuclei of the A- and alpha-cells – this is the process known as karyogamy).
+
+```{r}
+expr[grepl(pattern = "kar", x = expr$PopName, ignore.case = TRUE),]
+
+```
+
+**Clusters of Regulation**: You can visually identify groups of genes (nodes) that are connected and share similar regulation trends (indicated by color and shape).
+
+-   **Color**: The gradient from blue to red indicates the direction and magnitude of the log2 fold change (log2fc), with blue being highly upregulated and red being highly downregulated.
+
+-   **Shape**: Triangles represent genes with significant regulation (`abs(log2fc) > 2`), while circles indicate less significant regulation.
+
+The next task is to have a look at the network and try to interpret the results. Here it should be noted that the cells have been arrested in what may be a bit "boring" part of the cell cycle (late G1), but we can still make a few interesting observations.
+
+**REPORT QUESTION #1: Inspect the network**
+
+-   Can you find any clusters (even small ones) with several genes being regulated in the same direction?
+
+-   Discuss the biological meaning of this within the group (note that not all clusters are super-easy to interpret).
+
+-   Which of the KAR genes are regulated?
+
+    -   KAR5, KAR3 and KAR4
+
+```{r}
+expr[grepl(pattern = "kar", x = expr$PopName, ignore.case = TRUE),]
+
+```
+
+# PART 2: Arrest and Release time-series experiment
+
+## The "alpha-30/alpha-38" arrest and release experiments
+
+For the first part of the exercise we'll be working an alpha-factor arrest-and-release experiment (the "**alpha-30/alpha38**" experiment from the Breeden lab). Briefly, the experimental set-up is as follows:
+
+-   **ARREST:** The culture was arrested using alpha-factor (as we have seen before).
+
+-   **RELEASE:** When most of the cells had been arrested in cell cycle, the cells were spun down, and re-suspended in fresh media (thus removing the alpha-factor).
+
+-   **SAMPLING:** small samples were collected from the culture at 5-minute intervals following release (and experimental tricks were used to quickly kill the cells and protect the RNA).
+
+-   **ARRAY ANALYSIS:** for each timepoint the synchronized cells were compared to an asynchronous culture on a **two color array** (competitive hybridization) using Cy3 and Cy5 labeling.
+
+    -   **DYE SWAP:** The experiment was carried out twice, once with CASE (Cy3) vs. CONTROL (Cy5) and once with CASE (Cy5) vs. CONTROL (Cy3) - this is done to eliminate technical biases in the labeling process.
+
+### **Understanding the data**
+
+**TASK: find the "alpha-30" experiment in GEO"**
+
+-   Search for the accession ID: GSE4987
+
+**REPORT QUESTION #2:**
+
+-   Find the title of the publication describing the experiment.
+
+    -   "The Forkhead transcription factor Hcm1 regulates chromosome segregation genes and fills the S-phase gap in the transcriptional circuitry of the cell cycle"
+
+-   How many arrays (measurements) are associated with the experiment?
+
+    -   50 (samples)
+
+**CLEANED UP DATA:**
+
+From the data available for download at GEO (the MATRIX file mentioned above), we have prepared an extract (and very slight reformatting) of the data we need for this exercise.
+
+```{r}
+load("/home/projects/22140/exercise7.Rdata")
+```
+
+-   The data frame "alpha30_38" contains the data in long format. Take a minute to explore the data frame. The log2fc is the fold change between the two conditions case and control. In the alpha30 experiment, fold change is case = Cy3 / control = Cy5. In alpha38 the dyes were swapped and hence control = Cy3 / case = Cy5
+
+### **Estimating the inter-division time**
+
+Before we move on with the analysis of biology described by the data, we need to have a better understanding of how the **time series** relates to the cell cycle. We'll start out by estimating the **inter-division time** (number of minutes it takes for a full cell cycle).
+
+\
+This can be done by simply plotting the **expression profiles** of a few genes that we expect to follow a **cyclic pattern** in the data set, for example:
+
+```         
+ 
+RAD53 [YPL153C] G1 (mid)  DNA repair/cell cycle arrest
+CLN1  [YMR199W] G1/S1     G1-cyclin - controls entry to the S-phase
+HTB2  [YBL002W] S (mid)   Histone H2B - histones are needed for the new chromosomes
+CLB1  [YGR108W] G2 (mid)  B-type cyclin
+ASH1  [YKL185W] M (late)  Transcriptional regulator (during anaphase)
+```
+
+**TASK:** below is a hint how to use ggplot to plot x = timepoint and y = log2fc
+
+```{r}
+# all in one
+df <- alpha30_38[alpha30_38$gene %in% c("YPL153C", "YMR199W", "YBL002W", "YGR108W", "YKL185W") & alpha30_38$experiment == "alpha30",]
+ggplot(df, aes(x = timepoint, y = log2fc, color = gene)) +
+  geom_point() +
+  geom_line() +
+  ggtitle("alpha30")
+
+# or one at the time if you prefer
+ggplot(df, aes(x = timepoint, y = log2fc, group = gene)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(~gene) +
+  ggtitle("alpha30")
+```
