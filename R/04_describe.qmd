@@ -55,6 +55,12 @@ describe_dat_aug_01 |>
   ) +
   theme_minimal()
 
+# save plot
+ggsave(here("results/04_histogram_plot.png"), 
+       plot = describe_dat_aug_01, 
+       width = 10, 
+       height = 6)
+
 ```
 
 There is four different classes: endogenous, housekeeping, negative and positive.\
