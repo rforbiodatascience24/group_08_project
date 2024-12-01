@@ -60,6 +60,7 @@ print(read.csv(here("data/02_dat_clean.csv")))
 
 ```{r}
 #| echo: true
+#| eval: false
 #| results: hide
 #| code-line-numbers: "5-7|9-13|15-16|24-28|30-32|33-35"
 

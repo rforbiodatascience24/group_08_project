@@ -76,18 +76,6 @@ estimates
 ### Filtering and selecting treatment effects from linear model estimates
 
 ```{r}
-estimates_reduced <- estimates |> 
-  unnest(data) |> 
-  filter(term == "bin_treatment") |> # choose only "treatment"
-  select(gene, # select variables of interest
-         p.value, 
-         estimate, 
-         conf.low, 
-         conf.high,
-         treatment) |> 
-  ungroup() # ungroup tbl
-
-
 estimates <- estimates |> 
   filter(term == "bin_treatment") |> # choose only "treatment"
   select(gene, # select variables of interest
@@ -99,7 +87,6 @@ estimates <- estimates |>
 
 # view result
 estimates
-estimates_reduced
 ```
 
 ### Forest plot of q-values
@@ -150,6 +137,7 @@ p_value_estimates_plot <- estimates |>
   geom_point() +
   geom_errorbarh(aes(xmax = conf.low, 
                      xmin = conf.high)) +
+  theme_minimal(base_size = 8) +
   geom_vline(xintercept = 0, 
              linetype = "solid", 
              color = "black") +
@@ -214,10 +202,10 @@ ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"),
 ## Analysis
 
 ```{r}
-significant_gene_list <- estimates |>  
-  arrange(p.value) |> 
-  slice(1:4) |> 
-  pull(gene)
+significant_gene_list <- estimates |>  # create a list of significant genes 
+  arrange(p.value) |> # arrange based on ascending p-value
+  slice(1:4) |> # extract the first 4 rows
+  pull(gene) # extract the gene names
 
 # four different plots showing the difference in expression before and after treatment.
 # chose four genes with highest significant p-value
@@ -231,8 +219,6 @@ gene_ekspression_before_and_after_treatment_4_genes <- (p1 + p2 + p3 + p4) +
   plot_annotation(title = "Gene Expression before and after treatment",
                   subtitle = str_interp("Comparing ${significant_gene_list[1]}, ${significant_gene_list[2]}, ${significant_gene_list[3]} and ${significant_gene_list[4]}")) +
   theme(plot.title.position = "plot") # move title of the combined plot to the very left
-
-gene_ekspression_before_and_after_treatment_4_genes
 
 # save plot
 ggsave(here("results/07_gene_ekspression_before_and_after_treatment_4_genes.png"), 

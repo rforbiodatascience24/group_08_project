@@ -20,6 +20,10 @@ In this project we have analyzed gene expression of a metastatic breast cancer t
 
 We have adhered to using tidyverse functions when applicable and have followed the KISS (Keep It Stupid Simple) coding philosophy.
 
+## Presentation
+
+[https://htmlpreview.github.io/? https://raw.githubusercontent.com/rforbiodatascience24/group_08_project/refs/heads/main/doc/presentation.html](https://htmlpreview.github.io/?https://raw.githubusercontent.com/rforbiodatascience24/group_08_project/refs/heads/main/doc/presentation.html){.uri}
+
 ## Data Availability
 
 Data can be found in the NCBI GEO database under the accesion: GSE261815. Data retrieval is done automatically in the source code through URLs to the files. Link to files provided below:
