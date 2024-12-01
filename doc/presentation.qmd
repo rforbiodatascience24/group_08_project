@@ -14,6 +14,10 @@ format:
     theme: moon
     transition: slide
 editor: visual
+
+output:
+  html_document:
+    self_contained: true
 ---
 
 ```{r}
@@ -193,7 +197,7 @@ estimates <- estimates |>
 
 Comment: Explain q value vs p value forest plot
 
-::: r-stack
+::::: r-stack
 ::: fragment
 ![](images/07_forest_plot_p_value.png)
 :::
@@ -201,7 +205,7 @@ Comment: Explain q value vs p value forest plot
 ::: fragment
 ![](images/07_volcano_plot_of_signifcantly_expressed_genes.png)
 :::
-:::
+:::::
 
 ## Results pt 2
 
