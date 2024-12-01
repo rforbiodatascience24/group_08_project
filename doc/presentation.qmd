@@ -33,32 +33,9 @@ This study looks at how a combination of pembrolizumab, exemestane, and leuproli
 
 ## Work method illustrated by a flowchart
 
-![](images/flowchart.png){.absolute}
+![](images/flowchart1.png){.small-figure}
 
-## Raw -> tidy data
-
-
-::: {.columns}
-
-::: {.column width="35%"}
-```{r}
-#| echo: true
-# Untidy single patient dataset
-print(read.csv(here("data/01_dat_load_pre_data_GSM8152441.csv")))
-```
-:::
-
-::: {.column width="65%"}
-```{r}
-#| echo: true
-# Cleaned cobined pre and post data for 5 patients
-print(read.csv(here("data/02_dat_clean.csv")))
-```
-:::
-
-:::
-
-## Raw -> Tidy data (version 2)
+## Untidy -> Tidy data
 
 ::: {.panel-tabset}
 
@@ -136,10 +113,6 @@ We may also want to include the histogram over distribution of code_classes
 ![](images/04_top_2_procent_fold_change.png){.fragment}
 :::
 
-## Analysis 1 results - find better title
-
-
-![](images/05_plots_all_together.png){.absolute}
 
 ## Distribution of log2 fold change per class
 
@@ -230,6 +203,9 @@ Comment: Explain q value vs p value forest plot
 :::
 
 :::
+
+## Results pt 2
+![](images/07_gene_ekspression_before_and_after_treatment_4_genes.png)
 
 
 ## Discussion
