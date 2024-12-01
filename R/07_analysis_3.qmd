@@ -137,7 +137,7 @@ p_value_estimates_plot <- estimates |>
   geom_point() +
   geom_errorbarh(aes(xmax = conf.low, 
                      xmin = conf.high)) +
-  theme_minimal(base_size = 8) +
+  theme_grey(base_size = 8) +
   geom_vline(xintercept = 0, 
              linetype = "solid", 
              color = "black") +
@@ -161,9 +161,7 @@ ggsave(here("results/07_forest_plot_p_value.png"),
 ```{r}
 estimates <- estimates |> 
   mutate(log_of_p = (-log10(p.value))) # create a new column with -10log10(p)
-#| fig-width: 8
-#| fig-height: 5.5
-#| dpi: 300
+
 volcano_plot <- estimates |> 
   ggplot(aes(x = estimate, # plot results
              y = log_of_p)) + 
@@ -182,7 +180,7 @@ volcano_plot <- estimates |>
                   size = 2, 
                   color = "turquoise", 
                   max.overlaps = 50) +
-  theme_minimal(base_size = 8) +
+  theme_grey(base_size = 8) +
   geom_hline(yintercept = 0, linetype = "solid", color = "black") +
   labs(
   title = "Immune Microenvironment in Response to Pembrolizumab, Exemestane, and Leuprolide \nin Premenopausal ER+/HER2− Advanced Breast Cancer",
@@ -220,6 +218,7 @@ gene_ekspression_before_and_after_treatment_4_genes <- (p1 + p2 + p3 + p4) +
                   subtitle = str_interp("Comparing ${significant_gene_list[1]}, ${significant_gene_list[2]}, ${significant_gene_list[3]} and ${significant_gene_list[4]}")) +
   theme(plot.title.position = "plot") # move title of the combined plot to the very left
 
+gene_ekspression_before_and_after_treatment_4_genes
 # save plot
 ggsave(here("results/07_gene_ekspression_before_and_after_treatment_4_genes.png"), 
        plot = gene_ekspression_before_and_after_treatment_4_genes, 

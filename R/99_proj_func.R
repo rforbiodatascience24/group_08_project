@@ -56,10 +56,10 @@ replace_outliers_with_na <- function(data, prefix) {
 significant_gene <- function(dataframe, chosen_gene) {
   plot <- dataframe |> # Use the input dataframe
     filter(gene == chosen_gene) |> # Filter for the chosen gene
-    ggplot(aes(x = treatment, 
+    ggplot(aes(x = fct_rev(treatment), 
                y = count_value)) + # Create the plot
     geom_point() + # Add scatter points
-    theme_minimal() + # Minimal theme
+    theme_grey() + # grey theme
     ggtitle(chosen_gene) + # Use the gene name as the plot title
     theme(
       axis.title.x = element_blank(), # Remove x-axis label
