@@ -195,7 +195,8 @@ volcano_plot <- estimates |>
 ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"),
        plot = volcano_plot,
        width = 8, 
-       height = 5.5)
+       height = 5.5,
+       bg = "white")
 ```
 
 ## Analysis
@@ -224,6 +225,7 @@ gene_ekspression_before_and_after_treatment_4_genes
 ggsave(here("results/07_gene_ekspression_before_and_after_treatment_4_genes.png"), 
        plot = gene_ekspression_before_and_after_treatment_4_genes, 
        width = 10, 
-       height = 6)
+       height = 6,
+       bg = "white")
 
 ```
