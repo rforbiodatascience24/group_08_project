@@ -19,7 +19,6 @@ clean_data <- function(dataframe) {
   return(data_clean)
 }
 
-
 # Function to replace outliers with NA for columns starting with a specific string and add bounds
 replace_outliers_with_na <- function(data, prefix) {
   # Identify columns with the specified prefix
