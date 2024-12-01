@@ -13,7 +13,6 @@ format:
     scoll: true
     theme: moon
     transition: slide
-    self_contained: true
 editor: visual
 
 ---
