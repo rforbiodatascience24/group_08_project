@@ -53,3 +53,21 @@ replace_outliers_with_na <- function(data, prefix) {
     ungroup()  # Remove rowwise grouping
 }
 
+# four different plots showing the difference in expression before and after treatment.
+# chose four genes with a significant p-value
+significant_gene <- function(dataframe, chosen_gene) {
+  resulting_df <- data_frame |>
+  filter(gene == chosen_gene) |> # filtering for the wanted gene
+  ggplot(aes(x = treatment, 
+             y = count_value)) +
+  geom_point() + # scatter plot
+  theme_minimal() +
+  ggtitle(chosen_gene) +
+  theme(axis.title.x = element_blank(), # remove the x- and y axis legends
+        axis.title.y = element_blank(),
+        plot.title = element_text(hjust = 0.5, # move the title of each plot to the middle
+                                  size = 10)) # adjust the size of the title of each plot
+  return(resulting_df)
+}
+  
+
