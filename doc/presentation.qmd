@@ -13,11 +13,9 @@ format:
     scoll: true
     theme: moon
     transition: slide
+    self_contained: true
 editor: visual
 
-output:
-  html_document:
-    self_contained: true
 ---
 
 ```{r}
@@ -115,7 +113,7 @@ write_csv(df_long, here("data/03_dat_aug_02.csv"))
 We may also want to include the histogram over distribution of code_classes
 
 ::: r-stack
-![](images/04_top_2_procent_fold_change.png){.fragment}
+![](images/04_top_2_procent_fold_change.png){.fragment}{.absolute left="0"}
 :::
 
 ## Distribution of log2 fold change per class
@@ -199,17 +197,17 @@ Comment: Explain q value vs p value forest plot
 
 ::: r-stack
 ::: fragment
-![](images/07_forest_plot_p_value.png)
+![](images/07_forest_plot_p_value.png){.small-figure}
 :::
 
 ::: fragment
-![](images/07_volcano_plot_of_signifcantly_expressed_genes.png)
+![](images/07_volcano_plot_of_signifcantly_expressed_genes.png){.small-figure}
 :::
 :::
 
 ## Results pt 2
 
-![](images/07_gene_ekspression_before_and_after_treatment_4_genes.png)
+![](images/07_gene_ekspression_before_and_after_treatment_4_genes.png){.small-figure}
 
 ## Discussion
 
