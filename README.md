@@ -22,6 +22,8 @@ We have adhered to using tidyverse functions when applicable and have followed t
 
 ## Presentation
 
+Direct link to our presentation can be found here:
+
 [https://htmlpreview.github.io/? https://raw.githubusercontent.com/rforbiodatascience24/group_08_project/refs/heads/main/doc/presentation.html](https://htmlpreview.github.io/?https://raw.githubusercontent.com/rforbiodatascience24/group_08_project/refs/heads/main/doc/presentation.html){.uri}
 
 ## Data Availability
@@ -32,4 +34,4 @@ Data can be found in the NCBI GEO database under the accesion: GSE261815. Data r
 
 ## Using the project code
 
-To generate result files and run the data analysis refer to
+To generate result files and run the data analysis, navigate to the directory of the project, then the R folder and run the 00.all.qmd.
