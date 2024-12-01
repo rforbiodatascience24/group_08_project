@@ -45,15 +45,22 @@ describe_dat_aug_01 |>
   print()
 
 # histogram of gene classes and the number of genes in them 
-describe_dat_aug_01 |>
-  ggplot(aes(x = code_class)) +
+histogram_plot <- describe_dat_aug_01 |>
+  ggplot(aes(x = code_class, fill = code_class)) +
   geom_bar() + 
   labs(
-    title = "Histogram of Classes",
+    title = "Gene distribution of gene classes",
     x = "Classes",
-    y = "Number of Genes"
+    y = "Number of Genes",
+    fill = "Gene Class"
   ) +
   theme_minimal()
+
+# save plot
+ggsave(here("results/04_histogram_plot.png"), 
+       plot = histogram_plot, 
+       width = 10, 
+       height = 6)
 
 ```
 
