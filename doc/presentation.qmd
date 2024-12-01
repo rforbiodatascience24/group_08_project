@@ -33,7 +33,7 @@ This study looks at how a combination of pembrolizumab, exemestane, and leuproli
 
 ## Work method illustrated by a flowchart
 
-![](images/flowchart1.png){.absolute}
+![](images/flowchart1.png){.small-figure}
 
 ## Untidy -> Tidy data
 
