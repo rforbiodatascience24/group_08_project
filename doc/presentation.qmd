@@ -26,7 +26,6 @@ library("ggrepel")
 source("../R/99_proj_func.R")
 ```
 
-
 ## Study description
 
 This study looks at how a combination of pembrolizumab, exemestane, and leuprolide affects the immune environment in premenopausal women with advanced breast cancer. It tracks changes in immune-related gene expression before and after treatment in 15 patients.
@@ -35,11 +34,10 @@ This study looks at how a combination of pembrolizumab, exemestane, and leuproli
 
 ![](images/flowchart1.png){.small-figure}
 
-## Untidy -> Tidy data
+## Untidy -\> Tidy data
 
-::: {.panel-tabset}
-
-### Raw datafile
+::: panel-tabset
+### Untidy datafile
 
 ```{r}
 #| echo: true
@@ -104,24 +102,22 @@ df_long <- df_wide |>
 write_csv(df_long, here("data/03_dat_aug_02.csv"))
 ```
 
-
 ## Description results
 
 We may also want to include the histogram over distribution of code_classes
 
-::: {.r-stack}
+::: r-stack
 ![](images/04_top_2_procent_fold_change.png){.fragment}
 :::
 
-
 ## Distribution of log2 fold change per class
 
-![](images/06_boxplot_of_gene_class_log2fc.png){.absolute left=0}
-
+![](images/06_boxplot_of_gene_class_log2fc.png){.absolute left="0"}
 
 ## Are there significance in the log2 fold change for some genes? {.scrollable}
 
-1. Nest data
+1.  Nest data
+
 ```{r}
 #| echo: true
 #| results: hide
@@ -134,8 +130,8 @@ mbc_log2_transformed_nested <- mbc_log2_transformed |> # define new tbl
 
 ```
 
+2.  Fitting linear models
 
-2. Fitting linear models
 ```{r}
 #| echo: true
 #| results: hide
@@ -147,7 +143,8 @@ mbc_log2_transformed_nested <- mbc_log2_transformed_nested |>
              data = .x)))
 ```
 
-3. Tidying linear model results with confidence intervals
+3.  Tidying linear model results with confidence intervals
+
 ```{r}
 #| echo: true
 #| results: hide
@@ -160,7 +157,8 @@ mbc_log2_transformed_nested <- mbc_log2_transformed_nested |>
                conf.level = 0.95)))
 ```
 
-4. Unnesting
+4.  Unnesting
+
 ```{r}
 #| echo: true
 #| results: hide
@@ -170,8 +168,8 @@ estimates <- mbc_log2_transformed_nested |>
 estimates
 ```
 
+5.  Filtering and selecting treatment effects from linear model estimates
 
-5. Filtering and selecting treatment effects from linear model estimates
 ```{r}
 #| echo: true
 #| results: hide
@@ -187,32 +185,28 @@ estimates <- estimates |>
 
 ```
 
-
 ## Results
 
 Comment: Explain q value vs p value forest plot
 
-::: {.r-stack}
-
-::: {.fragment}
+::: r-stack
+::: fragment
 ![](images/07_forest_plot_p_value.png)
 :::
 
-::: {.fragment}
+::: fragment
 ![](images/07_volcano_plot_of_signifcantly_expressed_genes.png)
 :::
-
 :::
 
 ## Results pt 2
-![](images/07_gene_ekspression_before_and_after_treatment_4_genes.png)
 
+![](images/07_gene_ekspression_before_and_after_treatment_4_genes.png)
 
 ## Discussion
 
-::: {.incremental}
-- Where any genes significantly up or downregulated with this treatment?
-- What effect could removing outliers have on the findings?
-- How could the analysis be improved?
+::: incremental
+-   Where any genes significantly up or downregulated with this treatment?
+-   What effect could removing outliers have on the findings?
+-   How could the analysis be improved?
 :::
-
