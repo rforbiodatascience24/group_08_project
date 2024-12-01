@@ -59,7 +59,7 @@ significant_gene <- function(dataframe, chosen_gene) {
     ggplot(aes(x = fct_rev(treatment), 
                y = count_value)) + # Create the plot
     geom_point() + # Add scatter points
-    theme_grey() + # grey theme
+    theme_minimal() + # grey theme
     ggtitle(chosen_gene) + # Use the gene name as the plot title
     theme(
       axis.title.x = element_blank(), # Remove x-axis label
