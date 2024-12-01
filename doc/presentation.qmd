@@ -51,24 +51,20 @@ print(read.csv(here("data/01_dat_load_pre_data_GSM8152441.csv")))
 
 ### Tidy data
 
-
 ```{r}
 #| echo: true
 # Cleaned cobined pre and post data for 5 patients
 read.csv(here("data/02_dat_clean.csv"))
 ```
-
-
 :::
 
 ## Augmentation of the data {.scrollable}
-
 
 ```{r}
 #| echo: true
 #| eval: false
 #| results: hide
-#| code-line-numbers: "5-7|9-13|15-16|24-28|30-32|33-35"
+#| code-line-numbers: "5-7|9-13|15-16|24-28|29|30-32"
 
 # Creating wide data frame
 df_clean <- read.csv(here("data/02_dat_clean.csv"))
