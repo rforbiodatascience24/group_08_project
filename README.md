@@ -22,7 +22,7 @@ We have adhered to using tidyverse functions when applicable and have followed t
 
 ## Presentation
 
-<https://htmlpreview.github.io/?https://raw.githubusercontent.com/rforbiodatascience24/group_08_project/refs/heads/main/doc/presentation.html>
+[https://htmlpreview.github.io/? https://raw.githubusercontent.com/rforbiodatascience24/group_08_project/refs/heads/main/doc/presentation.html](https://htmlpreview.github.io/?https://raw.githubusercontent.com/rforbiodatascience24/group_08_project/refs/heads/main/doc/presentation.html){.uri}
 
 ## Data Availability
 
