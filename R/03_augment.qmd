@@ -49,9 +49,9 @@ write_csv(df_wide, here("data/03_dat_aug_01.csv"))
 # make a longer data frame with a row for each "count" variable
 df_long <- df_wide |>  
   pivot_longer(
-    cols = starts_with("pre_count") | starts_with("post_count"), # select count columns
-    names_to = "treatment",  # new column for column names
-    values_to = "count_value" # new column for values
+    cols = starts_with("pre_count") | starts_with("post_count"), # select post- and pre count columns
+    names_to = "treatment",  # new variable called treatment 
+    values_to = "count_value" # new column for the count/expression values
   ) |> 
   mutate(log2_count_value = log2(count_value)) |> # calculate log2 of counts
   mutate(bin_treatment = case_when(
