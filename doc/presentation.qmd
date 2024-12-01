@@ -220,8 +220,14 @@ estimates <- estimates |>
 Comment: Explain q value vs p value forest plot
 
 ::: {.r-stack}
-![](images/07_forest_plot_p_value.png){.fragment}
-![](images/07_volcano_plot_of_signifcantly_expressed_genes.png){.fragment}
+
+::: {.fragment}
+![](images/07_forest_plot_p_value.png)
+:::
+
+::: {.fragment}
+![](images/07_volcano_plot_of_signifcantly_expressed_genes.png)
+:::
 
 :::
 
