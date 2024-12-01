@@ -26,6 +26,8 @@ Direct link to our presentation can be found here:
 
 [https://htmlpreview.github.io/? https://raw.githubusercontent.com/rforbiodatascience24/group_08_project/refs/heads/main/doc/presentation.html](https://htmlpreview.github.io/?https://raw.githubusercontent.com/rforbiodatascience24/group_08_project/refs/heads/main/doc/presentation.html){.uri}
 
+<https://github.com/rforbiodatascience24/group_08_project/blob/main/doc/presentation.html>
+
 ## Data Availability
 
 Data can be found in the NCBI GEO database under the accesion: GSE261815. Data retrieval is done automatically in the source code through URLs to the files. Link to files provided below:
