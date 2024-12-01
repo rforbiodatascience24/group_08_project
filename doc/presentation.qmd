@@ -14,7 +14,6 @@ format:
     theme: moon
     transition: slide
 editor: visual
-
 ---
 
 ```{r}
@@ -107,7 +106,7 @@ df_long <- df_wide |>
 write_csv(df_long, here("data/03_dat_aug_02.csv"))
 ```
 
-## Description results
+## Descriptive statistics
 
 We may also want to include the histogram over distribution of code_classes
 
