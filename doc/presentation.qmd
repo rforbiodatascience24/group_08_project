@@ -4,13 +4,13 @@ author: |
   Martin Vennick Haugbølle, 
   Cecilie Møller-Jensen, 
   Amanda Vinter Eichen, 
-  Thomas Vitus, 
+  Thomas Vitus Skyggebjerg, 
   Julie Alsing Haugaard
 format:
   revealjs:
     code-line-numbers: true
     smaller: true
-    scoll: true
+    scroll: true
     theme: moon
     transition: slide
 editor: visual
