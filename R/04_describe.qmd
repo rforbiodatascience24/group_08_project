@@ -49,7 +49,7 @@ histogram_plot <- describe_dat_aug_01 |>
   ggplot(aes(x = code_class, fill = code_class)) +
   geom_bar() + 
   labs(
-    title = "Gene distribution of code classes",
+    title = "Gene distribution of gene classes",
     x = "Classes",
     y = "Number of Genes",
     fill = "Gene Class"
