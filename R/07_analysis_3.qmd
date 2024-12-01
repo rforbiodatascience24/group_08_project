@@ -137,7 +137,7 @@ p_value_estimates_plot <- estimates |>
   geom_point() +
   geom_errorbarh(aes(xmax = conf.low, 
                      xmin = conf.high)) +
-  theme_grey(base_size = 8) +
+  theme_minimal(base_size = 8) +
   geom_vline(xintercept = 0, 
              linetype = "solid", 
              color = "black") +
@@ -153,7 +153,8 @@ p_value_estimates_plot <- estimates |>
 ggsave(here("results/07_forest_plot_p_value.png"), 
          plot = p_value_estimates_plot, 
          width = 10, 
-         height = 6)
+         height = 6,
+         bg = "white")
 ```
 
 #### Volcano plot
