@@ -38,7 +38,11 @@ This study looks at how a combination of pembrolizumab, exemestane, and leuproli
 
 ![](images/flowchart1.png){.small-figure}
 
-## Untidy -\> Tidy data
+## Untidy –\> Tidy data
+
+1.  *Each variable is saved in its own column.*
+2.  *Each observation is saved in its own row.*
+3.  *Each "type" of observation is stored in a single table (here, storms).*
 
 ::: panel-tabset
 ### Untidy datafile
