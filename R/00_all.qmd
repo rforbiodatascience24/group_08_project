@@ -40,7 +40,7 @@ files_tbl <- tibble(
 )
 
 # Render and move files using purrr
-files_tbl %>%
+files_tbl |> 
   mutate(
     # Render the files
     rendered = map2(input, output_name, ~ quarto::quarto_render(input = .x, output_file = .y)),
