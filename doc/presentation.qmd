@@ -109,6 +109,7 @@ write_csv(df_long, here("data/03_dat_aug_02.csv"))
 ## Descriptive statistics
 
 We may also want to include the histogram over distribution of code_classes
+![](images/04_histogram_plot.png){.fragment}{.absolute left="0"}
 
 ::: r-stack
 ![](images/04_top_2_procent_fold_change.png){.fragment}{.absolute left="0"}

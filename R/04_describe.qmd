@@ -51,7 +51,8 @@ histogram_plot <- describe_dat_aug_01 |>
   labs(
     title = "Gene distribution of code classes",
     x = "Classes",
-    y = "Number of Genes"
+    y = "Number of Genes",
+    fill = "Gene Class"
   ) +
   theme_minimal()
 
