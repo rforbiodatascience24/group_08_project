@@ -19,7 +19,7 @@ source("99_proj_func.R")
 
 ```{r}
 post_pre_values <- read_csv(here("data/03_dat_aug_02.csv"))
-
+p_values <- read_csv(here("data/07_dat_estimates_01.csv"))
 ```
 
 ## Analysis
@@ -27,6 +27,11 @@ post_pre_values <- read_csv(here("data/03_dat_aug_02.csv"))
 ```{r}
 # four different plots showing the difference in expression before and after treatment.
 # chose four genes with a significant p-value
+
+p_values |> 
+  
+
+
 p1_CXCL13 <- post_pre_values |>
   filter(gene == "CXCL13") |> # filtering for the wanted gene
   ggplot(aes(x = treatment, 
