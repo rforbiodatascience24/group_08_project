@@ -32,6 +32,25 @@ Data can be found in the NCBI GEO database under the accesion: GSE261815. Data r
 
 <https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE261815>
 
+## Required Packages
+
+The following packages are required:
+
+-   `tidyverse`
+-   `ggplot2`
+-   `dplyr`
+-   `here`
+-   `stringr`
+-   `quatro`
+-   `patchwork`
+-   `broom`
+
+## Installation
+
+Install the required packages with the following code in R:
+
+`install.packages(c("tidyverse", "ggplot2", "dplyr", "here", "stringr", "quatro", "patchwork", "broom", "ggrepel", "readr", "rlang"))`
+
 ## Using the project code
 
 To generate result files and run the data analysis, navigate to the directory of the project, then the R folder and run the 00.all.qmd.
