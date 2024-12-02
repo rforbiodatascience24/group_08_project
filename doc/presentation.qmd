@@ -1,5 +1,5 @@
 ---
-title: "Gene expression analysis of combined treatment of metastatic breast cancer"
+title: "Gene expression analysis of combined treatment for metastatic breast cancer"
 author: |
   Martin Vennick Haugbølle, 
   Cecilie Møller-Jensen, 
@@ -28,7 +28,9 @@ source("../R/99_proj_func.R")
 
 ## Study description
 
-This study looks at how a combination of pembrolizumab, exemestane, and leuprolide affects the immune environment in premenopausal women with advanced breast cancer. It tracks changes in immune-related gene expression before and after treatment in 15 patients.
+- Subjects: Premenopausal women with advanced breast cancer (5 patients).
+- Treatment: Combination of drugs (pembrolizumab, exemestane, and leuprolide).
+- Aim: Asses the treatment's effect on gene expression in immune environment before and after treatment.
 
 ## Work method illustrated by a flowchart
 
