@@ -36,13 +36,13 @@ This study looks at how a combination of pembrolizumab, exemestane, and leuproli
 
 ## Untidy –\> Tidy data
 
-::: {style="margin-top: -15px; margin-bottom: -15px;"}
+:::: {style="margin-top: -15px; margin-bottom: -15px;"}
 ::: {style="line-height: 1.1;"}
 1.  *Each variable is saved in its own column.*\
 2.  *Each observation is saved in its own row.*\
 3.  *Each "type" of observation is stored in a single table.*\
 :::
-:::
+::::
 
 ::: panel-tabset
 ### Untidy datafile
@@ -112,11 +112,11 @@ write_csv(df_long, here("data/03_dat_aug_02.csv"))
 
 ## Descriptive statistics
 
-::: r-stack
+:::: r-stack
 ::: {style="margin-top: -30px;"}
 ![](images/04_histogram_plot.png){width="100%" align="center"}
 :::
-:::
+::::
 
 ## Distribution of log2 fold change per class
 
@@ -170,17 +170,17 @@ estimates <- mbc_log2_transformed_nested |>
 
 ## Results
 
-::: r-stack
+:::::: r-stack
 ::: {style="margin-top: -30px;"}
 ![](images/07_forest_plot_p_value.png){width="100%" align="center"}
 :::
 
-::: fragment
+:::: fragment
 ::: {style="margin-top: -30px;"}
 ![](images/07_volcano_plot_of_signifcantly_expressed_genes.png){width="100%" align="center"}
 :::
-:::
-:::
+::::
+::::::
 
 ## Most up and downregulated genes with the treatment
 
