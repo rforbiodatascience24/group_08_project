@@ -20,7 +20,7 @@ library("ggplot2")
 ## Load data
 
 ```{r}
-log2_fold_change <- read.csv(here("data/03_dat_aug_03.csv"))
+log2_fold_change <- read.csv(here("data/03_dat_aug_02.csv"))
 ```
 
 ## Analysis

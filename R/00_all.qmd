@@ -27,6 +27,10 @@ input_files <- c(
   "R/07_analysis_3.qmd"
 )
 
+
+# Creating directories for the data folder
+dir.create("../data")
+
 # Ensure results directory exists
 results_dir <- here("results")
 #if (!dir.exists(results_dir)) dir.create(results_dir)
