@@ -52,7 +52,7 @@ replace_outliers_with_na <- function(data, prefix) {
     ungroup()  # Remove rowwise grouping
 }
 
-
+# create scatter-plot for significant gene
 significant_gene <- function(dataframe, chosen_gene) {
   plot <- dataframe |> # Use the input dataframe
     filter(gene == chosen_gene) |> # Filter for the chosen gene
