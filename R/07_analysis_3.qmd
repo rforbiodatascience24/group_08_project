@@ -181,7 +181,7 @@ volcano_plot <- estimates |>
                   size = 2, 
                   color = "turquoise", 
                   max.overlaps = 50) +
-  theme_grey(base_size = 8) +
+  theme_minimal(base_size = 8) +
   geom_hline(yintercept = 0, linetype = "solid", color = "black") +
   labs(
   title = "Immune Microenvironment in Response to Pembrolizumab, Exemestane, and Leuprolide \nin Premenopausal ER+/HER2− Advanced Breast Cancer",

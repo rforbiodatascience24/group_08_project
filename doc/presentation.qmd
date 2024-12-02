@@ -18,9 +18,8 @@ editor: visual
 ---
 
 ```{r}
-library(tidyverse)
-library(here)
-library(readr)
+library("tidyverse")
+library("readr")
 library("broom")
 library("here")
 library("ggrepel")
@@ -37,9 +36,13 @@ This study looks at how a combination of pembrolizumab, exemestane, and leuproli
 
 ## Untidy –\> Tidy data
 
-1.  *Each variable is saved in its own column.*
-2.  *Each observation is saved in its own row.*
-3.  *Each "type" of observation is stored in a single table.*
+::: {style="margin-top: -10px; margin-bottom: -10px;"}
+::: {style="line-height: 1.1;"}
+1.  *Each variable is saved in its own column.*\
+2.  *Each observation is saved in its own row.*\
+3.  *Each "type" of observation is stored in a single table.*\
+:::
+:::
 
 ::: panel-tabset
 ### Untidy datafile
@@ -196,11 +199,15 @@ Comment: Explain q value vs p value forest plot
 
 ::: r-stack
 ::: fragment
-![](images/07_forest_plot_p_value.png){.small-figure}
+::: {style="margin-top: -30px;"}
+![](images/07_forest_plot_p_value.png){width="100%" align="center"}
+:::
 :::
 
 ::: fragment
-![](images/07_volcano_plot_of_signifcantly_expressed_genes.png){.small-figure}
+::: {style="margin-top: -30px;"}
+![](images/07_volcano_plot_of_signifcantly_expressed_genes.png){width="100%" align="center"}
+:::
 :::
 :::
 
