@@ -116,12 +116,6 @@ write_csv(df_long, here("data/03_dat_aug_02.csv"))
 ::: {style="margin-top: -30px;"}
 ![](images/04_histogram_plot.png){width="100%" align="center"}
 :::
-
-::: fragment
-::: {style="margin-top: -30px;"}
-![](images/04_top_2_procent_fold_change.png){width="100%" align="center"}
-:::
-:::
 :::
 
 ## Distribution of log2 fold change per class
@@ -131,6 +125,7 @@ write_csv(df_long, here("data/03_dat_aug_02.csv"))
 ## Are there significance in the log2 fold change for some genes? {.scrollable}
 
 ::: {style="max-width: 950px; margin: auto;"}
+
 1.  Nest data
 
 ```{r}
@@ -172,6 +167,7 @@ mbc_log2_transformed_nested <- mbc_log2_transformed_nested |>
                conf.level = 0.95)))
 ```
 
+
 4.  Unnesting
 
 ```{r}
@@ -182,6 +178,7 @@ estimates <- mbc_log2_transformed_nested |>
   unnest(model_object_tidy) # unnest nested tbl
 estimates
 ```
+
 
 5.  Filtering and selecting treatment effects from linear model estimates
 
@@ -201,13 +198,12 @@ estimates <- estimates |>
 ```
 :::
 
+
 ## Results
 
 ::: r-stack
-::: fragment
 ::: {style="margin-top: -30px;"}
 ![](images/07_forest_plot_p_value.png){width="100%" align="center"}
-:::
 :::
 
 ::: fragment
