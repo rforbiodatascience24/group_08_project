@@ -203,8 +203,6 @@ estimates <- estimates |>
 
 ## Results
 
-Comment: Explain q value vs p value forest plot
-
 ::: r-stack
 ::: fragment
 ::: {style="margin-top: -30px;"}
@@ -219,14 +217,14 @@ Comment: Explain q value vs p value forest plot
 :::
 :::
 
-## Results pt 2
+## Most up and downregulated genes with the treatment
 
 ![](images/07_gene_ekspression_before_and_after_treatment_4_genes.png){.small-figure}
 
-## Discussion
+## Discussion and conclusion
 
 ::: incremental
--   Where any genes significantly up or downregulated with this treatment?
+-   Were any genes significantly up or downregulated with this treatment?
 -   What effect could removing outliers have on the findings?
 -   How could the analysis be improved?
 :::
