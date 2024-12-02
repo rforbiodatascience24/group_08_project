@@ -41,16 +41,18 @@ The following packages are required:
 -   `dplyr`
 -   `here`
 -   `stringr`
--   `quatro`
+-   `quarto`
 -   `patchwork`
--   `broom`
+-   `ggrepel`
+-   `readr`
+-   `rlang`
 
 ## Installation
 
 Install the required packages with the following code in R:
 
-`install.packages(c("tidyverse", "ggplot2", "dplyr", "here", "stringr", "quatro", "patchwork", "broom", "ggrepel", "readr", "rlang"))`
+`install.packages(c("tidyverse", "ggplot2", "dplyr", "here", "stringr", "quarto", "patchwork", "broom", "ggrepel", "readr", "rlang"))`
 
 ## Using the project code
 
-To generate result files and run the data analysis, navigate to the directory of the project, then the R folder and run the 00.all.qmd.
+To generate result files and run the data analysis, navigate to the directory of the project, then the R folder and run the `00_all.qmd`
