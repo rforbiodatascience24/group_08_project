@@ -51,19 +51,7 @@ files_tbl |>
     moved = map2(temp_output, final_output, ~ file.rename(.x, .y))
   )
 
-
-# Rendering presentation
-input_file <- here("doc/presentation.qmd")
-output_name <- "presentation.html"
-temp_output <- "presentation.html"
-final_output <- here("doc/presentation.html")
-quarto::quarto_render(input = input_file, output_file = output_name)
-file.rename(from = temp_output, to = final_output)
-
-
-```
-
-```{r}
+# code to copy .png files from results to images
 # Define source and destination directories
 source_folder <- here("results")  
 destination_folder <- here("doc/images")
@@ -76,4 +64,14 @@ list.files(source_folder,
                    to = file.path(destination_folder, 
                                   basename(.x)), 
                    overwrite = TRUE))
+
+# Rendering presentation
+input_file <- here("doc/presentation.qmd")
+output_name <- "presentation.html"
+temp_output <- "presentation.html"
+final_output <- here("doc/presentation.html")
+quarto::quarto_render(input = input_file, output_file = output_name)
+file.rename(from = temp_output, to = final_output)
+
+
 ```
