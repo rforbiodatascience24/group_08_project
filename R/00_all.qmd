@@ -50,6 +50,17 @@ files_tbl |>
     # Move the files to results folder
     moved = map2(temp_output, final_output, ~ file.rename(.x, .y))
   )
+
+
+# Rendering presentation
+input_file <- here("doc/presentation.qmd")
+output_file <- "presentation.html"
+temp_output <- "presentation.html"
+final_output <- here("doc/presentation.html")
+quarto::quarto_render(input = input_file, output_file = output_file)
+file.rename(temp_output, final_output)
+
+
 ```
 
 ```{r}
