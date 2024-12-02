@@ -54,11 +54,11 @@ files_tbl |>
 
 # Rendering presentation
 input_file <- here("doc/presentation.qmd")
-output_file <- "presentation.html"
+output_name <- "presentation.html"
 temp_output <- "presentation.html"
 final_output <- here("doc/presentation.html")
-quarto::quarto_render(input = input_file, output_file = output_file)
-file.rename(temp_output, final_output)
+quarto::quarto_render(input = input_file, output_file = output_name)
+file.rename(from = temp_output, to = final_output)
 
 
 ```
