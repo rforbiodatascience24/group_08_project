@@ -8,6 +8,7 @@ author: |
   Julie Alsing Haugaard
 format:
   revealjs:
+    self-contained: true
     code-line-numbers: true
     smaller: true
     scroll: true
