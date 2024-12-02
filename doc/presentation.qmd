@@ -130,6 +130,7 @@ write_csv(df_long, here("data/03_dat_aug_02.csv"))
 ```{r}
 #| echo: true
 #| results: hide
+#| eval: false
 #| code-line-numbers: "1,5-6|8,11-14|16,19-23|25,28-35"
 # 1. Read augmented datafile and nest data
 
