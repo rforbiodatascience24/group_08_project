@@ -194,8 +194,8 @@ volcano_plot <- estimates |>
 # save plot
 ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"),
        plot = volcano_plot,
-       width = 8, 
-       height = 5.5,
+       width = 10, 
+       height = 6,
        bg = "white")
 ```
 
