@@ -27,8 +27,7 @@ input_files <- c(
   "R/07_analysis_3.qmd"
 )
 
-
-# Creating directories for the data folder
+# Creating directories
 dir.create("../data")
 
 # Ensure results directory exists
@@ -51,4 +50,19 @@ files_tbl |>
     # Move the files to results folder
     moved = map2(temp_output, final_output, ~ file.rename(.x, .y))
   )
+```
+
+```{r}
+# Define source and destination directories
+source_folder <- here("results")  
+destination_folder <- here("doc/images")
+
+# Copy .png files from results to images
+list.files(source_folder, 
+           pattern = "\\.png$", 
+           full.names = TRUE) |>   # choose only .png files
+  walk(~ file.copy(from = .x, 
+                   to = file.path(destination_folder, 
+                                  basename(.x)), 
+                   overwrite = TRUE))
 ```
