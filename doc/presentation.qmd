@@ -36,7 +36,7 @@ This study looks at how a combination of pembrolizumab, exemestane, and leuproli
 
 ## Untidy –\> Tidy data
 
-::: {style="margin-top: -10px; margin-bottom: -10px;"}
+::: {style="margin-top: -15px; margin-bottom: -15px;"}
 ::: {style="line-height: 1.1;"}
 1.  *Each variable is saved in its own column.*\
 2.  *Each observation is saved in its own row.*\
@@ -112,10 +112,16 @@ write_csv(df_long, here("data/03_dat_aug_02.csv"))
 
 ## Descriptive statistics
 
-![](images/04_histogram_plot.png){.fragment}{.absolute left="0"}
-
 ::: r-stack
-![](images/04_top_2_procent_fold_change.png){.fragment}{.absolute left="0"}
+::: {style="margin-top: -30px;"}
+![](images/04_histogram_plot.png){width="100%" align="center"}
+:::
+
+::: fragment
+::: {style="margin-top: -30px;"}
+![](images/04_top_2_procent_fold_change.png){width="100%" align="center"}
+:::
+:::
 :::
 
 ## Distribution of log2 fold change per class
@@ -124,6 +130,7 @@ write_csv(df_long, here("data/03_dat_aug_02.csv"))
 
 ## Are there significance in the log2 fold change for some genes? {.scrollable}
 
+::: {style="max-width: 950px; margin: auto;"}
 1.  Nest data
 
 ```{r}
@@ -147,7 +154,7 @@ mbc_log2_transformed_nested <- mbc_log2_transformed |> # define new tbl
 mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
   mutate(model_object = map( # add a model_object column
     .x = data, # use data column as input
-    .f = ~lm(formula = log2_count_value ~ bin_treatment, # model log2 transformed values based on treatment
+    .f = ~lm(formula = log2_count_value ~ bin_treatment, # model log2 values based on treatment
              data = .x)))
 ```
 
@@ -192,6 +199,7 @@ estimates <- estimates |>
   ungroup() # ungroup tbl
 
 ```
+:::
 
 ## Results
 
