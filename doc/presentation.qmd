@@ -52,7 +52,7 @@ source("../R/99_proj_func.R")
 ```{r}
 #| echo: true
 # Untidy single patient dataset
-print(read.csv(here("data/pre_data_GSM8152441.csv")))
+print(read.csv(here("data_for_presention/pre_data_GSM8152441.csv")))
 ```
 
 ### Tidy data
@@ -60,7 +60,7 @@ print(read.csv(here("data/pre_data_GSM8152441.csv")))
 ```{r}
 #| echo: true
 # Cleaned cobined pre and post data for 5 patients
-read.csv(here("data/02_dat_clean.csv"))
+read.csv(here("data_for_presention/02_dat_clean.csv"))
 ```
 :::
 
