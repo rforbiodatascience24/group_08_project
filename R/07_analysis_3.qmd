@@ -137,18 +137,18 @@ p_value_estimates_plot <- estimates |>
   geom_point() +
   geom_errorbarh(aes(xmax = conf.low, 
                      xmin = conf.high)) +
-  theme_minimal(base_size = 8) +
+  theme_minimal(base_size = 10) +
   geom_vline(xintercept = 0, 
              linetype = "solid", 
              color = "black") +
   labs(
-  title = "Significant Immune-Related Genes in Premenopausal \nER+/HER2− Advanced Breast Cancer",
+  title = "Significantly Expressed Immune-Related Genes in Premenopausal \nER+/HER2− Advanced Breast Cancer",
   x = "Estimates (95% Confidence Intervals)",
   y = "Gene",
-  caption = "Genes identified as significant by non-adjusted p-value after treatment with \npembrolizumab, exemestane, and leuprolide."
+  caption = "Genes identified as significantly expressed by p-value after treatment\n with pembrolizumab, exemestane, and leuprolide."
 ) +
   theme(plot.title.position = "plot")
-
+p_value_estimates_plot
 # save plot
 ggsave(here("results/07_forest_plot_p_value.png"), 
          plot = p_value_estimates_plot, 
@@ -161,7 +161,7 @@ ggsave(here("results/07_forest_plot_p_value.png"),
 
 ```{r}
 estimates <- estimates |> 
-  mutate(log_of_p = (-log10(p.value))) # create a new column with -10log10(p)
+  mutate(log_of_p = (-log10(p.value))) # create a new column with -log10(p)
 
 volcano_plot <- estimates |> 
   ggplot(aes(x = estimate, # plot results
@@ -181,7 +181,7 @@ volcano_plot <- estimates |>
                   size = 2, 
                   color = "turquoise", 
                   max.overlaps = 50) +
-  theme_minimal(base_size = 8) +
+  theme_minimal(base_size = 10) +
   geom_hline(yintercept = 0, linetype = "solid", color = "black") +
   labs(
   title = "Immune Microenvironment in Response to Pembrolizumab, Exemestane, and Leuprolide \nin Premenopausal ER+/HER2− Advanced Breast Cancer",
@@ -190,7 +190,7 @@ volcano_plot <- estimates |>
   y = "-log10(p-value)"
 ) +
   theme(plot.title.position = "plot")
-
+volcano_plot
 # save plot
 ggsave(here("results/07_volcano_plot_of_signifcantly_expressed_genes.png"),
        plot = volcano_plot,
