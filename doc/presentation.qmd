@@ -122,71 +122,41 @@ write_csv(df_long, here("data/03_dat_aug_02.csv"))
 
 ![](images/06_boxplot_of_gene_class_log2fc.png){.absolute left="0"}
 
-## Are there significance in the log2 fold change for some genes? {.scrollable}
+## Are Log2 Changes Statistically Significant for Specific Genes? {.scrollable}
 
 ::: {style="max-width: 950px; margin: auto;"}
-
-1.  Nest data
-
 ```{r}
 #| echo: true
 #| results: hide
-#| code-line-numbers: "5"
-# read augmented datafile
+#| code-line-numbers: "1,5-6|8,11-14|16,19-23|25,28-35"
+# 1. Read augmented datafile and nest data
+
 mbc_log2_transformed <- read_csv(here("data/03_dat_aug_02.csv"))
 mbc_log2_transformed_nested <- mbc_log2_transformed |> # define new tbl
   group_by(gene) |> # group by name
   nest() # nest data by each gene
 
-```
+# 2. Fitting linear models
 
-2.  Fitting linear models
-
-```{r}
-#| echo: true
-#| results: hide
-#| code-line-numbers: "2-5"
 mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
   mutate(model_object = map( # add a model_object column
     .x = data, # use data column as input
     .f = ~lm(formula = log2_count_value ~ bin_treatment, # model log2 values based on treatment
              data = .x)))
-```
 
-3.  Tidying linear model results with confidence intervals
+# 3. Tidying linear model results with confidence intervals
 
-```{r}
-#| echo: true
-#| results: hide
-#| code-line-numbers: "4-6"
 mbc_log2_transformed_nested <- mbc_log2_transformed_nested |> 
   mutate(model_object_tidy = map( # add a tidy model_object column
     .x = model_object,
     .f = ~tidy(x = .x,
                conf.int = TRUE,
                conf.level = 0.95)))
-```
 
+# 4. Unnest and select treatment effects from linear model slope estimates
 
-4.  Unnesting
-
-```{r}
-#| echo: true
-#| results: hide
-#| code-line-numbers: "2"
 estimates <- mbc_log2_transformed_nested |> 
-  unnest(model_object_tidy) # unnest nested tbl
-estimates
-```
-
-
-5.  Filtering and selecting treatment effects from linear model estimates
-
-```{r}
-#| echo: true
-#| results: hide
-#| code-line-numbers: "2-7"
-estimates <- estimates |> 
+  unnest(model_object_tidy) |> # unnest nested tbl
   filter(term == "bin_treatment") |> # choose only "treatment"
   select(gene, # select variables of interest
          p.value, 
@@ -197,7 +167,6 @@ estimates <- estimates |>
 
 ```
 :::
-
 
 ## Results
 
