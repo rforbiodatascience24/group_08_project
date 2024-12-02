@@ -4,13 +4,13 @@ author: |
   Martin Vennick Haugbølle, 
   Cecilie Møller-Jensen, 
   Amanda Vinter Eichen, 
-  Thomas Vitus, 
+  Thomas Vitus Skyggebjerg, 
   Julie Alsing Haugaard
 format:
   revealjs:
     code-line-numbers: true
     smaller: true
-    scoll: true
+    scroll: true
     theme: moon
     transition: slide
 editor: visual
@@ -53,12 +53,8 @@ print(read.csv(here("data/01_dat_load_pre_data_GSM8152441.csv")))
 
 ```{r}
 #| echo: true
-
-options(width = 1000)  # Set a wide enough value
-options(max.print = 10000)  # Increase the max print limit
-
 # Cleaned cobined pre and post data for 5 patients
-print(read.csv(here("data/02_dat_clean.csv")))
+read.csv(here("data/02_dat_clean.csv"))
 ```
 :::
 
@@ -68,7 +64,7 @@ print(read.csv(here("data/02_dat_clean.csv")))
 #| echo: true
 #| eval: false
 #| results: hide
-#| code-line-numbers: "5-7|9-13|15-16|24-28|30-32|33-35"
+#| code-line-numbers: "5-7|9-13|15-16|24-28|29|30-32"
 
 # Creating wide data frame
 df_clean <- read.csv(here("data/02_dat_clean.csv"))
